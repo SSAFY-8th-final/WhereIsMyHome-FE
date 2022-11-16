@@ -1,6 +1,6 @@
 <template>
 <div>
-    <hero-section-min></hero-section-min>
+    <div class="page-gap"></div>
     <section class="container-sm pd-4">
       <div class="bg-white border mx-auto" style="width: 100%;">
         <section class="w-100 p-4 d-flex justify-content-center pb-4">
@@ -156,11 +156,9 @@
 </template>
 
 <script>
-import HeroSectionMin from '@/components/HeroSectionMin.vue';
 
 export default {
     components: {
-        HeroSectionMin
     }
 }
 </script>

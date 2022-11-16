@@ -44,7 +44,7 @@ import RectGrid from "@/components/main/RectGrid.vue";
 import PhotoControl from "@/components/main/PhotoControl.vue";
 import FourTab from "@/components/main/FourTab.vue";
 import SlidePost from "@/components/main/SlidePost.vue";
-import PreView from "@/components/main/PreView.vue";
+import PreView from "@/components/PreView.vue";
 import SlidePreVieww from "@/components/main/SlidePreVieww.vue";
 
 export default {

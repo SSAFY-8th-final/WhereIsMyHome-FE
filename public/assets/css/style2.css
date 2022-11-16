@@ -17,6 +17,10 @@
   --bs-gutter-x: 0;
 }
 
+/*이거 넣어야됨*/
+.page-gap{
+  margin-top: 90px;
+}
 /************* 거래정보 레이아웃 ***************/
 #search-input{
 	margin: 0;

@@ -1,7 +1,7 @@
 <template>
 <div>
 
-    <hero-section-min></hero-section-min>
+    <div class="page-gap"></div>
     <section-header title="Favorite" description="my favorite"></section-header>
 
     <pre-view></pre-view>
@@ -11,14 +11,12 @@
 
 <script>
 import SectionHeader from "@/components/main/SectionHeader.vue";
-import HeroSectionMin from '@/components/HeroSectionMin.vue';
-import PreView from "@/components/main/PreView.vue";
+import PreView from "@/components/PreView.vue";
 
 
 export default {
   components: {
     SectionHeader,
-    HeroSectionMin,
     PreView,
   },
 };

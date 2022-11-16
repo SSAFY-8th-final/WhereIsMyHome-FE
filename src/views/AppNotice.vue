@@ -1,6 +1,6 @@
 <template>
   <div>
-    <hero-section-min></hero-section-min>
+	<div class="page-gap"></div>
     <div class="container" style="height: 50vh;">
 		<h4 class="text-center mt-3">공지사항</h4>
 
@@ -37,11 +37,9 @@
 </template>
 
 <script>
-import HeroSectionMin from '@/components/HeroSectionMin.vue';
 
 export default {
   components: {
-    HeroSectionMin,
   },
 }
 </script>
