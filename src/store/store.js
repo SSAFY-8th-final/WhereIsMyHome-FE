@@ -21,6 +21,9 @@ export default new Vuex.Store({
         },
         event: {
             list: [],
+            limit: 10,
+            offset: 0,
+            searchWord: "",
              
             // detail
             eventKey: 0,
@@ -61,10 +64,18 @@ export default new Vuex.Store({
          },
     },
     mutations: {
+         /* event */
+        SET_EVENT_LIST(state, list) {
+            state.event.list = list;
+        },
+        SET_EVENT_TOTAL_LIST_ITEM_COUNT(state, count) {
+            state.event.totalListItemCount = count;
+        },
+        /* notice */
         SET_NOTICE_LIST(state, list) {
             state.notice.list = list;
          },
-   
+         
          SET_NOTICE_TOTAL_LIST_ITEM_COUNT(state, count) {
             state.notice.totalListItemCount = count;
          },
@@ -106,6 +117,26 @@ export default new Vuex.Store({
                } else {
                   context.commit("SET_NOTICE_LIST", data.list);
                   context.commit("SET_NOTICE_TOTAL_LIST_ITEM_COUNT", data.count);
+               }
+            } catch (error) {
+               console.error(error);
+            }
+         },
+         async eventList(context) {
+            let params = {
+               limit: this.state.notice.limit,
+               offset: this.state.notice.offset,
+               searchWord: this.state.notice.searchWord,
+            };
+   
+            try {
+               let { data } = await http.get("/events", { params }); // params: params shorthand property, let response 도 제거
+               console.log(data);
+               if (data.result == "login") {
+                  router.push("/login");
+               } else {
+                  context.commit("SET_EVENT_LIST", data.list);
+                  context.commit("SET_EVENT_TOTAL_LIST_ITEM_COUNT", data.count);
                }
             } catch (error) {
                console.error(error);

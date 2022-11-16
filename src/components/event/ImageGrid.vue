@@ -10,18 +10,17 @@
       >
         <ul class="portfolio-flters" data-aos="fade-up" data-aos-delay="100">
           <li data-filter="*" class="filter-active">All</li>
-          <li data-filter=".filter-remodeling">진행중</li>
-          <li data-filter=".filter-construction">예정</li>
-          <li data-filter=".filter-repairs">종료</li>
+          <li data-filter=".filter-proceeding">진행중</li>
+          <li data-filter=".filter-end">종료</li>
         </ul>
         <!-- End Projects Filters -->
 
         <div class="row gy-4 portfolio-container" data-aos="fade-up" data-aos-delay="200">
-          <div class="col-lg-4 col-md-6 portfolio-item filter-remodeling">
+          <div class="col-lg-4 col-md-6 portfolio-item filter-proceeding">
             <div class="portfolio-content h-100">
               <img src="assets/img/projects/remodeling-1.jpg" class="img-fluid" alt="" />
               <div class="portfolio-info">
-                <h4>Remodeling 1</h4>
+                <h4>proceeding 1</h4>
                 <p>Lorem ipsum, dolor sit amet consectetur</p>
                 <a
                   href="assets/img/projects/remodeling-1.jpg"
@@ -38,7 +37,7 @@
           </div>
           <!-- End Projects Item -->
 
-          <div class="col-lg-4 col-md-6 portfolio-item filter-construction">
+          <div class="col-lg-4 col-md-6 portfolio-item filter-expected">
             <div class="portfolio-content h-100">
               <img src="assets/img/projects/construction-1.jpg" class="img-fluid" alt="" />
               <div class="portfolio-info">
@@ -59,7 +58,7 @@
           </div>
           <!-- End Projects Item -->
 
-          <div class="col-lg-4 col-md-6 portfolio-item filter-repairs">
+          <div class="col-lg-4 col-md-6 portfolio-item filter-end">
             <div class="portfolio-content h-100">
               <img src="assets/img/projects/repairs-1.jpg" class="img-fluid" alt="" />
               <div class="portfolio-info">
@@ -80,7 +79,7 @@
           </div>
           <!-- End Projects Item -->
 
-          <div class="col-lg-4 col-md-6 portfolio-item filter-design">
+          <div class="col-lg-4 col-md-6 portfolio-item filter-proceeding">
             <div class="portfolio-content h-100">
               <img src="assets/img/projects/design-1.jpg" class="img-fluid" alt="" />
               <div class="portfolio-info">
@@ -101,7 +100,7 @@
           </div>
           <!-- End Projects Item -->
 
-          <div class="col-lg-4 col-md-6 portfolio-item filter-remodeling">
+          <div class="col-lg-4 col-md-6 portfolio-item filter-proceeding">
             <div class="portfolio-content h-100">
               <img src="assets/img/projects/remodeling-2.jpg" class="img-fluid" alt="" />
               <div class="portfolio-info">
@@ -122,7 +121,7 @@
           </div>
           <!-- End Projects Item -->
 
-          <div class="col-lg-4 col-md-6 portfolio-item filter-construction">
+          <div class="col-lg-4 col-md-6 portfolio-item filter-expected">
             <div class="portfolio-content h-100">
               <img src="assets/img/projects/construction-2.jpg" class="img-fluid" alt="" />
               <div class="portfolio-info">
@@ -143,7 +142,7 @@
           </div>
           <!-- End Projects Item -->
 
-          <div class="col-lg-4 col-md-6 portfolio-item filter-repairs">
+          <div class="col-lg-4 col-md-6 portfolio-item filter-end">
             <div class="portfolio-content h-100">
               <img src="assets/img/projects/repairs-2.jpg" class="img-fluid" alt="" />
               <div class="portfolio-info">
@@ -164,7 +163,7 @@
           </div>
           <!-- End Projects Item -->
 
-          <div class="col-lg-4 col-md-6 portfolio-item filter-design">
+          <div class="col-lg-4 col-md-6 portfolio-item filter-proceeding">
             <div class="portfolio-content h-100">
               <img src="assets/img/projects/design-2.jpg" class="img-fluid" alt="" />
               <div class="portfolio-info">
@@ -185,7 +184,7 @@
           </div>
           <!-- End Projects Item -->
 
-          <div class="col-lg-4 col-md-6 portfolio-item filter-remodeling">
+          <div class="col-lg-4 col-md-6 portfolio-item filter-proceeding">
             <div class="portfolio-content h-100">
               <img src="assets/img/projects/remodeling-3.jpg" class="img-fluid" alt="" />
               <div class="portfolio-info">
@@ -206,7 +205,7 @@
           </div>
           <!-- End Projects Item -->
 
-          <div class="col-lg-4 col-md-6 portfolio-item filter-construction">
+          <div class="col-lg-4 col-md-6 portfolio-item filter-expected">
             <div class="portfolio-content h-100">
               <img src="assets/img/projects/construction-3.jpg" class="img-fluid" alt="" />
               <div class="portfolio-info">
@@ -227,7 +226,7 @@
           </div>
           <!-- End Projects Item -->
 
-          <div class="col-lg-4 col-md-6 portfolio-item filter-repairs">
+          <div class="col-lg-4 col-md-6 portfolio-item filter-end">
             <div class="portfolio-content h-100">
               <img src="assets/img/projects/repairs-3.jpg" class="img-fluid" alt="" />
               <div class="portfolio-info">
@@ -248,7 +247,7 @@
           </div>
           <!-- End Projects Item -->
 
-          <div class="col-lg-4 col-md-6 portfolio-item filter-design">
+          <div class="col-lg-4 col-md-6 portfolio-item filter-proceeding">
             <div class="portfolio-content h-100">
               <img src="assets/img/projects/design-3.jpg" class="img-fluid" alt="" />
               <div class="portfolio-info">
@@ -280,4 +279,9 @@
 export default {};
 </script>
 
-<style></style>
+<style scoped>
+.row > * {
+  padding-right: calc(1.5rem * .5);
+  padding-left: calc(1.5rem * .5);
+}
+</style>
