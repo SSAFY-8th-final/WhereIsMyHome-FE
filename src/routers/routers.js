@@ -4,11 +4,14 @@ Vue.use(VueRouter);
 
 import NavBar from '@/components/NavBar.vue';
 import MainPage from '@/views/AppMain';
-import MapMain from '@/views/AppMap';
+import AppMap from '@/views/AppMap';
 import AppFav from '@/views/AppFav';
 import AppEvent from '@/views/AppEvent';
 import AppNotice from '@/views/AppNotice';
 import AppLogin from "@/views/AppLogin";
+import AppRegister from "@/views/AppRegister";
+import AppDetail from "@/views/AppDetail";
+import AppMyPage from "@/views/AppMyPage";
 import FooterPage from '@/components/FooterPage.vue';
 
 export default new VueRouter({
@@ -25,7 +28,7 @@ export default new VueRouter({
             path: '/map',
             components: {
                 NavBar,
-                default: MapMain,
+                default: AppMap,
             }
         },
         {
@@ -53,10 +56,34 @@ export default new VueRouter({
             }
         },    
         {
+            path: '/detail',
+            components: {
+                NavBar,
+                default: AppDetail,
+                FooterPage
+            }
+        },    
+        {
             path: "/login",
             components: {
                 NavBar,
                 default: AppLogin,
+                FooterPage,
+            },
+        },
+        {
+            path: "/register",
+            components: {
+                NavBar,
+                default: AppRegister,
+                FooterPage,
+            },
+        },
+        {
+            path: "/mypage",
+            components: {
+                NavBar,
+                default: AppMyPage,
                 FooterPage,
             },
         },
