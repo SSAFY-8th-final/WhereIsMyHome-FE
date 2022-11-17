@@ -1,67 +1,25 @@
 <template>
     <div id="mySidepanel" class="sidepanel">
-        <div class="row" id="deal-content">
+        <div >
 
         <div id="nav-menu-left">
             <button class="btn btn-sm btn-outline-secondary" id="homeBtn"><a href="/">Home</a></button>
         </div>
+        <ul class="list-group deal-list">
+            <pannel-item class="list-group-item container" v-bind:house="house" v-for="(house, index) in  $store.state.map.list" v-bind:key="index"></pannel-item>
+        </ul>
 
+            <!-- <div class="container"> 
+                <div id="deal-list" class="row deal-list" >
+                    <pannel-item v-bind:house="house" v-for="(house, index) in  $store.state.map.list" v-bind:key="index"></pannel-item>
+            </div>
 
-            <div class="container"> 
-                <div class="row">
-                    <h2 style="margin-left: 0.5em;">거래정보</h2>
-                    <hr>
-                </div>
-                <div id="deal-list" class="row deal-list">
-                    <div class="row deal-list-item" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
-                    <div class="row deal-name">경희궁의아침 2단지</div>
-                    <div class="row deal-money">거래금액: 105,000<br>면적: 124.17</div>
-                    <div class="row deal-date">2015.12</div>
-                    </div>
-                    <div class="row deal-list-item" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
-                    <div class="row deal-name">경희궁 파크팰리스</div>
-                    <div class="row deal-money">거래금액: 120,000<br>면적: 146.33</div>
-                    <div class="row deal-date">2015.12</div>
-                    </div>
-                    <div class="row deal-list-item" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
-                    <div class="row deal-name">경희궁 파크팰리스</div>
-                    <div class="row deal-money">거래금액: 120,000<br>면적: 146.33</div>
-                    <div class="row deal-date">2015.12</div>
-                    </div>
-                    <div class="row deal-list-item" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
-                    <div class="row deal-name">경희궁 파크팰리스</div>
-                    <div class="row deal-money">거래금액: 120,000<br>면적: 146.33</div>
-                    <div class="row deal-date">2015.12</div>
-                    </div>
-                    <div class="row deal-list-item" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
-                    <div class="row deal-name">경희궁의아침 2단지</div>
-                    <div class="row deal-money">거래금액: 105,000<br>면적: 124.17</div>
-                    <div class="row deal-date">2015.12</div>
-                    </div>
-                    <div class="row deal-list-item" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
-                        <div class="row deal-name">경희궁의아침 2단지</div>
-                        <div class="row deal-money">거래금액: 105,000<br>면적: 124.17</div>
-                        <div class="row deal-date">2015.12</div>
-                    </div>
-                    <div class="row deal-list-item" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
-                        <div class="row deal-name">경희궁의아침 2단지</div>
-                        <div class="row deal-money">거래금액: 105,000<br>면적: 124.17</div>
-                        <div class="row deal-date">2015.12</div>
-                    </div>
-                    <div class="row deal-list-item" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
-                        <div class="row deal-name">경희궁의아침 2단지</div>
-                        <div class="row deal-money">거래금액: 105,000<br>면적: 124.17</div>
-                        <div class="row deal-date">2015.12</div>
-                    </div>
-                
-                </div>
+            </div>   -->
 
-        </div>  
-
-</div>
+        </div>
 
     <div @click="sidePannelControll">
-        <svg id="localInfoTest" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chevron-compact-right closebtn" viewBox="0 0 16 16">
+        <svg id="sidePannelChevronBtn" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chevron-compact-right closebtn" viewBox="0 0 16 16">
         <path fill-rule="evenodd" d="M6.776 1.553a.5.5 0 0 1 .671.223l3 6a.5.5 0 0 1 0 .448l-3 6a.5.5 0 1 1-.894-.448L9.44 8 6.553 2.224a.5.5 0 0 1 .223-.671z"/>
         </svg> 
     </div>
@@ -71,24 +29,30 @@
 </template>
 
 <script>
+import PannelItem from "@/components/map/PannelItem.vue";
+
 export default {
+    components:{
+        PannelItem
+    },
     data() {
         return {
             openCloseNum: 0,
+            
         }
     },
     methods: {
         openNav() {
             document.getElementById("mySidepanel").style.transform = "translateX(0%)";
-            document.getElementById("localInfoTest").classList.remove('bi-chevron-compact-right');
-            document.getElementById("localInfoTest").classList.add('bi-chevron-compact-left');
-            document.querySelector("#localInfoTest > path").setAttribute('d',  "M9.224 1.553a.5.5 0 0 1 .223.67L6.56 8l2.888 5.776a.5.5 0 1 1-.894.448l-3-6a.5.5 0 0 1 0-.448l3-6a.5.5 0 0 1 .67-.223z")
+            document.getElementById("sidePannelChevronBtn").classList.remove('bi-chevron-compact-right');
+            document.getElementById("sidePannelChevronBtn").classList.add('bi-chevron-compact-left');
+            document.querySelector("#sidePannelChevronBtn > path").setAttribute('d',  "M9.224 1.553a.5.5 0 0 1 .223.67L6.56 8l2.888 5.776a.5.5 0 1 1-.894.448l-3-6a.5.5 0 0 1 0-.448l3-6a.5.5 0 0 1 .67-.223z")
         },
         closeNav() {
             document.getElementById("mySidepanel").style.transform = "translateX(-100%)";
-            document.getElementById("localInfoTest").classList.remove('bi-chevron-compact-left');
-            document.getElementById("localInfoTest").classList.add('bi-chevron-compact-right');
-            document.querySelector("#localInfoTest > path").setAttribute('d', "M6.776 1.553a.5.5 0 0 1 .671.223l3 6a.5.5 0 0 1 0 .448l-3 6a.5.5 0 1 1-.894-.448L9.44 8 6.553 2.224a.5.5 0 0 1 .223-.671z")
+            document.getElementById("sidePannelChevronBtn").classList.remove('bi-chevron-compact-left');
+            document.getElementById("sidePannelChevronBtn").classList.add('bi-chevron-compact-right');
+            document.querySelector("#sidePannelChevronBtn > path").setAttribute('d', "M6.776 1.553a.5.5 0 0 1 .671.223l3 6a.5.5 0 0 1 0 .448l-3 6a.5.5 0 1 1-.894-.448L9.44 8 6.553 2.224a.5.5 0 0 1 .223-.671z")
         },
         sidePannelControll(){
             if(this.openCloseNum == 0){
@@ -106,7 +70,31 @@ export default {
 </script>
 
 <style>
-#localInfoTest{
+
+/*********** 거래정보 레이아웃 세부 ***********/
+.deal-list {
+  /* deal-list 내부 스크롤 만들기*/
+  overflow: auto;
+  height: calc(91vh - 70px);
+  overflow-x: hidden;
+}
+.deal-list > .row {
+  width: 95%;
+  padding: 5px 0;
+  margin-left: 1em;
+  border: none !important;
+  border-bottom: 1px solid rgb(197, 197, 197) !important;
+}
+
+.deal-list > .deal-list-item{
+  max-height: 130px;
+}
+.deal-list > .list-group-item{
+  border: none !important;
+  border-bottom: 1px solid rgb(197, 197, 197) !important;
+}
+/*********** side pannel ***********/
+#sidePannelChevronBtn{
 	z-index: 10;
 	overflow: hidden;
     position: absolute;
@@ -124,7 +112,7 @@ export default {
     
     transition: 1s;
 }
-#localInfoTest:hover{
+#sidePannelChevronBtn:hover{
 	background-color: grey;
 }
 
