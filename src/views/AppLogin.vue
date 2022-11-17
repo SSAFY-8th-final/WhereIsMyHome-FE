@@ -1,6 +1,6 @@
 <template>
 <div>
-    <div class="page-gap"></div>
+    <bread-crumbs title="로그인 | 회원가입"></bread-crumbs>
     <section class="container-sm pd-4">
       <div class="bg-white border mx-auto" style="width: 100%;">
         <section class="w-100 p-4 d-flex justify-content-center pb-4">
@@ -22,26 +22,6 @@
               <div class="tab-content">
                 <div class="tab-pane fade show active" id="pills-login" role="tabpanel" aria-labelledby="tab-login">
                     <form>
-                    <div class="text-center mb-3">
-                        <p>Sign in with:</p>
-                        <button type="button" class="btn btn-link btn-floating mx-1">
-                        <i class="fab fa-facebook-f"></i>
-                        </button>
-
-                        <button type="button" class="btn btn-link btn-floating mx-1">
-                        <i class="fab fa-google"></i>
-                        </button>
-
-                        <button type="button" class="btn btn-link btn-floating mx-1">
-                        <i class="fab fa-twitter"></i>
-                        </button>
-
-                        <button type="button" class="btn btn-link btn-floating mx-1">
-                        <i class="fab fa-github"></i>
-                        </button>
-                    </div>
-
-                    <p class="text-center">or:</p>
 
                     <!-- Email input -->
                     <div class="form-outline mb-4">
@@ -73,6 +53,26 @@
 
                     <!-- Submit button -->
                     <button type="submit" class="btn btn-primary btn-block mb-4">Sign in</button>
+
+                    <p class="text-center">or:</p>
+
+                    <div class="text-center mb-3">
+                        <button type="button" class="btn btn-link btn-floating mx-1">
+                        <i class="fab fa-facebook-f"></i>
+                        </button>
+
+                        <button type="button" class="btn btn-link btn-floating mx-1">
+                        <i class="fab fa-google"></i>
+                        </button>
+
+                        <button type="button" class="btn btn-link btn-floating mx-1">
+                        <i class="fab fa-twitter"></i>
+                        </button>
+
+                        <button type="button" class="btn btn-link btn-floating mx-1">
+                        <i class="fab fa-github"></i>
+                        </button>
+                    </div>
 
                     <!-- Register buttons -->
                     <div class="text-center">
@@ -156,9 +156,10 @@
 </template>
 
 <script>
-
+import BreadCrumbs from "@/components/BreadCrumbs.vue";
 export default {
     components: {
+        BreadCrumbs,
     }
 }
 </script>

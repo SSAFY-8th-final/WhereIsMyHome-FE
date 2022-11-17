@@ -104,4 +104,9 @@
 export default {};
 </script>
 
-<style></style>
+<style>
+.row > * {
+  padding-right: calc(1.5rem * .5);
+  padding-left: calc(1.5rem * .5);
+}
+</style>
