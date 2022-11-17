@@ -1,5 +1,5 @@
 <template>
-<li>
+<li @click="showDetail">
     <div class="pannel-list-wrapper">
         <div class="row card-item">
 
@@ -47,19 +47,24 @@ export default {
   components:{
     ToggleFav
   },
-    props:{
-        house: {
-            type: Object,
-            default: ()=> {
-                return{
-                    AptName: '',
-                    dealAmount: '',
-                    area: '',
-                    floor: 0
-                }
-            }
-        }
-    }
+  props:{
+      house: {
+          type: Object,
+          default: ()=> {
+              return{
+                  AptName: '',
+                  dealAmount: '',
+                  area: '',
+                  floor: 0
+              }
+          }
+      }
+  },
+  methods: {
+    showDetail(){
+      this.$router.push('/detail')
+    },
+  }
 }
 </script>
 
