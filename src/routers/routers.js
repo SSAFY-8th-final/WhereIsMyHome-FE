@@ -12,6 +12,7 @@ import AppLogin from "@/views/AppLogin";
 import AppRegister from "@/views/AppRegister";
 import AppDetail from "@/views/AppDetail";
 import AppMyPage from "@/views/AppMyPage";
+import AppAdminNotice from "@/views/AppAdminNotice";
 import FooterPage from '@/components/FooterPage.vue';
 
 export default new VueRouter({
@@ -87,6 +88,14 @@ export default new VueRouter({
                 FooterPage,
             },
         },
+        {
+            path: "/admin/notice",
+            components: {
+                NavBar,
+                default: AppAdminNotice,
+                FooterPage,
+            }
+        }
 
     ]
 });
