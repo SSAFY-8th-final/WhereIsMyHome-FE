@@ -2,7 +2,7 @@
     <section class="ftco-section">
         <div class="container">
             <div class="row justify-content-center">
-                <div class="input-group mb-3">
+                <div class="input-group w-50 mb-3">
                     <!-- store 사용 -->
                     <!-- <input v-model="searchWord" @keydown.enter="boardList" type="text" class="form-control"> -->
                     <input
@@ -11,7 +11,7 @@
                     type="text"
                     class="form-control"
                     />
-                    <button @click="eventList" class="btn btn-dark" type="button">Search</button>
+                    <button @click="eventList" type="button"><i class="fa-solid fa-magnifying-glass"></i></button>
                 </div>
             </div>
             <div class="row">
@@ -107,5 +107,18 @@ export default {
     -webkit-box-shadow: 0px 5px 12px -12px rgb(0 0 0 / 29%);
     -moz-box-shadow: 0px 5px 12px -12px rgba(0, 0, 0, 0.29);
     box-shadow: 0px 5px 12px -12px rgb(0 0 0 / 29%);
+}
+/* search bar*/
+.input-group input, button {
+  border: none !important;
+  outline: none !important;
+  box-shadow: none !important;
+}
+.input-group {
+  border-bottom: 1px solid black;
+}
+.input-group >>> button {
+  background-color: white;
+  padding-left: 5px;
 }
 </style>
