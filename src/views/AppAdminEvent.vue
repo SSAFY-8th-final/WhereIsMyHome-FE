@@ -1,17 +1,17 @@
 <template>
   <div>
-    <bread-crumbs title="공지사항 관리"></bread-crumbs>
-    <admin-notice></admin-notice>
+    <bread-crumbs title="이벤트 관리"></bread-crumbs>
+    <admin-event></admin-event>
   </div>
 </template>
 
 <script>
 import BreadCrumbs from "@/components/BreadCrumbs.vue";
-import AdminNotice from "@/components/admin/notice/AdminNotice.vue";
+import AdminEvent from "@/components/admin/event/AdminEvent.vue";
 export default {
   components: {
     BreadCrumbs,
-    AdminNotice,
+    AdminEvent,
   },
 };
 </script>
