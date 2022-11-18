@@ -16,67 +16,13 @@
         <!-- End Projects Filters -->
 
         <div class="row gy-4 portfolio-container" data-aos="fade-up" data-aos-delay="200">
-          <div class="col-lg-4 col-md-6 portfolio-item filter-proceeding">
-            <div class="portfolio-content h-100">
-              <img src="assets/img/projects/remodeling-1.jpg" class="img-fluid" alt="" />
-              <div class="portfolio-info">
-                <h4>proceeding 1</h4>
-                <p>Lorem ipsum, dolor sit amet consectetur</p>
-                <a
-                  href="assets/img/projects/remodeling-1.jpg"
-                  title="Remodeling 1"
-                  data-gallery="portfolio-gallery-remodeling"
-                  class="glightbox preview-link"
-                  ><i class="bi bi-zoom-in"></i
-                ></a>
-                <a href="project-details.html" title="More Details" class="details-link"
-                  ><i class="bi bi-link-45deg"></i
-                ></a>
-              </div>
-            </div>
-          </div>
+          <image-item></image-item>
           <!-- End Projects Item -->
 
-          <div class="col-lg-4 col-md-6 portfolio-item filter-expected">
-            <div class="portfolio-content h-100">
-              <img src="assets/img/projects/construction-1.jpg" class="img-fluid" alt="" />
-              <div class="portfolio-info">
-                <h4>Construction 1</h4>
-                <p>Lorem ipsum, dolor sit amet consectetur</p>
-                <a
-                  href="assets/img/projects/construction-1.jpg"
-                  title="Construction 1"
-                  data-gallery="portfolio-gallery-construction"
-                  class="glightbox preview-link"
-                  ><i class="bi bi-zoom-in"></i
-                ></a>
-                <a href="project-details.html" title="More Details" class="details-link"
-                  ><i class="bi bi-link-45deg"></i
-                ></a>
-              </div>
-            </div>
-          </div>
+          <image-item></image-item>
           <!-- End Projects Item -->
 
-          <div class="col-lg-4 col-md-6 portfolio-item filter-end">
-            <div class="portfolio-content h-100">
-              <img src="assets/img/projects/repairs-1.jpg" class="img-fluid" alt="" />
-              <div class="portfolio-info">
-                <h4>Repairs 1</h4>
-                <p>Lorem ipsum, dolor sit amet consectetur</p>
-                <a
-                  href="assets/img/projects/repairs-1.jpg"
-                  title="Repairs 1"
-                  data-gallery="portfolio-gallery-repairs"
-                  class="glightbox preview-link"
-                  ><i class="bi bi-zoom-in"></i
-                ></a>
-                <a href="project-details.html" title="More Details" class="details-link"
-                  ><i class="bi bi-link-45deg"></i
-                ></a>
-              </div>
-            </div>
-          </div>
+          <image-item></image-item>
           <!-- End Projects Item -->
 
           <div class="col-lg-4 col-md-6 portfolio-item filter-proceeding">
@@ -276,7 +222,12 @@
 </template>
 
 <script>
-export default {};
+import ImageItem from "@/components/event/ImageItem.vue";
+export default {
+  components: {
+    ImageItem
+  }
+};
 </script>
 
 <style scoped>

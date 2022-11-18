@@ -12,7 +12,7 @@
             class="glightbox preview-link"
             ><i class="bi bi-zoom-in"></i
         ></a>
-        <a href="project-details.html" title="More Details" class="details-link"
+        <a href="#/event/1" title="More Details" class="details-link"
             ><i class="bi bi-link-45deg"></i
         ></a>
         </div>
