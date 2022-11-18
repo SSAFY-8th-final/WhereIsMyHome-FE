@@ -1,6 +1,7 @@
 <template>
   <!-- ======= Services Section ======= -->
   <section id="services" class="services section-bg">
+    <section-header id="serviceTitle" title="동네정보" description="hello"></section-header>
     <div class="container" data-aos="fade-up">
       <div class="row gy-4">
         <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="100">
@@ -111,7 +112,22 @@
 </template>
 
 <script>
-export default {};
+import SectionHeader from "@/components/main/SectionHeader.vue";
+export default {
+  components: {
+    SectionHeader
+  }
+};
 </script>
 
-<style></style>
+<style scoped>
+  #services >>> #serviceTitle {
+    padding-top: 0px !important;
+    padding-bottom: 60px;
+  }
+
+  .row > * {
+    padding-right: calc(1.5rem * .5);
+    padding-left: calc(1.5rem * .5);
+  }
+</style>

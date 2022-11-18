@@ -1,8 +1,7 @@
 <template>
   <div>
-	<div class="page-gap"></div>
+	<bread-crumbs title="공지사항"></bread-crumbs>
     <div class="container" style="height: 50vh;">
-		<h4 class="text-center mt-3">공지사항</h4>
 
 		<div class="input-group mb-3 mt-5">
 			
@@ -37,9 +36,10 @@
 </template>
 
 <script>
-
+import BreadCrumbs from "@/components/BreadCrumbs.vue";
 export default {
   components: {
+	BreadCrumbs,
   },
 }
 </script>

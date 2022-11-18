@@ -1,23 +1,19 @@
 <template>
-<div>
-
-    <div class="page-gap"></div>
-    <section-header title="Favorite" description="my favorite"></section-header>
-
-    <pre-view></pre-view>
-</div>
-
+  <div>
+      <bread-crumbs title="관심목록"></bread-crumbs>
+      <four-tab></four-tab>
+  </div>
 </template>
 
 <script>
-import SectionHeader from "@/components/main/SectionHeader.vue";
-import PreView from "@/components/PreView.vue";
+import BreadCrumbs from "@/components/BreadCrumbs.vue";
+import FourTab from "@/components/fav/FourTab.vue";
 
 
 export default {
   components: {
-    SectionHeader,
-    PreView,
+    BreadCrumbs,
+    FourTab,
   },
 };
 </script>
