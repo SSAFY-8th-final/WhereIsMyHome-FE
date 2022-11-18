@@ -22,9 +22,4 @@ export default {
 </script>
 
 <style scoped>
-div >>> .breadcrumbs{
-  height: var(--header-size);
-  padding: 0;
-  min-height: var(--header-size);
-}
 </style>
