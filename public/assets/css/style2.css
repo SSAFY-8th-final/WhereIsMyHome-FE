@@ -19,7 +19,11 @@
 
 /*이거 넣어야됨*/
 .page-gap{
-  margin-top: 90px;
+  margin-top: var(--header-size);
+}
+
+:root {
+  --header-size: 80px;
 }
 /************* 거래정보 레이아웃 ***************/
 #search-input{
@@ -47,152 +51,6 @@
     z-index: 10;
     min-width: 44px;
     padding: 0 10px;
-}
-
-
-/*********** 거래정보 레이아웃 세부 ***********/
-.deal-list {
-  /* deal-list 내부 스크롤 만들기*/
-  overflow: auto;
-  height: calc(91vh - 112px);;
-  overflow-x: hidden;
-}
-.deal-list > .row {
-  width: 95%;
-  padding: 5px 0;
-  margin-left: 1em;
-  border-bottom: 1px solid rgb(197, 197, 197);
-}
-
-.deal-list > .deal-list-item{
-  max-height: 130px;
-}
-
-/*new!*/
-#localInfoTest{
-	z-index: 10;
-	overflow: hidden;
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    right: -22px;
-    margin: auto;
-    width: 22px;
-    height: 54px;
-    font-size: 0;
-    line-height: 0;
-    background-color: black;
-    text-indent: -9999px;
-    cursor: pointer;
-    
-    transition: 1s;
-}
-#localInfoTest:hover{
-	background-color: grey;
-}
-
-.sidepanel  {
-  width: 350px;
-  position: fixed;
-  z-index: 10;
-  height: 100vh;
-  top: 0;
-  left: 0;
-  background-color: #fff;
-  transition: 0.5s;
-  padding-top: 60px;
-  transform: translateX(-100%);
-}
-
-.sidepanel a {
-  padding: 8px 8px 8px 32px;
-  text-decoration: none;
-  font-size: 25px;
-  color: #818181;
-  display: block;
-  transition: 0.3s;
-}
-
-.sidepanel a:hover {
-  color: #f1f1f1;
-}
-
-.sidepanel .closebtn {
-  position: absolute;
-  top: 0;
-  right: 25px;
-  font-size: 36px;
-}
-
-#togglebtn{
-	position: absolute;
-    top: 11px;
-    left: 119px;
-    z-index: 10;
-    min-width: 44px;
-    padding: 0 10px;
-}
-
-.openbtn {
-  font-size: 20px;
-  cursor: pointer;
-  background-color: #111;
-  color: white;
-  padding: 10px 15px;
-  border: none;
-}
-
-.openbtn:hover {
-  background-color:#444;
-}
-.closebtn {
-  font-size: 10px;
-  cursor: pointer;
-  background-color: #111;
-  color: white;
-  border: none;
-}
-
-.closebtn:hover {
-  background-color:#444;
-}
-
-/*********거래정보 - list ***********/
-/* list item */
-.deal-money::after {
-  content: "만원";
-  margin-left: 0.2em;
-}
-
-.deal-list .deal-date {
-  color: grey;
-  margin-top: 2px;
-}
-.deal-list .deal-date::before {
-  content: "\F1F6";
-  margin-right: 3px;
-  font-family: bootstrap-icons;
-}
-
-.deal-name {
-  font-size: larger;
-  margin-bottom: 2px;
-}
-
-/* deal-list 스크롤바 관련 */
-.deal-list::-webkit-scrollbar {
-  width: 10px;
-}
-.deal-list::-webkit-scrollbar-thumb {
-  background-color: grey;
-  border-radius: 10px;
-  background-clip: padding-box;
-  border: 1px solid transparent;
-}
-.deal-list::-webkit-scrollbar-track {
-  background-color: rgb(255, 255, 255);
-  border-radius: 10px;
-  box-shadow: inset 0px 0px 5px white;
 }
 
 /**********거래 상세정보 모달***********/
