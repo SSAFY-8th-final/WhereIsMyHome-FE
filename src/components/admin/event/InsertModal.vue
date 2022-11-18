@@ -3,13 +3,13 @@
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title">글 쓰기</h5>
+        <h5 class="modal-title">이벤트 등록</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
 
         <div class="mb-3">
-          <input v-model="title" type="text" class="form-control" placeholder="제목">
+          <input v-model="name" type="text" class="form-control" placeholder="제목">
         </div>
         <div class="mb-3">
           <div id=divEditorInsert></div>
@@ -27,7 +27,7 @@
         </div>
       </div>
       <div class="modal-footer">
-        <button @click="boardInsert" class="btn btn-sm btn-primary btn-outline" data-dismiss="modal" type="button">등록</button>
+        <button @click="eventInsert" class="btn btn-sm btn-primary btn-outline" data-dismiss="modal" type="button">등록</button>
       </div>
     </div>
   </div>
@@ -49,7 +49,7 @@ export default {
   // data 가 최초 발생하는 곳이므로 store 를 사용하지 않아도 됨.
   data() {
         return {
-          title: '',
+          name: '',
           CKEditor: '',
           attachFile: false,
           fileList: []
@@ -58,7 +58,7 @@ export default {
   methods: {
       // modal 초기화
       initUI(){
-        this.title = '';
+        this.name = '';
         this.CKEditor.setData('');
         this.attachFile = false;
         this.fileList = [];
@@ -73,7 +73,7 @@ export default {
           });
       },
       // 굳이 actions 에 있을 필요 없다. backend async 작업이지만, 그 결과로 store 를 변경하는 내용이 없다.
-      async boardInsert(){
+      async eventInsert(){
         let formData = new FormData();
         formData.append("title", this.title);
         formData.append("content", this.CKEditor.getData());
@@ -91,7 +91,7 @@ export default {
         }
 
         try{
-          let {data} = await http.post('/boards', formData, options);
+          let {data} = await http.post('/admins/events', formData, options);
 
           console.log("InsertModalVue: data : ");
           console.log(data);

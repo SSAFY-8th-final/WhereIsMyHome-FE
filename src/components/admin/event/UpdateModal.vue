@@ -3,7 +3,7 @@
       <div class="modal-dialog">
          <div class="modal-content">
             <div class="modal-header">
-               <h5 class="modal-title">글 수정</h5>
+               <h5 class="modal-title">이벤트 수정</h5>
                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
@@ -17,10 +17,10 @@
                </div>
                <!-- 기존 파일 내용 보여줌  -->
                <!-- 새로운 첨부파일은 data-fileList 로 -->
-               <div v-if="$store.state.board.fileList.length > 0" class="mb-3">
+               <div v-if="$store.state.event.fileList.length > 0" class="mb-3">
                   첨부파일 :
                   <span
-                     ><div v-for="(file, index) in $store.state.board.fileList" class="fileName" :key="index">{{ file.fileName }}</div></span
+                     ><div v-for="(file, index) in $store.state.event.fileList" class="fileName" :key="index">{{ file.fileName }}</div></span
                   >
                </div>
                <div class="form-check mb-3">
@@ -36,7 +36,7 @@
                </div>
             </div>
             <div class="modal-footer">
-               <button @click="boardUpdate" class="btn btn-sm btn-primary btn-outline" data-dismiss="modal" type="button">수정</button>
+               <button @click="eventUpdate" class="btn btn-sm btn-primary btn-outline" data-dismiss="modal" type="button">수정</button>
             </div>
          </div>
       </div>
@@ -68,20 +68,20 @@ export default {
    computed: {
       storeTitle: {
          get() {
-            return this.$store.state.board.title;
+            return this.$store.state.event.name;
          },
-         set(title) {
-            this.$store.commit("SET_BOARD_TITLE", title);
+         set(name) {
+            this.$store.commit("SET_EVENT_TITLE", name);
          },
       },
    },
    methods: {
       // modal 초기화
       initUI() {
-         this.CKEditor.setData(this.$store.state.board.content);
-         this.attachFile = false;
-         this.fileList = [];
-         document.querySelector("#inputFileUploadUpdate").value = "";
+         this.CKEditor.setData(this.$store.state.event.content);
+         // this.attachFile = false;
+         // this.fileList = [];
+         // document.querySelector("#inputFileUploadUpdate").value = "";
       },
       changeFile(fileEvent) {
          this.fileList = []; // thumbnail 초기화
@@ -92,11 +92,11 @@ export default {
          });
       },
       // 굳이 actions 에 있을 필요 없다. backend async 작업이지만, 그 결과로 store 를 변경하는 내용이 없다.
-      async boardUpdate() {
+      async eventUpdate() {
          // post form data
          let formData = new FormData();
-         formData.append("boardId", this.$store.state.board.boardId); // update 에 추가
-         formData.append("title", this.$store.state.board.title);
+         formData.append("eventKey", this.$store.state.event.eventKey); // update 에 추가
+         formData.append("name", this.$store.state.event.name);
          formData.append("content", this.CKEditor.getData()); // store X !!!!
 
          // file upload
@@ -113,7 +113,7 @@ export default {
 
          // not put, REST but FileUpload
          try {
-            let { data } = await http.post("/boards/" + this.$store.state.board.boardId, formData, options);
+            let { data } = await http.post("/admins/events/" + this.$store.state.event.eventKey, formData, options);
 
             console.log("UpdateModalVue: data : ");
             console.log(data);
