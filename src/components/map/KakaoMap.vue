@@ -47,9 +47,9 @@
   };
   </script>
   
-  <style scoped>
-  #map {
+<style scoped>
+  div >>> #map {
     width: 100%;
-    height: 100vh;
+    height: calc(100vh - 80px);
   }
-  </style>
+</style>

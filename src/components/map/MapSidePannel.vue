@@ -1,39 +1,27 @@
 <template>
     <div id="mySidepanel" class="sidepanel">
-        <div >
-
-        <div id="nav-menu-left">
-            <button class="btn btn-sm btn-outline-secondary" id="homeBtn"><a href="/">Home</a></button>
-        </div>
+      <search-bar-map></search-bar-map>
+      <div>
         <ul class="list-group deal-list">
             <pannel-item class="list-group-item container" v-bind:house="house" v-for="(house, index) in  $store.state.map.list" v-bind:key="index"></pannel-item>
         </ul>
-
-            <!-- <div class="container"> 
-                <div id="deal-list" class="row deal-list" >
-                    <pannel-item v-bind:house="house" v-for="(house, index) in  $store.state.map.list" v-bind:key="index"></pannel-item>
-            </div>
-
-            </div>   -->
-
-        </div>
-
+      </div>
     <div @click="sidePannelControll">
         <svg id="sidePannelChevronBtn" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chevron-compact-right closebtn" viewBox="0 0 16 16">
         <path fill-rule="evenodd" d="M6.776 1.553a.5.5 0 0 1 .671.223l3 6a.5.5 0 0 1 0 .448l-3 6a.5.5 0 1 1-.894-.448L9.44 8 6.553 2.224a.5.5 0 0 1 .223-.671z"/>
         </svg> 
     </div>
-    <!-- <div id="localInfoTest" class="closebtn" @click="sidePannelControll">00000000</div> -->
 </div>
 
 </template>
 
 <script>
+import SearchBarMap from "@/components/map/SearchBarMap.vue";
 import PannelItem from "@/components/map/PannelItem.vue";
 
 export default {
     components:{
-        PannelItem
+        PannelItem, SearchBarMap
     },
     data() {
         return {
@@ -75,7 +63,7 @@ export default {
 .deal-list {
   /* deal-list 내부 스크롤 만들기*/
   overflow: auto;
-  height: calc(91vh - 70px);
+  height: calc(90vh - 70px);
   overflow-x: hidden;
 }
 .deal-list > .row {
@@ -93,6 +81,24 @@ export default {
   border: none !important;
   border-bottom: 1px solid rgb(197, 197, 197) !important;
 }
+
+/* deal-list 스크롤바 관련 */
+.deal-list::-webkit-scrollbar {
+  width: 10px;
+}
+.deal-list::-webkit-scrollbar-thumb {
+  background-color: grey;
+  border-radius: 10px;
+  background-clip: padding-box;
+  border: 1px solid transparent;
+}
+.deal-list::-webkit-scrollbar-track {
+  background-color: rgb(255, 255, 255);
+  border-radius: 10px;
+  box-shadow: inset 0px 0px 5px white;
+}
+
+
 /*********** side pannel ***********/
 #sidePannelChevronBtn{
 	z-index: 10;
@@ -110,7 +116,7 @@ export default {
     text-indent: -9999px;
     cursor: pointer;
     
-    transition: 1s;
+    transition: 0.5s;
 }
 #sidePannelChevronBtn:hover{
 	background-color: grey;
@@ -126,7 +132,7 @@ export default {
   left: 0;
   background-color: #fff;
   transition: 0.5s;
-  padding-top: 60px;
+  margin-top: var(--header-size);
   transform: translateX(-100%);
 }
 
@@ -184,5 +190,7 @@ export default {
 .closebtn:hover {
   background-color:#444;
 }
+
+
 
 </style>

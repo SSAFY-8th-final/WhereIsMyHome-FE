@@ -81,7 +81,7 @@ export default new VueRouter({
             },
         },
         {
-            path: "/mypage",
+            path: "/profile",
             components: {
                 NavBar,
                 default: AppMyPage,
