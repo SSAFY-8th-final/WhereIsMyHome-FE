@@ -15,8 +15,8 @@ export default {
         }
     },
     methods: {
-    heartit: function () {
-      
+    heartit: function (e) {
+      e.stopPropagation();
       this.liked = !this.liked;
 
     }
