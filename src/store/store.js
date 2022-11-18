@@ -8,6 +8,10 @@ import util from "@/common/util.js";
 
 import router from "@/routers/routers.js";
 
+import AddrSido from "@/assets/json/sido.json"
+import AddrSigungu from "@/assets/json/sigungu.json"
+import AddrDong from "@/assets/json/dong.json"
+
 export default new Vuex.Store({
     state: {
          // login, NavBar
@@ -224,7 +228,16 @@ export default new Vuex.Store({
             readCount: 0,
             fileList: [],
             isAdmin: false,
-         },
+      },
+      address: {
+         sidoSelect: '',
+         sigunguSelect: '',
+         dongSelect: '',
+
+         sido: AddrSido,
+         sigungu: AddrSigungu,
+         dong: AddrDong,
+      }
     },
     mutations: {
       SET_LOGIN(state, payload) {
@@ -297,7 +310,18 @@ export default new Vuex.Store({
          // for UpdateModal title v-modal
          SET_NOTICE_TITLE(state, title) {
             state.notice.title = title;
-         },
+       },
+         
+       /* selected address */
+       SET_SIDO_SELECT(state, sido) {
+            state.address.sidoSelect = sido
+       },
+       SET_SIGUNGU_SELECT(state, sigungu) {
+         state.address.sigunguSelect = sigungu
+       },
+       SET_DONG_SELECT(state, dong) {
+         state.address.dongSelect = dong
+      }
     },
     actions: {
         async noticeList(context) {
@@ -391,7 +415,17 @@ export default new Vuex.Store({
             } else {
                return true;
             }
+       },
+      //  getSidoList: function (state) {
+      //     return state.address.sido;
+      //    },
+      getFilteredSigungu: function (state) {
+          return state.address.sigungu.filter(item => item.code.substr(0,2) == state.address.sidoSelect);
          },
+       getFilteredDong: function (state) {
+         return state.address.dong.filter(item => item.code.substr(0,5) == state.address.sigunguSelect);
+         }
+
     }
 
 })
