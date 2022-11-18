@@ -1,6 +1,8 @@
 <template>
     <!-- ======= MapNavBg ======= -->
-    <div class="breadcrumbs d-flex align-items-center" style="background-image: url('assets/img/breadcrumbs-bg.jpg');">
+    <div>
+        <div class="breadcrumbs d-flex align-items-center" style="background-image: url('assets/img/breadcrumbs-bg.jpg');">
+        </div>
     </div>
 </template>
 
@@ -9,6 +11,10 @@ export default {
 }
 </script>
 
-<style>
-
+<style scoped>
+div >>> .breadcrumbs{
+  height: var(--header-size);
+  padding: 0;
+  min-height: var(--header-size);
+}
 </style>

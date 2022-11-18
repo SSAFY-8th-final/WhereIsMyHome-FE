@@ -32,13 +32,13 @@
 export default {};
 </script>
 
-<style>
-#serchBar>div{
+<style scoped>
+div >>> #serchBar>div{
   box-shadow: 0 2px 1px 0 rgb(0 0 0 / 15%);
   
 }
 
-#searchBar label {
+div >>> #searchBar label {
   display: flex;
   align-items: center;
   width: 300px;
@@ -49,7 +49,7 @@ export default {};
   background-color: white;
 }
 
-#searchBar input {
+div >>> #searchBar input {
   width: 100%;
   height: 20px;
   margin-left: 10px;
@@ -60,7 +60,7 @@ export default {};
   appearance: none;
 }
 
-#searchBar input:focus {
+div >>> #searchBar input:focus {
   background-color: white;
 }
 </style>
