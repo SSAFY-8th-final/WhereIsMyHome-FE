@@ -170,7 +170,7 @@ export default {
     },
     async eventDelete() {
          try {
-            let { data } = await http.delete("/events/" + this.$store.state.event.eventKey);
+            let { data } = await http.delete("/admins/events/" + this.$store.state.event.eventKey);
             console.log(data);
 
             if (data.result == "login") {

@@ -68,6 +68,7 @@ export default new Vuex.Store({
       title: "",
       content: "",
       userEmail: "",
+      regDt: "",
       regDate: "",
       regTime: "",
       readCount: 0,
@@ -170,10 +171,10 @@ export default new Vuex.Store({
     },
 
     SET_NOTICE_DETAIL(state, payload) {
-      state.notice.boardId = payload.boardId;
+      state.notice.noticeId = payload.noticeId;
       state.notice.title = payload.title;
       state.notice.content = payload.content;
-      state.notice.userName = payload.userName;
+      state.notice.userEmail = payload.userEmail;
       state.notice.regDate = util.makeDateStr(
         payload.regDt.date.year,
         payload.regDt.date.month,
@@ -187,7 +188,6 @@ export default new Vuex.Store({
         ":"
       );
       state.notice.readCount = payload.readCount;
-      state.notice.fileList = payload.fileList;
       state.notice.sameUser = payload.sameUser;
     },
     // for UpdateModal title v-modal
@@ -218,7 +218,7 @@ export default new Vuex.Store({
       };
 
       try {
-        let { data } = await http.get("/notices", { params }); // params: params shorthand property, let response 도 제거
+        let { data } = await http.get("/admins/notices", { params }); // params: params shorthand property, let response 도 제거
         console.log(data);
         if (data.result == "login") {
           router.push("/login");
