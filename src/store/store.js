@@ -3,6 +3,8 @@ import Vuex from "vuex";
 
 Vue.use(Vuex);
 
+//import jwtDecode from "jwt-decode";
+
 import http from "@/common/axios.js";
 import util from "@/common/util.js";
 
@@ -15,16 +17,17 @@ import AddrDong from "@/assets/json/dong.json"
 export default new Vuex.Store({
     state: {
          // login, NavBar
-         login: {
-            // NavBar
+         user: {
             isLogin: false,
-
-            userName: "",
-            userProfileImageUrl: "",
+    
+            userInfo: null,
+            isValidToken: false,
 
             // Login
-            userEmail: "dskim@my.com",
-            userPassword: "1234",
+          userInput: {
+             userEmail: '',
+             userPassword: ''
+            }
          },
          //
          board: {
@@ -241,11 +244,16 @@ export default new Vuex.Store({
       }
     },
     mutations: {
-      SET_LOGIN(state, payload) {
-         state.login.isLogin = payload.isLogin;
-         state.login.userName = payload.userName;
-         state.login.userProfileImageUrl = payload.userProfileImageUrl;
-      },
+      SET_IS_LOGIN: (state, isLogin) => {
+         state.user.isLogin = isLogin;
+       },
+       SET_IS_VALID_TOKEN: (state, isValidToken) => {
+         state.user.isValidToken = isValidToken;
+       },
+       SET_USER_INFO: (state, userInfo) => {
+         state.user.isLogin = true;
+         state.user.userInfo = userInfo;
+       },
 
       SET_BOARD_LIST(state, list) {
          state.board.list = list;
@@ -322,9 +330,131 @@ export default new Vuex.Store({
        },
        SET_DONG_SELECT(state, dong) {
          state.address.dongSelect = dong
-      }
+       },
+       SET_INTEREST_CODE(state, flag) {
+          state.address.setInterestCode = flag;
+       }
     },
-    actions: {
+   actions: {
+      async login(context, payload) {
+         
+         try {
+            console.log(payload)
+            let response = await http.post('/login', JSON.stringify(payload))
+            let { data } = response
+            console.log(response.status);
+
+            let statusCode = response.status;
+            if (statusCode == 200) {
+               context.commit("SET_IS_LOGIN", true);
+               context.commit("SET_IS_VALID_TOKEN", true);
+               sessionStorage.setItem("access-token", data.accessToken);
+               sessionStorage.setItem("refresh-token", data.refreshToken);
+            } else if (statusCode == 401) {
+               context.commit("SET_IS_LOGIN", false);
+               context.commit("SET_IS_VALID_TOKEN", false);
+               alert("아이디 또는 비밀번호 잘못 입력")
+            } else {
+               alert("사이트 오류")
+            }
+
+         } catch (error) {
+            console.log(error);
+         }
+      },
+      // async userConfirm({ commit},user) {
+      //    await login(user, ({ data }) => {
+      //        if (data.message === "success") {
+      //          let accessToken = data["access-token"];
+      //          let refreshToken = data["refresh-token"];
+      //          // console.log("login success token created!!!! >> ", accessToken, refreshToken);
+      //          commit("SET_IS_LOGIN", true);
+      //          commit("SET_IS_VALID_TOKEN", true);
+      //          sessionStorage.setItem("access-token", accessToken);
+      //          sessionStorage.setItem("refresh-token", refreshToken);
+      //        } else {
+      //          commit("SET_IS_LOGIN", false);
+      //          commit("SET_IS_VALID_TOKEN", false);
+      //        }
+      //      },
+      //      (error) => {
+      //        console.log(error);
+      //      }
+      //    );
+      //  },
+      //  async getUserInfo({ commit, dispatch }, token) {
+      //    let decodeToken = jwtDecode(token);
+      //    // console.log("2. getUserInfo() decodeToken :: ", decodeToken);
+      //    await findById(decodeToken.userEmail,({ data }) => {
+      //        if (data.message === "success") {
+      //          commit("SET_USER_INFO", data.userInfo);
+      //          // console.log("3. getUserInfo data >> ", data);
+      //        } else {
+      //          console.log("유저 정보 없음!!!!");
+      //        }
+      //      },
+      //      async (error) => {
+      //        console.log("getUserInfo() error code [토큰 만료되어 사용 불가능.] ::: ", error.response.status);
+      //        commit("SET_IS_VALID_TOKEN", false);
+      //        await dispatch("tokenRegeneration");
+      //      }
+      //    );
+      //  },
+      //  async tokenRegeneration({ commit, state }) {
+      //    console.log("토큰 재발급 >> 기존 토큰 정보 : {}", sessionStorage.getItem("access-token"));
+      //    await tokenRegeneration(
+      //      JSON.stringify(state.userInfo),
+      //      ({ data }) => {
+      //        if (data.message === "success") {
+      //          let accessToken = data["access-token"];
+      //          console.log("재발급 완료 >> 새로운 토큰 : {}", accessToken);
+      //          sessionStorage.setItem("access-token", accessToken);
+      //          commit("SET_IS_VALID_TOKEN", true);
+      //        }
+      //      },
+      //      async (error) => {
+      //        // HttpStatus.UNAUTHORIZE(401) : RefreshToken 기간 만료 >> 다시 로그인!!!!
+      //        if (error.response.status === 401) {
+      //          console.log("갱신 실패");
+      //          // 다시 로그인 전 DB에 저장된 RefreshToken 제거.
+      //          await logout(state.userInfo.userEmail,({ data }) => {
+      //              if (data.message === "success") {
+      //                console.log("리프레시 토큰 제거 성공");
+      //              } else {
+      //                console.log("리프레시 토큰 제거 실패");
+      //              }
+      //              alert("RefreshToken 기간 만료!!! 다시 로그인해 주세요.");
+      //              commit("SET_IS_LOGIN", false);
+      //              commit("SET_USER_INFO", null);
+      //              commit("SET_IS_VALID_TOKEN", false);
+      //              router.push({ name: "login" });
+      //            },
+      //            (error) => {
+      //              console.log(error);
+      //              commit("SET_IS_LOGIN", false);
+      //              commit("SET_USER_INFO", null);
+      //            }
+      //          );
+      //        }
+      //      }
+      //    );
+      //  },
+      //  async userLogout({ commit }, userEmail) {
+      //    await logout(userEmail, ({ data }) => {
+      //        if (data.message === "success") {
+      //          commit("SET_IS_LOGIN", false);
+      //          commit("SET_USER_INFO", null);
+      //          commit("SET_IS_VALID_TOKEN", false);
+      //        } else {
+      //          console.log("유저 정보 없음!!!!");
+      //        }
+      //      },
+      //      (error) => {
+      //        console.log(error);
+      //      }
+      //    );
+      //  },
+       
         async noticeList(context) {
             let params = {
                limit: this.state.notice.limit,
@@ -368,8 +498,14 @@ export default new Vuex.Store({
     },
     getters: {
       isLogin: function (state) {
-         return state.login.isLogin;
-      },
+         return state.user.isLogin;
+       },
+      checkUserInfo: function (state) {
+         return state.user.userInfo;
+       },
+       checkToken: function (state) {
+         return state.isValidToken;
+       },
 
       getBoardList: function (state) {
          return state.board.list;

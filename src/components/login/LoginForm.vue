@@ -17,13 +17,13 @@
             <div class="tab-pane fade" role="tabpanel" aria-labelledby="tab-login" :class="[{'show': this.loginTab}, {'active': this.loginTab}]" >
                 <!-- Email input -->
                 <div class="form-outline mb-4">
-                    <input type="email" id="loginName" class="form-control" />
+                    <input v-model="userEmail" type="email" id="loginName" class="form-control" />
                     <label class="form-label" for="loginName">Email or username</label>
                 </div>
 
                 <!-- Password input -->
                 <div class="form-outline mb-4">
-                    <input type="password" id="loginPassword" class="form-control" />
+                    <input v-model="userPassword" type="password" id="loginPassword" class="form-control" />
                     <label class="form-label" for="loginPassword">Password</label>
                 </div>
 
@@ -44,7 +44,7 @@
                 </div>
 
                 <!-- Submit button -->
-                <button class="btn btn-primary btn-block mb-4">Sign in</button>
+                <button @click="confirm" class="btn btn-primary btn-block mb-4">Sign in</button>
 
                 <p class="text-center">or:</p>
 
@@ -153,7 +153,10 @@ export default {
     data: function () {
         return{
             loginTab: true,
-            setInterestCode: false
+            setInterestCode: false,
+            
+            userEmail: null,
+            userPassword: null
         }
     },
     components: {
@@ -166,7 +169,25 @@ export default {
         handleRegister() {
              this.$store.commit('SET_INTEREST_CODE', this.setInterestCode);
              console.log(this.$store.state.address.setInterestCode)
+        },
+
+
+    async confirm() {
+        const user = {
+            userEmail: this.userEmail,
+            userPassword: this.userPassword
         }
+      await this.$store.dispatch('login',user);
+
+      let token = sessionStorage.getItem("access-token");
+      console.log("1. login token >> " + token);
+      console.log("login? "+this.$store.state.user.isLogin)
+      if (this.$store.state.user.isLogin) {
+        await this.$store.dispatch('getUserInfo', token);
+        console.log("4. confirm() userInfo :: ", this.$store.state.user.userInfo);
+        this.$router.replace("/");
+      }
+    },
     },
 }
 </script>
