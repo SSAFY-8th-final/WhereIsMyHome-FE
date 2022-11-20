@@ -1,69 +1,128 @@
 <template>
-    <section class="ftco-section">
-        <div class="container">
-            <div class="row justify-content-center">
-                <div class="input-group w-50 mb-3">
-                    <!-- store 사용 -->
-                    <!-- <input v-model="searchWord" @keydown.enter="boardList" type="text" class="form-control"> -->
-                    <input
-                    v-model="$store.state.event.searchWord"
-                    @keydown.enter="eventList"
-                    type="text"
-                    class="form-control"
-                    />
-                    <button @click="eventList" type="button"><i class="fa-solid fa-magnifying-glass"></i></button>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-md-12">
-                    <div class="table-wrap">
-                        <table class="table table-borderless">
-                            <thead class="thead-dark">
-                            <tr>
-                                <th>&nbsp;</th>
-                                <th>title</th>
-                                <th>regDt</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            <tr class="alert" role="alert">
-                                <th scope="row">001</th>
-                                <td>지도페이지 업데이트</td>
-                                <td>2022/11/11</td>
-                            </tr>
-                            <tr class="alert" role="alert">
-                                <th scope="row">002</th>
-                                <td>최근 본 매물 갯수 제한 안내</td>
-                                <td>2022/11/10</td>
-                            </tr>
-                            <tr class="alert" role="alert">
-                                <th scope="row">003</th>
-                                <td>유저 페이지 업데이트</td>
-                                <td>2022/11/09</td>
-                            </tr>
-                            <tr class="alert" role="alert">
-                                <th scope="row">004</th>
-                                <td>Outh 로그인 기능 추가</td>
-                                <td>2022/11/08</td>
-                            </tr>
-                            <tr class="alert" role="alert">
-                                <th scope="row">005</th>
-                                <td>파이널 화이팅</td>
-                                <td>2022/11/07</td>
-                            </tr>
-                            </tbody>
-                        </table>
+    <div>
+        <section class="ftco-section">
+            <div class="container">
+                <div class="row justify-content-center">
+                    <div class="input-group w-50 mb-3">
+                        <!-- store 사용 -->
+                        <!-- <input v-model="searchWord" @keydown.enter="boardList" type="text" class="form-control"> -->
+                        <input
+                        v-model="$store.state.notice.searchWord"
+                        @keydown.enter="noticeList"
+                        type="text"
+                        class="form-control"
+                        />
+                        <button @click="noticeList" type="button"><i class="fa-solid fa-magnifying-glass"></i></button>
                     </div>
                 </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="table-wrap">
+                            <table class="table table-borderless">
+                                <thead class="thead-dark">
+                                <tr>
+                                    <th>#</th>
+                                    <th>제목</th>
+                                    <th>조회수</th>
+                                    <th>작성일</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                    <tr style="cursor: pointer" v-for="(notice, index) in listGetters" :key="index" @click="noticeDetail(notice.noticeId)">
+                                        <th scope="row">{{notice.noticeId}}</th>
+                                        <td>{{notice.title}}</td>
+                                        <td>{{notice.readCount}}</td>
+                                        <td>{{notice.regDt.date | makeDateStr("/")}}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <PaginationUI v-on:call-parent="movePage"></PaginationUI>
             </div>
-            <PaginationUI v-on:call-parent="movePage"></PaginationUI>
-            <button class="btn btn-sm btn-primary" >글쓰기</button>
-        </div>
-    </section>
+        </section>
+    
+        <!-- Modal -->
+        <detail-modal></detail-modal>
+    </div>
 </template>
 
 <script>
+import PaginationUI from "@/components/PaginationUI.vue";
+import DetailModal from "@/components/notice/DetailModal.vue";
+
+import { Modal } from "bootstrap";
+
+import http from "@/common/axios.js";
+import util from "@/common/util.js";
+
+import Vue from "vue";
+import VueAlertify from "vue-alertify";
+Vue.use(VueAlertify);
+
 export default {
+    components: {
+        PaginationUI,
+        DetailModal,
+    },
+    data() {
+        return {
+        detailModal: null,
+        };
+    },
+    computed: {
+        // gttters 이용
+        listGetters() {
+            return this.$store.getters.getNoticeList;
+        },
+    },
+    methods: {
+        noticeList() {
+            this.$store.dispatch("noticeList");
+        },
+        // pagination
+        movePage(pageIndex) {
+            // store commit 으로 변경
+            // this.offset = (pageIndex - 1) * this.listRowCount;
+            // this.currentPageIndex = pageIndex;
+            this.$store.commit("SET_NOTICE_MOVE_PAGE", pageIndex);
+
+            this.noticeList();
+        },
+        // util
+        makeDateStr: util.makeDateStr,
+        // detail
+        async noticeDetail(noticeId) {
+            try {
+                let { data } = await http.get('/notices/' + noticeId);
+                console.log(data);
+
+                if (data.result == "login") {
+                    this.doLogout(); // this.$router.push("/login"); 에서 변경
+                } else {
+                    let { dto } = data;
+                    this.$store.commit("SET_NOTICE_DETAIL", dto);
+
+                    this.detailModal.show();
+                }
+            } catch (error) {
+                console.log("AdminNoticeVue: error : ");
+                console.log(error);
+            }
+        },
+    },
+    created() {
+        this.noticeList();
+    },
+    mounted() {
+        this.detailModal = new Modal(document.getElementById("detailModal"));
+    },
+    filters: {
+        makeDateStr: function (date, separator) {
+            return date.year + separator + (date.month < 10 ? "0" + date.month : date.month) + separator + (date.day < 10 ? "0" + date.day : date.day);
+        },
+    },
 
 }
 </script>
