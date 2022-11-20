@@ -7,9 +7,20 @@
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
-
         <div class="mb-3">
           <input v-model="name" type="text" class="form-control" placeholder="제목">
+        </div>
+        <div class="mb-3">
+          <input v-model="category" type="text" class="form-control" placeholder="카테고리">
+        </div>
+        <div class="mb-3">
+          <label for="">시작일
+            <input v-model="startDateTime" type="date" class="form-control">
+          </label>
+          &nbsp;&nbsp;
+          <label for="">종료일
+            <input v-model="endDateTime" type="date" class="form-control">
+          </label>
         </div>
         <div class="mb-3">
           <div id=divEditorInsert></div>
@@ -50,6 +61,9 @@ export default {
   data() {
         return {
           name: '',
+          category: '',
+          startDateTime: '',
+          endDateTime: '',
           CKEditor: '',
           attachFile: false,
           fileList: []
@@ -59,6 +73,9 @@ export default {
       // modal 초기화
       initUI(){
         this.name = '';
+        this.category = '',
+        this.startDateTime = '',
+        this.endDateTime = '',
         this.CKEditor.setData('');
         this.attachFile = false;
         this.fileList = [];
@@ -77,7 +94,11 @@ export default {
         let formData = new FormData();
         formData.append("title", this.title);
         formData.append("content", this.CKEditor.getData());
+        formData.append("category", this.category);
+        formData.append("startDateTime", this.startDateTime);
+        formData.append("endDateTime", this.endDateTime);
 
+        console.log( this.startDateTime);
         // file upload
         let attachFiles = document.querySelector("#inputFileUploadInsert").files;
 

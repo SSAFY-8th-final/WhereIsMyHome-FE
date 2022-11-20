@@ -4,11 +4,11 @@
       <div class="container">
         <div class="row justify-content-center">
           <div class="input-group mb-3 w-50">
-            <select class="form-select" aria-label="Default select example">
+            <select v-model="selectStatus" class="form-select">
               <option selected>Option</option>
-              <option value="1">진행중</option>
-              <option value="2">예정</option>
-              <option value="3">종료</option>
+              <option value="001">진행중</option>
+              <option value="002">예정</option>
+              <option value="003">종료</option>
             </select>
               <input
                 v-model="$store.state.event.searchWord"
@@ -16,8 +16,9 @@
                 type="text"
                 class="form-control"
               />
-            <button @click="eventList" type="button"><i class="fa-solid fa-magnifying-glass"></i></button>
-          </div>
+              <button @click="eventList" type="button"><i class="fa-solid fa-magnifying-glass"></i></button>
+            </div>
+            <button id="writeBtn" class="btn btn-sm btn-light" @click="showInsertModal"><i class="fa-solid fa-pen-to-square"></i></button>
         </div>
         <div class="row">
           <div class="col-md-12">
@@ -26,21 +27,21 @@
                 <thead class="thead-dark">
                   <tr>
                     <th>#</th>
-                    <th>이벤트명</th>
-                    <th>시작일</th>
-                    <th>종료일</th>
-                    <th>작성자</th>
                     <th>진행상태</th>
+                    <th>이벤트명</th>
+                    <th>조회수</th>
+                    <th>작성자</th>
+                    <th>작성일</th>
                   </tr>
                 </thead>
                 <tbody>
                   <tr style="cursor: pointer" v-for="(event, index) in listGetters" :key="index" @click="eventDetail(event.eventKey)">
                     <th scope="row">{{ event.eventKey }}</th>
+                    <td><button class="btn" :class="btnColor(event)">{{ statusText(event) }}</button></td>
                     <td>{{ event.name }}</td>
-                    <td>{{ event.startDateTime }}</td>
-                    <td>{{ event.endDateTime }}</td>
+                    <td>{{ event.readCount }}</td>
                     <td>{{ event.registerId }}</td>
-                    <td><button class="btn btn-danger">On hold</button></td>
+                    <td>{{ event.registerDateTime.date | makeDateStr(".") }}</td>
                   </tr>
                 </tbody>
               </table>
@@ -48,7 +49,6 @@
           </div>
         </div>
         <PaginationUI v-on:call-parent="movePage"></PaginationUI>
-        <button class="btn btn-sm btn-primary" @click="showInsertModal">글쓰기</button>
       </div>
     </section>
     
@@ -68,7 +68,7 @@ import DetailModal from "@/components/admin/event/DetailModal.vue";
 import { Modal } from "bootstrap";
 
 import http from "@/common/axios.js";
-// import util from "@/common/util.js";
+import util from "@/common/util.js";
 
 import Vue from "vue";
 import VueAlertify from "vue-alertify";
@@ -86,6 +86,8 @@ export default {
       insertModal: null,
       detailModal: null,
       updateModal: null,
+
+      selectStatus: ''
     };
   },
   computed: {
@@ -96,7 +98,8 @@ export default {
   },
   methods: {
     eventList() {
-      this.$store.dispatch("eventList");
+      let selectStatus = this.selectStatus;
+      this.$store.dispatch("adminEventList", {selectStatus});
     },
     // pagination
     movePage(pageIndex) {
@@ -107,6 +110,8 @@ export default {
 
       this.eventList();
     },
+    // util
+    makeDateStr: util.makeDateStr,
     // detail
     async eventDetail(eventKey) {
       try {
@@ -178,7 +183,13 @@ export default {
             console.log("AdminEventVue: error : ");
             console.log(error);
          }
-      },
+    },
+    btnColor(event) {
+      return event.statusCode == '001' ? 'btn-success' : (event.statusCode == '002' ? 'btn-warning' : 'btn-secondary');
+    },
+    statusText(event) {
+      return event.statusCode == '001' ? '진행중' : (event.statusCode == '002' ? '예정' : '종료');
+    }
   },
   created() {
     this.eventList();
@@ -188,6 +199,11 @@ export default {
     this.detailModal = new Modal(document.getElementById("detailModal"));
     this.updateModal = new Modal(document.getElementById("updateModal"));
   },
+  filters: {
+      makeDateStr: function (date, separator) {
+         return date.year + separator + (date.month < 10 ? "0" + date.month : date.month) + separator + (date.day < 10 ? "0" + date.day : date.day);
+      },
+   },
 };
 </script>
 
@@ -234,5 +250,8 @@ export default {
 .input-group >>> button {
   background-color: white;
   padding-left: 5px;
+}
+#writeBtn {
+  margin-top: 20px;
 }
 </style>
