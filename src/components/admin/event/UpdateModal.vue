@@ -10,9 +10,24 @@
                <div class="mb-3">
                   <!-- v-model 을 store 와 직접 연결하기 보다 computed-get-set 을 사용(strict mode 에서는 오류 발생) -->
                   <!-- <input v-model="$store.state.board.title" type="text" class="form-control" placeholder="제목"> -->
+                  <label for="">제목</label>
                   <input v-model="storeTitle" type="text" class="form-control" placeholder="제목" />
                </div>
                <div class="mb-3">
+                  <label for="">카테고리</label>
+                  <input v-model="storeCategory" type="text" class="form-control" placeholder="카테고리">
+               </div>
+               <div class="mb-3">
+                  <label for="">시작일
+                     <input v-model="startDateTime" type="date" class="form-control">
+                  </label>
+                  &nbsp;&nbsp;
+                  <label for="">종료일
+                     <input v-model="endDateTime" type="date" class="form-control">
+                  </label>
+               </div>
+               <div class="mb-3">
+                  <label for="">내용</label>
                   <div id="divEditorUpdate"></div>
                </div>
                <!-- 기존 파일 내용 보여줌  -->
@@ -60,6 +75,8 @@ export default {
    data() {
       return {
          CKEditor: "",
+         startDateTime: "",
+         endDateTime: "",
          attachFile: false,
          fileList: [], // store 의 fileList 와 구분됨. 새로 첨부되는 파일을 위한.
       };
@@ -74,14 +91,39 @@ export default {
             this.$store.commit("SET_EVENT_TITLE", name);
          },
       },
+      storeCategory: {
+         get() {
+            return this.$store.state.event.category;
+         },
+         set(category) {
+            this.$store.commit("SET_EVENT_CATEGORY", category);
+         },
+      },
+      storeStartDateTime: {
+         get() {
+            return this.$store.state.event.startDateTime;
+         },
+         set(startDateTime) {
+            this.$store.commit("SET_EVENT_STARTDATETIME", startDateTime);
+         },
+      },
+      storeEndDateTime: {
+         get() {
+            return this.$store.state.event.endDateTime;
+         },
+         set(endDateTime) {
+            this.$store.commit("SET_EVENT_ENDDATETIME", endDateTime);
+         },
+      },
    },
    methods: {
       // modal 초기화
       initUI() {
+         this.CKEditor.setData('');
          this.CKEditor.setData(this.$store.state.event.content);
-         // this.attachFile = false;
-         // this.fileList = [];
-         // document.querySelector("#inputFileUploadUpdate").value = "";
+         this.attachFile = false;
+         this.fileList = [];
+         document.querySelector("#inputFileUploadUpdate").value = "";
       },
       changeFile(fileEvent) {
          this.fileList = []; // thumbnail 초기화
@@ -97,6 +139,9 @@ export default {
          let formData = new FormData();
          formData.append("eventKey", this.$store.state.event.eventKey); // update 에 추가
          formData.append("name", this.$store.state.event.name);
+         formData.append("category", this.$store.state.event.category);
+         formData.append("startDateTime", this.startDateTime);
+         formData.append("endDateTime", this.endDateTime);
          formData.append("content", this.CKEditor.getData()); // store X !!!!
 
          // file upload

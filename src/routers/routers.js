@@ -1,19 +1,23 @@
-import Vue from 'vue';
-import VueRouter from 'vue-router';
+import Vue from "vue";
+import VueRouter from "vue-router";
 Vue.use(VueRouter);
 
-import NavBar from '@/components/NavBar.vue';
-import MainPage from '@/views/AppMain';
-import AppMap from '@/views/AppMap';
-import AppFav from '@/views/AppFav';
-import AppEvent from '@/views/AppEvent';
-import AppNotice from '@/views/AppNotice';
+import NavBar from "@/components/NavBar.vue";
+import MainPage from "@/views/AppMain";
+import AppMap from "@/views/AppMap";
+import AppFav from "@/views/AppFav";
+import AppEvent from "@/views/AppEvent";
+import AppNotice from "@/views/AppNotice";
 import AppLogin from "@/views/AppLogin";
 import AppRegister from "@/views/AppRegister";
 import AppDetail from "@/views/AppDetail";
+import AppEventDetail from "@/views/AppEventDetail";
 import AppMyPage from "@/views/AppMyPage";
 import AppAdminNotice from "@/views/AppAdminNotice";
-import FooterPage from '@/components/FooterPage.vue';
+import AppAdminEvent from "@/views/AppAdminEvent";
+import AppAdminUser from "@/views/AppAdminUser";
+import FooterPage from "@/components/FooterPage.vue";
+
 
 // test
 import AppSaleInsert from "@/views/AppSaleInsert.vue";
@@ -31,15 +35,16 @@ const onlyAuthUser = async (to, from, next) => {
       await store.dispatch("getUserInfo", token);
     }
     // if (!checkToken || checkUserInfo === null) {
-    //   alert("로그인이 필요한 페이지입니다.");
-    //   // next({ name: "login" });
-    //   router.push({ name: "login" });
-    // }
-    // else {
-    // }
-    console.log("로그인 했다!!!!!!!!!!!!!.");
+    if (!store.state.user.isValidToken ) {
+      alert("로그인이 필요한 페이지입니다.");
+      // next({ name: "login" });
+      console.log("로그인 했다!!!!!!!!!!!!!.");
+      router.push({ name: "login" });
+    }
+    else {
+        return next();
+    }
     // console.log(next)
-    return next();
 };
   
 
@@ -77,6 +82,14 @@ const  routes = [
             }
         },
         {
+            path: "/event/:id",
+            components: {
+            NavBar,
+            default: AppEventDetail,
+            FooterPage,
+            },
+        },
+        {
             path: '/notice',
             components: {
                 NavBar,
@@ -93,7 +106,7 @@ const  routes = [
             }
         },    
         {
-        name: "login",    
+            name: "login",    
             path: "/login",
             components: {
                 NavBar,
@@ -125,6 +138,22 @@ const  routes = [
                 default: AppAdminNotice,
                 FooterPage,
             }
+        },
+        {
+            path: "/admin/event",
+            components: {
+            NavBar,
+            default: AppAdminEvent,
+            FooterPage,
+            },
+        },
+        {
+            path: "/admin/user",
+            components: {
+            NavBar,
+            default: AppAdminUser,
+            FooterPage,
+            },
         },
         {
             path: "/sale/insert",

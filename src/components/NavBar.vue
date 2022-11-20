@@ -36,7 +36,6 @@
             ></a>
             <ul>
               <li><router-link to="/sale/insert">매물 등록</router-link></li>
-              <li><router-link to="/#">공지사항 관리</router-link></li>
               <li><router-link to="/#">d</router-link></li>
             </ul>
            </li>
