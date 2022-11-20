@@ -230,9 +230,10 @@ export default new Vuex.Store({
             isAdmin: false,
       },
       address: {
-         sidoSelect: '',
-         sigunguSelect: '',
-         dongSelect: '',
+         setInterestCode: false,
+         sidoSelect: '11',
+         sigunguSelect: null,
+         dongSelect: null,
 
          sido: AddrSido,
          sigungu: AddrSigungu,

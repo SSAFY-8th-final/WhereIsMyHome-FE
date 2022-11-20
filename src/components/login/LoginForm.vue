@@ -100,13 +100,13 @@
 
                 <!-- Checkbox -->
                 <div class="form-check">
-                    <input class="form-check-input me-2" type="checkbox" value="" id="interestCheck" v-model="setInterestArea"/>
+                    <input class="form-check-input me-2" type="checkbox" value="" id="interestCheck" v-model="setInterestCode"/>
                     <label class="form-check-label" for="interestCheck">
                         관심지역 설정
                     </label>
                     
                 </div>
-                <div v-show="setInterestArea">
+                <div v-show="setInterestCode">
                     <interest-select-box></interest-select-box>
                 </div>
 
@@ -140,7 +140,7 @@
                 </div>
 
                 <!-- Submit button -->
-                <button class="btn btn-primary btn-block mb-3">Sign in</button>
+                <button @click="handleRegister" class="btn btn-primary btn-block mb-3">Sign in</button>
                 
             </div>
         </div> <!-- end Pills content -->
@@ -153,7 +153,7 @@ export default {
     data: function () {
         return{
             loginTab: true,
-            setInterestArea: false
+            setInterestCode: false
         }
     },
     components: {
@@ -162,8 +162,11 @@ export default {
     methods: {
         tabControll: function () {
             this.loginTab = !this.loginTab
-            console.log(this.loginTab)
         },
+        handleRegister() {
+             this.$store.commit('SET_INTEREST_CODE', this.setInterestCode);
+             console.log(this.$store.state.address.setInterestCode)
+        }
     },
 }
 </script>
