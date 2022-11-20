@@ -30,6 +30,16 @@
           <li><router-link to="/profile">Profile</router-link></li>
           <li><router-link to="/login">Login</router-link></li>
           
+           <li class="dropdown">
+          <a href="#"
+              ><span>Test</span> <i class="bi bi-chevron-down dropdown-indicator"></i
+            ></a>
+            <ul>
+              <li><router-link to="/sale/insert">매물 등록</router-link></li>
+              <li><router-link to="/#">공지사항 관리</router-link></li>
+              <li><router-link to="/#">d</router-link></li>
+            </ul>
+           </li>
         </ul>
       </nav>
       <!-- .navbar -->
