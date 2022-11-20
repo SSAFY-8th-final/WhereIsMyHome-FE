@@ -1,67 +1,67 @@
 <template>
-  <nav aria-label="Page navigation example">
-    <ul class="pagination">
-      <!-- previous, next는 조건에 맞으면 출력 -->
-      <li  v-if="prev" class="page-item"><a class="page-link" @click="paginationChanged(startPageIndex-1)">Previous</a></li>
-      <li v-for="index in (endPageIndex - startPageIndex + 1)" :key="index" class="page-item">
-        <a class="page-link" @click="paginationChanged(startPageIndex-1 + index)"
-              v-bind:class="{active:(startPageIndex-1 + index == currentPageIndex)}"
-        >{{ startPageIndex-1 + index }}</a>
-      </li>
-      <li v-if="next" class="page-item"><a class="page-link" @click="paginationChanged(endPageIndex + 1)">Next</a></li>
-    </ul>
-  </nav>
-</template>
-
-<script>
-export default {
-  props: ['totalListItemCount', 'listRowCount', 'pageLinkCount', 'currentPageIndex'],
-  computed: {
-    // pageCount = Math.ceil(totalListItemCount/listRowCount);
-    pageCount: function() {
-      return Math.ceil(this.totalListItemCount / this.listRowCount);
-    },
-    startPageIndex: function() {
-      if( (this.currentPageIndex % this.pageLinkCount) == 0 ){ //10, 20...맨마지막
-          return this.currentPageIndex - this.pageLinkCount + 1;
-      }else{
-          return Math.floor(this.currentPageIndex / this.pageLinkCount) * this.pageLinkCount + 1 ;
+  <!-- a tag href="#" 제외!!
+  route url 이 board 에서 / 로 변경되는 문제 발생 -->
+    <nav aria-label="Page navigation">
+      <ul class="pagination justify-content-center">
+        <li v-if="prev" class="page-item">
+          <a class="page-link" aria-label="Previous" @click="paginationChanged(startPageIndex - 1)">
+            <span aria-hidden="true">&laquo;</span>
+          </a>
+        </li>
+        <li v-for="index in ( endPageIndex-startPageIndex + 1 )" :key="index"
+            v-bind:class="{active: (startPageIndex + index - 1 == $store.state.pagination.currentPageIndex)}" class="page-item">
+          <a @click="paginationChanged(startPageIndex + index - 1)" 
+             class="page-link" >{{ startPageIndex + index - 1 }}</a> <!-- href 는 그대로, 커서 모양 유지-->
+        </li>
+        <li v-if="next" class="page-item">
+          <a class="page-link" aria-label="Next" @click="paginationChanged(endPageIndex + 1)">
+            <span aria-hidden="true">&raquo;</span>
+          </a>
+        </li>
+      </ul>
+    </nav>
+  </template>
+  
+  <script>
+  export default {
+    // props 사용 X
+    // props: ['listRowCount', 'pageLinkCount', 'currentPageIndex', 'totalListItemCount'],
+    data(){
+      return {
       }
     },
-    endPageIndex: function() {
-      let ret = 0;
-      if( (this.currentPageIndex % this.pageLinkCount) == 0 ){
-          ret = this.currentPageIndex;
-      }else{
-          ret = Math.floor(this.currentPageIndex / this.pageLinkCount) * this.pageLinkCount + this.pageLinkCount;
+    computed: {
+      pageCount: function(){
+        return this.$store.getters.getPageCount;
+      },
+      startPageIndex: function () {
+        console.log(this.$store.getters.getStartPageIndex)
+        return this.$store.getters.getStartPageIndex;
+      },
+      endPageIndex: function () {
+        console.log(this.$store.getters.getEndPageIndex)
+        return this.$store.getters.getEndPageIndex;
+      },
+      prev: function(){
+        return this.$store.getters.getPrev;
+      },
+      next: function(){
+        return this.$store.getters.getNext;
       }
-      return ret;
     },
-    prev: function() {
-      if( this.currentPageIndex <= this.pageLinkCount ){
-          return false;
-      }else{
-          return true;
+    methods:{
+      // 부모에게 event 전달    
+      paginationChanged(pageIndex){
+        console.log("paginationVue : paginationChanged : pageIndex : " + pageIndex );
+        this.$emit('call-parent', pageIndex);
       }
     },
-    next: function(){
-        // if( this.endPageIndex > this.pageCount){
-        if( ( Math.floor( this.pageCount / this.pageLinkCount ) * this.pageLinkCount ) < this.currentPageIndex){
-            //this.endPageIndex = this.pageCount
-            return false;
-        }else{
-            return true;
-        }            
-    }
-  },
-  methods: {
-    paginationChanged(pageIndex) {
-      this.$emit('call-parent-move-page', pageIndex);
-    }
+  
   }
+  </script>
+
+<style scoped>
+nav {
+  margin-top: 30px;
 }
-</script>
-
-<style>
-
 </style>

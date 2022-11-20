@@ -9,11 +9,8 @@
       </div>
 
       <div data-aos="fade-up">
-        
         <rect-grid></rect-grid>
       </div>
-
-      <photo-control></photo-control>
 
       <div data-aos="fade-up">
         <section-header
@@ -22,7 +19,6 @@
         ></section-header>
         <SlidePreVieww></SlidePreVieww>
       </div>
-
     </main>
   </div>
 </template>
