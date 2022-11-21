@@ -3,7 +3,7 @@
       <search-bar-map></search-bar-map>
       <div>
         <ul class="list-group deal-list">
-            <pannel-item class="list-group-item container" v-bind:house="house" v-for="(house, index) in  $store.state.map.list" v-bind:key="index"></pannel-item>
+            <pannel-item class="list-group-item container" style="cursor:pointer;" v-bind:house="house" v-for="(house, index) in  $store.state.map.list" v-bind:key="index"></pannel-item>
         </ul>
       </div>
     <div @click="sidePannelControll">
@@ -20,40 +20,44 @@ import SearchBarMap from "@/components/map/SearchBarMap.vue";
 import PannelItem from "@/components/map/PannelItem.vue";
 
 export default {
-    components:{
-        PannelItem, SearchBarMap
-    },
-    data() {
-        return {
-            openCloseNum: 0,
-            
-        }
-    },
-    methods: {
-        openNav() {
-            document.getElementById("mySidepanel").style.transform = "translateX(0%)";
-            document.getElementById("sidePannelChevronBtn").classList.remove('bi-chevron-compact-right');
-            document.getElementById("sidePannelChevronBtn").classList.add('bi-chevron-compact-left');
-            document.querySelector("#sidePannelChevronBtn > path").setAttribute('d',  "M9.224 1.553a.5.5 0 0 1 .223.67L6.56 8l2.888 5.776a.5.5 0 1 1-.894.448l-3-6a.5.5 0 0 1 0-.448l3-6a.5.5 0 0 1 .67-.223z")
-        },
-        closeNav() {
-            document.getElementById("mySidepanel").style.transform = "translateX(-100%)";
-            document.getElementById("sidePannelChevronBtn").classList.remove('bi-chevron-compact-left');
-            document.getElementById("sidePannelChevronBtn").classList.add('bi-chevron-compact-right');
-            document.querySelector("#sidePannelChevronBtn > path").setAttribute('d', "M6.776 1.553a.5.5 0 0 1 .671.223l3 6a.5.5 0 0 1 0 .448l-3 6a.5.5 0 1 1-.894-.448L9.44 8 6.553 2.224a.5.5 0 0 1 .223-.671z")
-        },
-        sidePannelControll(){
-            if(this.openCloseNum == 0){
-                this.openCloseNum = 1;
-                this.openNav();
-            }else{
-                this.openCloseNum = 0;
-                this.closeNav();
-            }
-        }
-
-
-    }
+  components:{
+      PannelItem, SearchBarMap
+  },
+  data() {
+      return {
+          openCloseNum: 0,
+          
+      }
+  },
+  methods: {
+      saleList() {
+        this.$store.dispatch("saleList");
+      },
+      openNav() {
+          document.getElementById("mySidepanel").style.transform = "translateX(0%)";
+          document.getElementById("sidePannelChevronBtn").classList.remove('bi-chevron-compact-right');
+          document.getElementById("sidePannelChevronBtn").classList.add('bi-chevron-compact-left');
+          document.querySelector("#sidePannelChevronBtn > path").setAttribute('d',  "M9.224 1.553a.5.5 0 0 1 .223.67L6.56 8l2.888 5.776a.5.5 0 1 1-.894.448l-3-6a.5.5 0 0 1 0-.448l3-6a.5.5 0 0 1 .67-.223z")
+      },
+      closeNav() {
+          document.getElementById("mySidepanel").style.transform = "translateX(-100%)";
+          document.getElementById("sidePannelChevronBtn").classList.remove('bi-chevron-compact-left');
+          document.getElementById("sidePannelChevronBtn").classList.add('bi-chevron-compact-right');
+          document.querySelector("#sidePannelChevronBtn > path").setAttribute('d', "M6.776 1.553a.5.5 0 0 1 .671.223l3 6a.5.5 0 0 1 0 .448l-3 6a.5.5 0 1 1-.894-.448L9.44 8 6.553 2.224a.5.5 0 0 1 .223-.671z")
+      },
+      sidePannelControll(){
+          if(this.openCloseNum == 0){
+              this.openCloseNum = 1;
+              this.openNav();
+          }else{
+              this.openCloseNum = 0;
+              this.closeNav();
+          }
+      }
+  },
+  created() {
+    this.saleList();
+  }
 }
 </script>
 

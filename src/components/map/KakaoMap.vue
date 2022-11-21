@@ -9,6 +9,7 @@
     data() {
       return {
         map: null,
+        markers: [],
       };
     },
     methods: {
@@ -28,7 +29,48 @@
         var zoomControl = new kakao.maps.ZoomControl();
         this.map.addControl(zoomControl, kakao.maps.ControlPosition.RIGHT);
 
+        this.displayMarkers();
+
       },
+      displayMarkers() {
+        let list = this.$store.getters.getSaleList;
+        
+        // 1. 현재 표시되어 있는 마커가 있다면 제거
+        if(this.markers.length > 0) {
+          this.markers.forEach((item) => {
+            item.setMap(null);
+          })
+        }
+
+        // 2. 마커 이미지 커스터 마이징
+        var imageSize = new kakao.maps.Size(24, 35);
+        var imageSrc = "https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/markerStar.png";  
+        var markerImage = new kakao.maps.MarkerImage(imageSrc, imageSize); 
+
+        // 3. 마커 표시
+        list.forEach((el) => {
+          const infowindow = new kakao.maps.InfoWindow({
+            removable: true,
+            content: `<div style="padding:5px;">${el.aptName}</div>`,
+          });
+
+          const marker = new kakao.maps.Marker({
+            map: this.map,
+            position: new kakao.maps.LatLng(el.lat, el.lng),
+            title: el.aptName,
+            image: markerImage
+          });
+
+          kakao.maps.event.addListener(marker, "mouseover", () => {
+            infowindow.open(this.map, marker)
+          })
+          kakao.maps.event.addListener(marker, "mouseout", () => {
+            infowindow.close(this.map, marker);
+          });
+
+          this.markers.push(marker);
+        })
+      }
     },
     mounted() {
       if (!window.kakao || !window.kakao.maps) {

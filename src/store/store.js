@@ -41,7 +41,9 @@ export default new Vuex.Store({
         list:[], // houseDto
         gugunCode: '',
         dongCode: '',
-        searchWord: ''
+        searchWord: '',
+
+        totalListItemCount: 0,
     },
     event: {
       list: [],
@@ -241,14 +243,21 @@ export default new Vuex.Store({
       },
       SET_USE_INTEREST_CODE(state, flag) {
         state.address.setInterestCode = flag;
-    },
-      SET_INTEREST_CODE(state, dongCode) {
-        state.address.setInterestCode = true
-        state.address.sidoSelect = dongCode.substring(0, 2);
-        state.address.sigunguSelect = dongCode.substring(0, 5);
-        state.address.dongSelect = dongCode;
-        console.log(dongCode.substring(0, 6))
-    }
+      },
+        SET_INTEREST_CODE(state, dongCode) {
+          state.address.setInterestCode = true
+          state.address.sidoSelect = dongCode.substring(0, 2);
+          state.address.sigunguSelect = dongCode.substring(0, 5);
+          state.address.dongSelect = dongCode;
+          console.log(dongCode.substring(0, 6))
+      },
+      /* map */
+      SET_MAP_LIST(state, list) {
+        state.map.list = list;
+      },
+      SET_MAP_TOTAL_LIST_ITEM_COUNT(state, count) {
+        state.map.totalListItemCount = count;
+      },
     },
     actions: {
       async noticeList(context) {
@@ -289,6 +298,24 @@ export default new Vuex.Store({
             context.commit("SET_ADMIN_EVENT_TOTAL_LIST_ITEM_COUNT", data.count);
           }
         } catch (error) {
+          console.error(error);
+        }
+      },
+      async saleList(context) {
+        let params = {
+          searchWord: this.state.notice.searchWord,
+        };
+
+        try {
+          let { data } = await http.get("/sales", { params });
+          console.log(data);
+          if (data.result == "login") {
+            router.push("/login");
+          } else {
+            context.commit("SET_MAP_LIST", data.list);
+            context.commit("SET_MAP_TOTAL_LIST_ITEM_COUNT", data.count);
+          }
+        } catch(error) {
           console.error(error);
         }
       },
@@ -435,6 +462,9 @@ export default new Vuex.Store({
       },
       getNoticeList: function (state) {
         return state.notice.list;
+      },
+      getSaleList: function (state) {
+        return state.map.list;
       },
   
       // pagination

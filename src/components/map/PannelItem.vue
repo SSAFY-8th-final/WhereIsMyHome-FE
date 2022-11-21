@@ -3,7 +3,7 @@
     <div class="pannel-list-wrapper">
         <div class="row card-item">
 
-              <div class="col-xl-5 ">
+              <div class="col-xl-5">
                 <div
                   class="card-bg"
                   style=" position: relative;background-image: url('https://picsum.photos/300/300/?image=193')"
@@ -29,9 +29,9 @@
               </div>
               <div class="col-xl-7 d-flex align-items-center">
                 <div class="card-body">
-                  <h4 class="card-title">{{house.AptName}}</h4>
+                  <h4 class="card-title">{{house.aptName}}</h4>
                   <p>
-                    거래금액: {{ house.dealAmount }}<br>면적: {{ house.area }}<br>{{ house.floor }}층
+                    거래금액: {{ house.saleAmount }}<br>거래유형: {{ house.saleTypeCode }}<br>*층
                   </p>
                 </div>
               </div>
@@ -52,7 +52,7 @@ export default {
           type: Object,
           default: ()=> {
               return{
-                  AptName: '',
+                  aptName: '',
                   dealAmount: '',
                   area: '',
                   floor: 0
@@ -62,7 +62,7 @@ export default {
   },
   methods: {
     showDetail(){
-      this.$router.push('/detail')
+      this.$router.push('/detail/' + this.house.no);
     },
   }
 }
