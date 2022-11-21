@@ -100,7 +100,7 @@ const  routes = [
             }
         },    
         {
-            path: '/detail',
+            path: '/detail/:id',
             components: {
                 NavBar,
                 default: AppDetail,
@@ -168,7 +168,7 @@ const  routes = [
 
 ]
 const router = new VueRouter({
-    mode: "history",
+    mode: "hash",
     base: process.env.BASE_URL,
     routes,
 });
