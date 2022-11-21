@@ -167,7 +167,7 @@ export default {
             this.loginTab = !this.loginTab
         },
         handleRegister() {
-             this.$store.commit('SET_INTEREST_CODE', this.setInterestCode);
+             this.$store.commit('SET_USE_INTEREST_CODE', this.setInterestCode);
              console.log(this.$store.state.address.setInterestCode)
         },
 
@@ -179,7 +179,7 @@ export default {
         }
       await this.$store.dispatch('login',user);
 
-      let token = sessionStorage.getItem("access-token");
+      let token = this.$store.state.user.token
       console.log("1. login token >> " + token);
       console.log("login? "+this.$store.state.user.isLogin)
       if (this.$store.state.user.isLogin) {
