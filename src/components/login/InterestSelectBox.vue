@@ -2,7 +2,7 @@
     <div class="row" id="deal-header"> 
         <div class="col-4">
             <select v-model="sidoSelect" @change="setSidoSelect" class="form-select form-select-sm">
-                <option v-for="(data, index) in this.$store.state.address.sido" :key="index" :value="data.code" >{{data.name}}</option>
+                <option v-for="(data, index) in this.$store.state.address.sidoList" :key="index" :value="data.code" >{{data.name}}</option>
             </select>
         </div>
         <div class="col-4">

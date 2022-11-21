@@ -1,7 +1,14 @@
 <template>
   <!-- ======= Header ======= -->
   <header id="header" class="header d-flex align-items-center">
-    <div class="container-fluid container-xl d-flex align-items-center justify-content-between">
+    <div
+      class="
+        container-fluid container-xl
+        d-flex
+        align-items-center
+        justify-content-between
+      "
+    >
       <a href="/" class="logo d-flex align-items-center">
         <!-- Uncomment the line below if you also wish to use an image logo -->
         <!-- <img src="assets/img/logo.png" alt=""> -->
@@ -12,14 +19,16 @@
       <i class="mobile-nav-toggle mobile-nav-hide d-none bi bi-x"></i>
       <nav id="navbar" class="navbar">
         <ul>
-          
           <li class="dropdown">
             <a href="#"
-              ><span>Admin</span> <i class="bi bi-chevron-down dropdown-indicator"></i
+              ><span>Admin</span>
+              <i class="bi bi-chevron-down dropdown-indicator"></i
             ></a>
             <ul>
               <li><router-link to="/admin/event">이벤트 관리</router-link></li>
-              <li><router-link to="/admin/notice">공지사항 관리</router-link></li>
+              <li>
+                <router-link to="/admin/notice">공지사항 관리</router-link>
+              </li>
               <li><router-link to="/admin/user">사용자 관리</router-link></li>
             </ul>
           </li>
@@ -27,18 +36,28 @@
           <li><router-link to="/fav">Fav</router-link></li>
           <li><router-link to="/event">Event</router-link></li>
           <li><router-link to="/notice">Notice</router-link></li>
-          <li><router-link to="/profile">Profile</router-link></li>
-          <li><router-link to="/login">Login</router-link></li>
-          
-           <li class="dropdown">
-          <a href="#"
-              ><span>Test</span> <i class="bi bi-chevron-down dropdown-indicator"></i
+          <li class="dropdown nav-icon-dropdown">
+            <a href="#"
+              ><div class="nav-icon">
+                <i class="fa-regular fa-face-smile fa-2x"></i></div
+            ></a>
+            <ul>
+              <li v-show="login"><router-link to="/user">My Page</router-link></li>
+              <li v-show="login"><a @click="logoutHandle">LogOut</a></li>
+              <li v-show="!login"><router-link to="/login">Login</router-link></li>
+              <li v-show="!login"><router-link to="/">Register</router-link></li>
+            </ul>
+          </li>
+          <li class="dropdown">
+            <a href="#"
+              ><span>Test</span>
+              <i class="bi bi-chevron-down dropdown-indicator"></i
             ></a>
             <ul>
               <li><router-link to="/sale/insert">매물 등록</router-link></li>
               <li><router-link to="/#">d</router-link></li>
             </ul>
-           </li>
+          </li>
         </ul>
       </nav>
       <!-- .navbar -->
@@ -48,7 +67,32 @@
 </template>
 
 <script>
-export default {};
+export default {
+  data: function () {
+        return{
+        }
+    },
+  methods: {
+    async logoutHandle() {
+      await this.$store.dispatch("logout");
+      alert("logout 성공");
+      this.$router.go();
+    },
+  },
+   computed : {
+        login(){
+          return this.$store.state.user.isLogin
+        }
+  },
+};
 </script>
 
-<style></style>
+<style scoped>
+.navbar >>> .nav-icon i {
+  font-size: 1.5em;
+}
+
+.navbar >>> .nav-icon-dropdown {
+  padding-top: 15px;
+}
+</style>

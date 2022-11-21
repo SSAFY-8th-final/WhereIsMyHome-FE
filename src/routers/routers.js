@@ -16,6 +16,9 @@ import AppMyPage from "@/views/AppMyPage";
 import AppAdminNotice from "@/views/AppAdminNotice";
 import AppAdminEvent from "@/views/AppAdminEvent";
 import AppAdminUser from "@/views/AppAdminUser";
+import UserEventList from "@/views/user/UserEventList.vue";
+import UserMain from "@/views/user/UserMain.vue";
+import UserUpdatePage from "@/views/user/UserUpdatePage.vue";
 import FooterPage from "@/components/FooterPage.vue";
 
 
@@ -110,6 +113,11 @@ const  routes = [
         {
             name: "login",    
             path: "/login",
+            beforeEnter: async (to, from, next) => { 
+                if (store.getters.isLogin) {
+                    router.push({ name: "main" });
+                } else next();
+            },
             components: {
                 NavBar,
                 default: AppLogin,
@@ -125,14 +133,29 @@ const  routes = [
             },
         },
         {
-            path: "/profile",
-            beforeEnter: onlyAuthUser,
+            path: "/user",
+            name: "user",
             components: {
                 NavBar,
                 default: AppMyPage,
-                FooterPage,
+                FooterPage
             },
-        },
+            children: [
+              {
+                path: "/user",
+                name: "userMain",
+                component: UserMain,
+              },
+              {
+                path: "/user/userEvent",
+                component: UserEventList,
+              },
+              {
+                path: "/user/userUpdate",
+                component: UserUpdatePage,
+              },
+          ]
+          },
         {
             path: "/admin/notice",
             components: {
@@ -159,6 +182,7 @@ const  routes = [
         },
         {
             path: "/sale/insert",
+            beforeEnter: onlyAuthUser,
             components: {
                 NavBar,
                 default: AppSaleInsert,

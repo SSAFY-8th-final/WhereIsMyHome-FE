@@ -41,9 +41,7 @@ export default new Vuex.Store({
         list:[], // houseDto
         gugunCode: '',
         dongCode: '',
-        searchWord: '',
-
-        totalListItemCount: 0,
+        searchWord: ''
     },
     event: {
       list: [],
@@ -98,9 +96,9 @@ export default new Vuex.Store({
       sigunguSelect: null,
       dongSelect: null,
 
-      sido: AddrSido,
-      sigungu: AddrSigungu,
-      dong: AddrDong,
+      sidoList: AddrSido,
+      sigunguList: AddrSigungu,
+      dongList: AddrDong,
     }
   },
     mutations: {
@@ -117,6 +115,9 @@ export default new Vuex.Store({
       SET_TOKEN(state, payload){
         state.user.token = payload.accessToken;
         state.user.refresh = payload.refreshToken;
+      },
+      SET_ACCESS_TOKEN(state, token){
+        state.user.token = token;
       },
 
 
@@ -243,21 +244,13 @@ export default new Vuex.Store({
       },
       SET_USE_INTEREST_CODE(state, flag) {
         state.address.setInterestCode = flag;
-      },
-        SET_INTEREST_CODE(state, dongCode) {
-          state.address.setInterestCode = true
-          state.address.sidoSelect = dongCode.substring(0, 2);
-          state.address.sigunguSelect = dongCode.substring(0, 5);
-          state.address.dongSelect = dongCode;
-          console.log(dongCode.substring(0, 6))
-      },
-      /* map */
-      SET_MAP_LIST(state, list) {
-        state.map.list = list;
-      },
-      SET_MAP_TOTAL_LIST_ITEM_COUNT(state, count) {
-        state.map.totalListItemCount = count;
-      },
+    },
+      SET_INTEREST_CODE(state, dongCode) {
+        state.address.setInterestCode = true
+        state.address.sidoSelect = dongCode.substring(0, 2);
+        state.address.sigunguSelect = dongCode.substring(0, 5);
+        state.address.dongSelect = dongCode;
+    }
     },
     actions: {
       async noticeList(context) {
@@ -301,28 +294,10 @@ export default new Vuex.Store({
           console.error(error);
         }
       },
-      async saleList(context) {
-        let params = {
-          searchWord: this.state.notice.searchWord,
-        };
-
-        try {
-          let { data } = await http.get("/sales", { params });
-          console.log(data);
-          if (data.result == "login") {
-            router.push("/login");
-          } else {
-            context.commit("SET_MAP_LIST", data.list);
-            context.commit("SET_MAP_TOTAL_LIST_ITEM_COUNT", data.count);
-          }
-        } catch(error) {
-          console.error(error);
-        }
-      },
       async login(context, payload) {
          
         try {
-           console.log(payload)
+           
            let response = await http.post('/login', JSON.stringify(payload))
            let { data } = response
            console.log(response.status);
@@ -343,15 +318,16 @@ export default new Vuex.Store({
            }
 
         } catch (error) {
-           console.log(error);
+          console.log(error);
         }
-     },
-     
+      },
+      
      async getUserInfo(context, token){
         let decodeToken = jwtDecode(token);
         console.log("2. getUserInfo() decodeToken :: ", decodeToken);
-        console.log(token)
-        let response = await http.get('/users/'+ decodeToken.userEmail);
+       console.log(token)
+       try {
+         let response = await http.get('/users/'+ decodeToken.userEmail);
         let {data} = response;
 
         let statusCode = response.status;
@@ -359,9 +335,9 @@ export default new Vuex.Store({
           context.commit("SET_USER_INFO", data.UserDto);
           context.commit("SET_IS_VALID_TOKEN", true);
           let interestCode = data.UserDto.interestCode;
-
+          
           if(interestCode != null && interestCode != '')
-            context.commit("SET_INTEREST_CODE", data.UserDto.interestCode)
+          context.commit("SET_INTEREST_CODE", data.UserDto.interestCode)
         } else if(statusCode == 401){
           context.commit("SET_USER_INFO", null);
           context.commit("SET_IS_VALID_TOKEN", false);
@@ -370,81 +346,88 @@ export default new Vuex.Store({
           context.commit("SET_USER_INFO", null);
           context.commit("SET_IS_VALID_TOKEN", false);
           alert('서버 오류')
+          await this.$store.dispatch("tokenRegeneration");
         }
-     }
+       } catch (error){
+        if(error.status == 401){
+          context.commit("SET_USER_INFO", null);
+          context.commit("SET_IS_VALID_TOKEN", false);
+          alert('다시 로그인 해주세요')
+        } else {
+          context.commit("SET_USER_INFO", null);
+          context.commit("SET_IS_VALID_TOKEN", false);
+          alert('다시 로그인 해주세요')
+          await this.dispatch("tokenRegeneration");
+        }
+       }
+        
+     },
+     async logout(context) {
+        console.log("2. logout()  :: ");
+        let decodeToken = jwtDecode(this.getters.getAccessToken);
+          let response = await http.get('/logout/'+decodeToken.userEmail);
 
-           //  async getUserInfo({ commit, dispatch }, token) {
-      //    let decodeToken = jwtDecode(token);
-      //    // console.log("2. getUserInfo() decodeToken :: ", decodeToken);
-      //    await findById(decodeToken.userEmail,({ data }) => {
-      //        if (data.message === "success") {
-      //          commit("SET_USER_INFO", data.userInfo);
-      //          // console.log("3. getUserInfo data >> ", data);
-      //        } else {
-      //          console.log("유저 정보 없음!!!!");
-      //        }
-      //      },
-      //      async (error) => {
-      //        console.log("getUserInfo() error code [토큰 만료되어 사용 불가능.] ::: ", error.response.status);
-      //        commit("SET_IS_VALID_TOKEN", false);
-      //        await dispatch("tokenRegeneration");
-      //      }
-      //    );
-      //  },
-      //  async tokenRegeneration({ commit, state }) {
-      //    console.log("토큰 재발급 >> 기존 토큰 정보 : {}", sessionStorage.getItem("access-token"));
-      //    await tokenRegeneration(
-      //      JSON.stringify(state.userInfo),
-      //      ({ data }) => {
-      //        if (data.message === "success") {
-      //          let accessToken = data["access-token"];
-      //          console.log("재발급 완료 >> 새로운 토큰 : {}", accessToken);
-      //          sessionStorage.setItem("access-token", accessToken);
-      //          commit("SET_IS_VALID_TOKEN", true);
-      //        }
-      //      },
-      //      async (error) => {
-      //        // HttpStatus.UNAUTHORIZE(401) : RefreshToken 기간 만료 >> 다시 로그인!!!!
-      //        if (error.response.status === 401) {
-      //          console.log("갱신 실패");
-      //          // 다시 로그인 전 DB에 저장된 RefreshToken 제거.
-      //          await logout(state.userInfo.userEmail,({ data }) => {
-      //              if (data.message === "success") {
-      //                console.log("리프레시 토큰 제거 성공");
-      //              } else {
-      //                console.log("리프레시 토큰 제거 실패");
-      //              }
-      //              alert("RefreshToken 기간 만료!!! 다시 로그인해 주세요.");
-      //              commit("SET_IS_LOGIN", false);
-      //              commit("SET_USER_INFO", null);
-      //              commit("SET_IS_VALID_TOKEN", false);
-      //              router.push({ name: "login" });
-      //            },
-      //            (error) => {
-      //              console.log(error);
-      //              commit("SET_IS_LOGIN", false);
-      //              commit("SET_USER_INFO", null);
-      //            }
-      //          );
-      //        }
-      //      }
-      //    );
-      //  },
-      //  async userLogout({ commit }, userEmail) {
-      //    await logout(userEmail, ({ data }) => {
-      //        if (data.message === "success") {
-      //          commit("SET_IS_LOGIN", false);
-      //          commit("SET_USER_INFO", null);
-      //          commit("SET_IS_VALID_TOKEN", false);
-      //        } else {
-      //          console.log("유저 정보 없음!!!!");
-      //        }
-      //      },
-      //      (error) => {
-      //        console.log(error);
-      //      }
-      //    );
-      //  },
+          let statusCode = response.status;
+          if(statusCode == 200){
+            context.commit("SET_IS_LOGIN", false);
+            context.commit("SET_USER_INFO", null);
+            context.commit("SET_IS_VALID_TOKEN", false);
+            context.commit("SET_TOKEN", {"accessToken": null, "refreshToken": null});
+          } else {
+            console.log("유저 정보 없음!!!!");
+          }
+
+        },
+    
+      async tokenRegeneration(context) {
+        console.log("tokenRegeneration")
+        try {
+          
+          let response = await http.post('/users/refresh', JSON.stringify(this.state.user.userInfo))
+          let { data } = response
+          console.log(response.status);
+
+          let statusCode = response.status;
+          if (statusCode == 200) {
+            let accessToken = data["access-token"];
+            console.log("재발급 완료 >> 새로운 토큰 : {}", accessToken);
+            sessionStorage.setItem("Authrozation", accessToken);
+            context.commit("SET_IS_VALID_TOKEN", true);
+             context.commit("SET_IS_LOGIN", true);
+             context.commit("SET_IS_VALID_TOKEN", true);
+             context.commit("SET_ACCESS_TOKEN", accessToken);
+          } 
+
+       } catch (error) {
+          console.log(error);
+          await this.dispatch('logout');
+       }
+     },
+
+      async checkPassword(context, password) { 
+        console.log("checkPassword :: " + password);
+        let params = {
+          userPassword: password,
+          userEmail: this.state.user.userInfo.userEmail
+        };
+        try {
+          let response = await http.post('/checkPw', params);
+          let statusCode = response.status;
+          console.log(statusCode)
+          if(statusCode == 200){
+            return true;
+          } else if(statusCode == 401) {
+            console.log("잘못된 비밀번호 입력");
+            return false;
+          }
+          
+        } catch (error) {
+          console.log(error);
+            return false;
+        }
+
+      }
+
 
     },
     getters: {
@@ -457,14 +440,14 @@ export default new Vuex.Store({
       checkToken: function (state) {
         return state.user.isValidToken;
       },
+      getAccessToken: function(state){
+        return state.user.token;
+      },
       getEventList: function (state) {
         return state.event.list;
       },
       getNoticeList: function (state) {
         return state.notice.list;
-      },
-      getSaleList: function (state) {
-        return state.map.list;
       },
   
       // pagination
@@ -526,14 +509,42 @@ export default new Vuex.Store({
       //     return state.address.sido;
       //    },
       getFilteredSigungu: function (state) {
-        return state.address.sigungu.filter(
+        return state.address.sigunguList.filter(
           (item) => item.code.substr(0, 2) == state.address.sidoSelect
         );
       },
       getFilteredDong: function (state) {
-        return state.address.dong.filter(
+        return state.address.dongList.filter(
           (item) => item.code.substr(0, 5) == state.address.sigunguSelect
         );
       },
+      getSidoNameByCode: (state) => (code) => {
+        return state.address.sidoList.filter(
+          (item) => item.code == code.substr(0, 2)
+        ).name;
+      },
+      getSigunguNameByCode: (state) => (code) => {
+        return state.address.sigunguList.filter(
+          (item) => item.code == code.substr(0, 5)
+        ).name;
+      },
+      getDongNameByCode: (state) => (code) =>{
+        return state.address.dongList.filter(
+          (item) => item.code == code
+        ).name;
+      },
+      
+      getAddressByDongCode: (state) => (dongCode) => {
+        let address = {
+          sido: '',
+          sigungu: '',
+          dong: ''
+        };
+        address.sido = (state.address.sidoList.find(e => e.code == dongCode.substr(0, 2))).name
+        address.sigungu = (state.address.sigunguList.find(e => e.code == dongCode.substr(0, 5))).name
+        address.dong =(state.address.dongList.find(e => e.code == dongCode)).name
+        
+        return address;
+      }
     },
     })
