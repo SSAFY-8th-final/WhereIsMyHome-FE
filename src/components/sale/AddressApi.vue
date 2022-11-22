@@ -1,11 +1,163 @@
 <template>
-  <div class="daummap">
-    <h1>우편번호: <span>{{ zip }}</span></h1>
-    <h1>기본주소: <span>{{ addr1 }}</span></h1>
-    <h1>상세주소: <span>{{ addr2 }}</span></h1>
-    <div ref="embed"></div>
-    <button @click="showApi">주소API 호출</button>
+  <section class="ftco-section">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-6 themed-grid-col">
+              <h2 class="mb-2">위치 정보</h2>
+              <div class="row">
+                <div class="col-md-10 themed-grid-col">
+                  <div class="form-outline mb-3">
+                    <label class="form-label" for="mainAddress">주소</label>
+                    <input type="text" id="mainAddress" class="form-control" readonly/>
+                  </div>
+                </div>
+                <div class="col-md-2 themed-grid-col">
+                    <button @click="showApi" class="btn btn-primary btn-block btn-search ms-1"><i class="bi bi-search"></i></button>
+                </div>
+              </div>
+                <label class="form-label" for="detailAddress">상세주소</label>
+                <input type="text" id="detailAddress" class="form-control me-5"/>
+            </div>
+          <div class="col-md-5 themed-grid-col">.col-md-4</div>
+        </div>
+        <div class="row justify-content-center">
+            <div class="col-md-11 themed-grid-col">
+              <h2 class="mb-2 mt-5">기본 정보</h2>
+              <div class="row">
+                <div class="col-11 me-1">
+                  
+                    <input type="radio" class="btn-check" name="btnradio" id="btnradio1" autocomplete="off" checked>
+                    <label class="btn btn-outline-primary me-2" for="btnradio1">월세</label>
+
+                    <input type="radio" class="btn-check" name="btnradio" id="btnradio2" autocomplete="off">
+                    <label class="btn btn-outline-primary me-2" for="btnradio2">전세</label>
+
+                    <input type="radio" class="btn-check" name="btnradio" id="btnradio3" autocomplete="off">
+                    <label class="btn btn-outline-primary" for="btnradio3">매매</label>
+                  
+                  
+                </div>
+                <!--월세-->
+                <div class="row">
+                  <div class="col-md-4 themed-grid-col">
+                    <div class="form-outline mb-3">
+                      <input type="text" id="amount" class="form-control mt-4"  placeholder="보증금"/>
+                    </div>
+                  </div>
+                  <div class="after-input-word price" style="width: 1em">
+                  /
+                  </div>
+                  <div class="col-md-4 themed-grid-col">
+                    <div class="form-outline mb-3">
+                      <input type="text" id="amount" class="form-control mt-4"  placeholder="월세"/>
+                    </div>
+                  </div>
+                  <div class="col-md-1 after-input-word price">만원</div>
+                </div>
+
+                <!--전세-->
+                <div class="row">
+                <div class="col-md-4 themed-grid-col">
+                  <div class="form-outline mb-3">
+                    <input type="text" id="amount" class="form-control mt-4" placeholder="전세"/>
+                  </div>
+                </div>
+                <div class="col-md-1 after-input-word price">만원</div>
+                </div>
+                
+                <!--매매-->
+                <div class="row">
+                <div class="col-md-4 themed-grid-col">
+                  <div class="form-outline mb-3">
+                    <input type="text" id="amount" class="form-control mt-4" placeholder="매매"/>
+                  </div>
+                </div>
+                <div class="col-md-1 after-input-word price">만원</div>
+                </div>
+
+
+              </div>
+
+              <div class="row">
+                <div class="col-11 themed-grid-col mb-3">
+
+               
+                    <input type="radio" class="btn-check" name="movein" id="btnradio4" autocomplete="off" checked>
+                    <label class="btn btn-outline-primary me-2" for="btnradio4">바로 입주</label>
+
+                    <input type="radio" class="btn-check" name="movein" id="btnradio5" autocomplete="off">
+                    <label class="btn btn-outline-primary me-2" for="btnradio5">날짜 지정</label>
+
+                    <input type='date' name='movein-date' class="calender"/>
+             
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="col-1"> 
+                  <label class="form-label" for="area">관리비</label>
+                  <input type="text" id="area" class="form-control"/>
+                </div>
+                <div class="col-md-1 after-input-word me-5">만원</div>
+                <div class="col-md-2 pe-3">
+                  <label class="form-label">방향</label>
+                  <input type="text" class="form-control" placeholder="ex.남향"/>
+                </div>
+                <div class="col-md-1"></div>
+                <div class="col-1"> 
+                  <label class="form-label" for="area">면적</label>
+                  <input type="text" id="area" class="form-control"/>
+                </div>
+                <div class="col-md-1 after-input-word  me-5">㎡</div>
+                <div class="col-1">
+                  <label class="form-label">층수</label>
+                  <input type="text" id="detailAddress" class="form-control"/>
+                </div>
+                <div class="after-input-word" style="width: 1em">
+                  /
+                </div>
+                <div class="col-1">
+                  <label class="form-label">해당 층수</label>
+                  <input type="text" id="detailAddress" class="form-control"/> 
+                </div>
+              </div>
+              <div class="row mt-3">
+                <div class="col-1 me-5"> 
+                  <label class="form-label" for="area">방</label>
+                  <input type="text" id="area" class="form-control"/>
+                </div>
+                
+                <div class="col-1 me-5"> 
+                  <label class="form-label" for="area">욕실</label>
+                  <input type="text" id="area" class="form-control"/>
+                </div>
+                
+                <div class="col-1"> 
+                  <label class="form-label" for="area">주차</label>
+                  <input type="text" id="area" class="form-control"/>
+                </div>
+                <div class="col-md-1 after-input-word">대</div>
+              </div>
+
+
+            </div>
+        </div>
+
+      <!-- 상세설명 및 파일 업로드 -->
+        <div class="row justify-content-center">
+            <div class="col-md-11 themed-grid-col">
+              <h2 class="mb-2 mt-5">상세 정보</h2>
+              <div class="row justify-content-center">
+                <textarea class="form-control my-3" id="exampleFormControlTextarea1" rows="5"></textarea>
+                <input type="file" class="form-control" id="inputGroupFile04" aria-describedby="inputGroupFileAddon04" aria-label="Upload">
+                
+              </div>
+            </div>
+        </div>
+
+
   </div>
+  </section>
 </template>
 
 <script>
@@ -13,9 +165,8 @@ export default {
   name: 'daumMap',
   data() {
     return {
-      zip: '',
-      addr1: '',
-      addr2: ''
+      loadAddr: '',
+      jibunAddr: ''
     }
   },
   methods: {
@@ -47,17 +198,29 @@ export default {
                 fullRoadAddr += extraRoadAddr;
             }
 
-            // 우편번호와 주소 정보를 해당 필드에 넣는다.
-            this.zip = data.zonecode; //5자리 새우편번호 사용
-            this.addr1 = fullRoadAddr;
+            this.loadAddr = fullRoadAddr;
             console.log(data)
         }
-      }).embed(this.$refs.embed)
+      }).open()
     }
   }
 }
 </script>
 
-<style>
+<style scoped>
+div >>> .btn-search{
+  margin-top: 33px;
+}
+ div >>> .after-input-word{
+  margin-top: 37px;
+  margin-left: 0.5em;
+  width: 2em;
+  }
+ div >>> .price{
+  margin-top: 30px;
+ }
 
+ .row >>> .calender{
+  border: none;
+ } 
 </style>

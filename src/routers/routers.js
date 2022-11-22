@@ -174,6 +174,7 @@ const  routes = [
         },
         {
             path: "/admin/user",
+            beforeEnter: onlyAuthUser,
             components: {
             NavBar,
             default: AppAdminUser,
@@ -182,7 +183,7 @@ const  routes = [
         },
         {
             path: "/sale/insert",
-            beforeEnter: onlyAuthUser,
+            //beforeEnter: onlyAuthUser,
             components: {
                 NavBar,
                 default: AppSaleInsert,
