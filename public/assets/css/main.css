@@ -2317,10 +2317,16 @@ section {
 }
 
 .blog .sidebar .sidebar-title {
-  font-size: 20px;
+  font-size: 30px;
   font-weight: 700;
   padding: 0;
-  margin: 0;
+  color: var(--color-secondary);
+}
+
+.blog .sidebar .sidebar-subtitle {
+  font-size: 20px;
+  font-weight: 500;
+  padding: 0;
   color: var(--color-secondary);
 }
 
