@@ -36,10 +36,9 @@ export default {
                 } else {
                     let { dto } = data;
                     this.$store.commit("SET_SALE_DETAIL", dto);
-                    console.log(this.$store.state.sale.saleInfo)
                 }
             } catch (error) {
-                console.log("AppDetailVue: error : ");
+                console.log("AdminEventVue: error : ");
                 console.log(error);
             }
         },
