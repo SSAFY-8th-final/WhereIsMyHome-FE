@@ -9,12 +9,14 @@
     data() {
       return {
         map: null,
+        geocoder: null,
         markers: [],
       };
     },
     methods: {
       initMap() {
         const container = document.getElementById("map");
+
         const options = {
             center: new kakao.maps.LatLng(37.574516, 126.968867), // 지도의 중심좌표
             level: 2 // 지도의 확대 레벨
@@ -25,12 +27,35 @@
         var mapTypeControl = new kakao.maps.MapTypeControl();
         this.map.addControl(mapTypeControl, kakao.maps.ControlPosition.TOPRIGHT);
 
-        // 지도 확대 축소를 제어할 수 있는  줌 컨트롤을 생성합니다
+        // 지도 확대 축소 제어 줌 컨트롤 생성
         var zoomControl = new kakao.maps.ZoomControl();
         this.map.addControl(zoomControl, kakao.maps.ControlPosition.RIGHT);
 
-        this.displayMarkers();
+        var geocoder = new kakao.maps.services.Geocoder();
 
+        if(this.$store.state.user.isLogin) { // 로그인 했으면 관심지역을 중심좌표로
+          // 사용자 관심지역 가져오기
+          let dongCode = this.$store.state.user.userInfo.interestCode;
+          let address = this.$store.getters.getAddressByDongCode(dongCode);
+          let addressStr = address.sido + " " + address.sigungu + " " + address.dong;
+
+          var map = this.map;
+          geocoder.addressSearch(addressStr, function(result, status) {
+
+              // 정상적으로 검색이 완료됐으면 
+              if (status === kakao.maps.services.Status.OK) {
+
+                  var coords = new kakao.maps.LatLng(result[0].y, result[0].x);
+
+                  // 지도의 중심을 결과값으로 받은 위치로 이동시킵니다
+                  map.setCenter(coords);
+              } 
+          });
+
+
+        }
+
+        this.displayMarkers();  // 매물 마커찍기
       },
       displayMarkers() {
         let list = this.$store.getters.getSaleList;
@@ -75,7 +100,7 @@
     mounted() {
       if (!window.kakao || !window.kakao.maps) {
         const script = document.createElement("script");
-        script.src = `//dapi.kakao.com/v2/maps/sdk.js?autoload=false&appkey=30825d7ff55d14a818299c266e641081`;
+        script.src = `//dapi.kakao.com/v2/maps/sdk.js?autoload=false&libraries=services&appkey=30825d7ff55d14a818299c266e641081`;
         /* global kakao */
         script.addEventListener("load", () => {
           kakao.maps.load(this.initMap);
