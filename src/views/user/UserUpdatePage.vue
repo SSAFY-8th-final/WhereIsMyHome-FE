@@ -48,7 +48,7 @@
 </template>
 
 <script>
-import InterestSelectBox from "@/components/login/InterestSelectBox.vue";
+import InterestSelectBox from "@/components/InterestSelectBox.vue";
 
 export default {
     data: function () {
