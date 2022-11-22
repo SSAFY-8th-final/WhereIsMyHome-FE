@@ -36,7 +36,9 @@ export default new Vuex.Store({
         userPassword: ''
       }
     },
-
+    sale: {
+      saleInfo: null
+    },
     map: {
         list:[], // houseDto
         gugunCode: '',
@@ -121,8 +123,6 @@ export default new Vuex.Store({
       SET_ACCESS_TOKEN(state, token){
         state.user.token = token;
       },
-
-
       SET_EVENT_LIST(state, list) {
         state.event.list = list;
       },
@@ -260,7 +260,10 @@ export default new Vuex.Store({
     SET_MAP_TOTAL_LIST_ITEM_COUNT(state, count) {
       state.map.totalListItemCount = count;
     },
-
+    /* sale */
+    SET_SALE_DETAIL(state, saleInfo) {
+      state.sale.saleInfo = saleInfo;
+    }
     },
     actions: {
       async noticeList(context) {
@@ -476,10 +479,13 @@ export default new Vuex.Store({
       },
       getNoticeList: function (state) {
         return state.notice.list;
-      },getSaleList: function (state) {
+      },
+      getSaleList: function (state) {
         return state.map.list;
       },
-
+      getSaleInfo: function (state) {
+        return state.sale.saleInfo;
+      },
   
       // pagination
       getPageCount: function (state) {
