@@ -369,29 +369,13 @@ export default new Vuex.Store({
           
           if(interestCode != null && interestCode != '')
           context.commit("SET_INTEREST_CODE", data.UserDto.interestCode)
-        } else if(statusCode == 401){
-          context.commit("SET_USER_INFO", null);
-          context.commit("SET_IS_VALID_TOKEN", false);
-          alert('다시 로그인 해주세요')
-        } else {
-          context.commit("SET_USER_INFO", null);
-          context.commit("SET_IS_VALID_TOKEN", false);
-          alert('서버 오류')
-          await this.$store.dispatch("tokenRegeneration");
-        }
+        } 
        } catch (error){
-        if(error.status == 401){
-          context.commit("SET_USER_INFO", null);
-          context.commit("SET_IS_VALID_TOKEN", false);
-          alert('다시 로그인 해주세요')
-        } else {
           context.commit("SET_USER_INFO", null);
           context.commit("SET_IS_VALID_TOKEN", false);
           alert('다시 로그인 해주세요')
           await this.dispatch("tokenRegeneration");
         }
-       }
-        
      },
      async logout(context) {
         console.log("2. logout()  :: ");
@@ -455,6 +439,34 @@ export default new Vuex.Store({
         } catch (error) {
           console.log(error);
             return false;
+        }
+      },
+      async register(context, user){
+        if(this.state.address.setInterestCode) user.interestCode = this.state.address.dongSelect
+        try{
+          await http.post('/register', JSON.stringify(user));
+          context.commit("SET_USER_INFO", user);
+        } catch(error){
+          alert('회원가입 실패')
+        }
+      },
+      async userUpdate(context, payload) { 
+
+        let params = payload.user;
+        if(payload.setInterestCode) params.interestCode = this.state.address.dongSelect
+        try {
+          let response = await http.patch('/users/'+this.state.user.userInfo.userEmail, params);
+          let statusCode = response.status;
+          console.log(statusCode)
+          if(statusCode == 200){
+            alert('정보 수정 성공')
+          } 
+        } catch (error) {
+          console.log(error);
+          if(error.status == 401)
+            alert('다시 로그인해주세요')
+          else
+            alert('문제 발생')
         }
 
       }

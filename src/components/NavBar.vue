@@ -45,7 +45,7 @@
               <li v-show="login"><router-link to="/user">My Page</router-link></li>
               <li v-show="login"><a @click="logoutHandle">LogOut</a></li>
               <li v-show="!login"><router-link to="/login">Login</router-link></li>
-              <li v-show="!login"><router-link to="/">Register</router-link></li>
+              <li v-show="!login"><router-link to="/register">Register</router-link></li>
             </ul>
           </li>
           <li class="dropdown">

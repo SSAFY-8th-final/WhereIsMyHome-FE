@@ -10,24 +10,24 @@
                 <!-- Username input -->
                 <div class="form-outline mb-4">
                     <input type="text" v-model="userName" class="form-control"/>
-                    <label class="form-label" for="registerUsername">Username</label>
+                    <label class="form-label">Username</label>
                 </div>
                                 <!-- Password input -->
                 <div class="form-outline mb-4">
-                    <input type="password" id="registerPassword" class="form-control" />
-                    <label class="form-label" for="registerPassword">Password</label>
+                    <input type="password" v-model="password1" class="form-control" />
+                    <label class="form-label">Password</label>
                 </div>
 
                 <!-- Repeat Password input -->
                 <div class="form-outline mb-4">
-                    <input type="password" id="registerRepeatPassword" class="form-control" />
-                    <label class="form-label" for="registerRepeatPassword">Repeat password</label>
+                    <input type="password" class="form-control" />
+                    <label class="form-label">Repeat password</label>
                 </div>
 
                 <!-- Checkbox -->
                 <div class="form-check">
                     <input class="form-check-input me-2" type="checkbox" v-model="setInterestCode"/>
-                    <label class="form-check-label" for="interestCheck" >
+                    <label class="form-check-label">
                         관심지역 설정
                     </label>
                     
@@ -37,7 +37,7 @@
                 </div>
 
                 <!-- Submit button -->
-                <button class="btn btn-primary btn-block my-3">정보 수정</button>
+                <button @click="userUpdateHandle" class="btn btn-primary btn-block my-3">정보 수정</button>
 
             </div>
 
@@ -48,23 +48,34 @@
 </template>
 
 <script>
-import InterestSelectBox from "@/components/login/InterestSelectBox.vue";
+import InterestSelectBox from "@/components/InterestSelectBox.vue";
 
 export default {
     data: function () {
         return{
-            setInterestCode: false,
-            userName: this.$store.state.user.userInfo.userName,
-            
-            interestCode: '',
-
+            setInterestCode: false, // 체크박스 handle
+            userName: '',
+            password1: '',
+            password2: '',
         }
     },
     components: {
         InterestSelectBox
     },
+    methods: {
+    async userUpdateHandle() {
+        const user = {
+            userName: this.userName,
+            userPassword: this.password1
+        }
+       
+      await this.$store.dispatch("userUpdate",{user: user, setInterestCode: this.setInterestCode} );
+      
+    },
+  },
     created(){
         this.setInterestCode = this.$store.state.address.setInterestCode;
+        this.userName = this.$store.state.user.userInfo.userName;
     }
 }
 </script>
