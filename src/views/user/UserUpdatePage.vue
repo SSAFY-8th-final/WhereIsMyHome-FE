@@ -1,27 +1,34 @@
 <template>
+<div>
+        <h4 class="mt-2 mb-2">회원정보 수정</h4>
+
       <section class="container-sm pd-4">
-    <div class="bg-white border mx-auto" style="width: 100%;">
         <section class="w-100 p-4 d-flex justify-content-center pb-4">
         <div style="width: 26rem;">
             <div class="container">
 
-                <!-- Email input -->
-                <div class="form-outline mb-4">
-                    <input type="email" class="form-control" :value="$store.state.user.userInfo.userEmail" readonly disabled/>
-                    <label class="form-label" for="registerEmail">Email</label>
-                </div>
-
                 <!-- Username input -->
                 <div class="form-outline mb-4">
-                    <input type="text" v-model="userName" class="form-control" disabled/>
+                    <input type="text" v-model="userName" class="form-control"/>
                     <label class="form-label" for="registerUsername">Username</label>
+                </div>
+                                <!-- Password input -->
+                <div class="form-outline mb-4">
+                    <input type="password" id="registerPassword" class="form-control" />
+                    <label class="form-label" for="registerPassword">Password</label>
+                </div>
+
+                <!-- Repeat Password input -->
+                <div class="form-outline mb-4">
+                    <input type="password" id="registerRepeatPassword" class="form-control" />
+                    <label class="form-label" for="registerRepeatPassword">Repeat password</label>
                 </div>
 
                 <!-- Checkbox -->
                 <div class="form-check">
                     <input class="form-check-input me-2" type="checkbox" v-model="setInterestCode"/>
                     <label class="form-check-label" for="interestCheck" >
-                        관심지역 
+                        관심지역 설정
                     </label>
                     
                 </div>
@@ -30,13 +37,14 @@
                 </div>
 
                 <!-- Submit button -->
-                <button class="btn btn-primary btn-block mb-3">정보 수정</button>
+                <button class="btn btn-primary btn-block my-3">정보 수정</button>
 
             </div>
+
         </div>
         </section>
-    </div>
     </section>
+</div>
 </template>
 
 <script>
