@@ -454,6 +454,26 @@ export default new Vuex.Store({
             return false;
         }
 
+      },
+      async userUpdate(context, payload) { 
+
+        let params = payload.user;
+        if(payload.setInterestCode) params.interestCode = this.state.address.dongSelect
+        try {
+          let response = await http.patch('/users/'+this.state.user.userInfo.userEmail, params);
+          let statusCode = response.status;
+          console.log(statusCode)
+          if(statusCode == 200){
+            alert('정보 수정 성공')
+          } 
+        } catch (error) {
+          console.log(error);
+          if(error.status == 401)
+            alert('다시 로그인해주세요')
+          else
+            alert('문제 발생')
+        }
+
       }
 
 
