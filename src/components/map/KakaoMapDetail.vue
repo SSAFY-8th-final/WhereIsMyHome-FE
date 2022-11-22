@@ -2,31 +2,11 @@
     <div>
       <div id="map-detail">
         <ul id="category">
-          <li id="BK9" data-order="0"> 
-              <span class="category_bg bank"></span>
-              은행
-          </li>       
-          <li id="MT1" data-order="1"> 
-              <span class="category_bg mart"></span>
-              마트
-          </li>  
-          <li id="PM9" data-order="2"> 
-              <span class="category_bg pharmacy"></span>
-              약국
-          </li>  
-          <li id="OL7" data-order="3"> 
-              <span class="category_bg oil"></span>
-              주유소
-          </li>  
-          <li id="CE7" data-order="4"> 
-              <span class="category_bg cafe"></span>
-              카페
-          </li>  
-          <li id="CS2" data-order="5"> 
-              <span class="category_bg store"></span>
-              편의점
-          </li>      
-      </ul>
+          <li  v-for="(el, index) in category" :key="index" :id=el.id :data-order=el.order @click="onClickCategory(el.id)"> 
+            <span class='category_bg' :class="el.type"></span>
+            {{el.title}}
+        </li>
+        </ul>
       </div>
     </div>
   </template>
@@ -39,16 +19,21 @@
   let contentNode;
 
   let category = [
-    {id: 'BK9', title: '은행', order: 0},
-    {id: 'MT1', title: '마트', order: 1},
-    {id: 'PM9', title: '약국', order: 2},
-    {id: 'OL7', title: '주유소', order: 3},
-    {id: 'CE7', title: '카페', order: 4},
-    {id: 'CS2', title: '편의점', order: 5}
-  ];
-  console.log(category);
+  {id: 'BK9', title: '은행', order: 0, type: 'bank'},
+  {id: 'MT1', title: '마트', order: 1, type: 'mart'},
+  {id: 'PM9', title: '약국', order: 2, type: 'pharmacy'},
+  {id: 'OL7', title: '주유소', order: 3, type: 'oil'},
+  {id: 'CE7', title: '카페', order: 4, type: 'cafe'},
+  {id: 'CS2', title: '편의점', order: 5, type: 'store'}
+];
 
-  export default {
+export default {
+    data() {
+      return {
+        category,
+        categoryMarkers: [],
+      }
+    },
     methods: {
       initMap() {
         placeOverlay = new kakao.maps.CustomOverlay({zIndex:1});
@@ -65,12 +50,7 @@
         kakao.maps.event.addListener(map, 'idle', this.searchPlaces);
 
         contentNode.className = 'placeinfo_wrap';
-        this.addEventHandle(contentNode, 'mousedown', kakao.maps.event.preventMap);
-        this.addEventHandle(contentNode, 'touchstart', kakao.maps.event.preventMap);
-
         placeOverlay.setContent(contentNode);
-
-        this.addCategoryClickEvent();
       },
       searchPlaces() {
         if (!currCategory) {
@@ -110,7 +90,23 @@
           // 장소정보를 표출하도록 클릭 이벤트를 등록합니다
           (function(marker, place) {
               kakao.maps.event.addListener(marker, 'click', function() {
-                  this.displayPlaceInfo(place);
+                var content = '<div class="placeinfo">' +
+                                '   <a class="title" href="' + place.place_url + '" target="_blank" title="' + place.place_name + '">' + place.place_name + '</a>';   
+
+                if (place.road_address_name) {
+                    content += '    <span title="' + place.road_address_name + '">' + place.road_address_name + '</span>' +
+                                '  <span class="jibun" title="' + place.address_name + '">(지번 : ' + place.address_name + ')</span>';
+                }  else {
+                    content += '    <span title="' + place.address_name + '">' + place.address_name + '</span>';
+                }                
+              
+                content += '    <span class="tel">' + place.phone + '</span>' + 
+                            '</div>' + 
+                            '<div class="after"></div>';
+
+                contentNode.innerHTML = content;
+                placeOverlay.setPosition(new kakao.maps.LatLng(place.y, place.x));
+                placeOverlay.setMap(map);  
               });
           })(marker, places[i]);
         }
@@ -129,53 +125,16 @@
                 image: markerImage 
             });
 
-        marker.setMap(this.map); // 지도 위에 마커를 표출합니다
-        this.markers.push(marker);  // 배열에 생성된 마커를 추가합니다
+        marker.setMap(map); // 지도 위에 마커를 표출합니다
+        this.categoryMarkers.push(marker);  // 배열에 생성된 마커를 추가합니다
 
         return marker;
       },
       removeMarker() {
-        for ( var i = 0; i < this.markers.length; i++ ) {
-            this.markers[i].setMap(null);
+        for ( var i = 0; i < this.categoryMarkers.length; i++ ) {
+            this.categoryMarkers[i].setMap(null);
         }   
-        this.markers = [];
-      },
-      displayPlaceInfo (place) {
-        var content = '<div class="placeinfo">' +
-                        '   <a class="title" href="' + place.place_url + '" target="_blank" title="' + place.place_name + '">' + place.place_name + '</a>';   
-
-        if (place.road_address_name) {
-            content += '    <span title="' + place.road_address_name + '">' + place.road_address_name + '</span>' +
-                        '  <span class="jibun" title="' + place.address_name + '">(지번 : ' + place.address_name + ')</span>';
-        }  else {
-            content += '    <span title="' + place.address_name + '">' + place.address_name + '</span>';
-        }                
-      
-        content += '    <span class="tel">' + place.phone + '</span>' + 
-                    '</div>' + 
-                    '<div class="after"></div>';
-
-        contentNode.innerHTML = content;
-        placeOverlay.setPosition(new kakao.maps.LatLng(place.y, place.x));
-        placeOverlay.setMap(this.map);  
-      },
-
-      //////////
-      addEventHandle(target, type, callback) {
-        if (target.addEventListener) {
-            target.addEventListener(type, callback);
-        } else {
-            target.attachEvent('on' + type, callback);
-        }
-      },
-      //////////
-      addCategoryClickEvent() {
-        var category = document.getElementById('category'),
-            children = category.children;
-
-        for (var i=0; i<children.length; i++) {
-            children[i].onclick = this.onClickCategory;
-        }
+        this.categoryMarkers = [];
       },
       onClickCategory(el) {
         var value = document.getElementById(el);
@@ -187,13 +146,13 @@
         if (value.className === 'on') {
             currCategory = '';
             this.changeCategoryClass();
-            this.removeCategory();
+            this.removeMarker();
         } else {
             console.log('oh!');
             currCategory = el;
             this.changeCategoryClass(value);
             console.log('t-bone!');
-            this.searchCategory();
+            this.searchPlaces();
         }
       },
       changeCategoryClass(el) {
