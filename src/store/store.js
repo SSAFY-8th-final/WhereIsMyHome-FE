@@ -6,6 +6,7 @@ Vue.use(Vuex);
 import jwtDecode from "jwt-decode";
 
 import http from "@/common/axios.js";
+import kakaoapi from "@/common/axioskakao.js";
 import util from "@/common/util.js";
 
 import router from "@/routers/routers.js";
