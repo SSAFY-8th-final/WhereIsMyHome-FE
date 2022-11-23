@@ -1,14 +1,14 @@
 <template>
   <div class="col-xl-4 col-md-6" data-aos="fade-up" data-aos-delay="100">
     <div class="post-item position-relative h-100">
-      <toggle-fav id="favBtn"></toggle-fav>
+      <toggle-fav id="favBtn" :no="el.no"></toggle-fav>
       <div class="post-img position-relative overflow-hidden">
         <img src="assets/img/interior-1.jpg" class="img-fluid" alt="" />
         <span class="post-date">서울시 사직동</span>
       </div>
 
       <div class="post-content d-flex flex-column">
-        <h3 class="post-title">광화문풍림스페이스본</h3>
+        <h3 class="post-title">{{el.AptName}}</h3>
         <p>저층 / 관리비 10만 / 신대방역 도보 5분거리 초역세권, 저렴한 원룸입니다.</p>
 
         <div class="meta d-flex align-items-center">
@@ -23,7 +23,7 @@
 
         <hr />
 
-        <a href="/detail" class="readmore"
+        <a :href="pathUrl" class="readmore"
           ><span>Read More</span><i class="bi bi-arrow-right"></i
         ></a>
       </div>
@@ -34,8 +34,14 @@
 <script>
 import ToggleFav from "@/components/map/ToggleFav.vue";
 export default {
+  props: ['el'],
   components: {
     ToggleFav
+  },
+  computed: {
+    pathUrl() {
+      return '#/detail/' + this.el.no;
+    }
   }
 };
 </script>
