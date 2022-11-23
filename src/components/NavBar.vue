@@ -55,7 +55,7 @@
             ></a>
             <ul>
               <li><router-link to="/sale/insert">매물 등록</router-link></li>
-              <li><router-link to="/#">d</router-link></li>
+              <li><router-link to="/test">test</router-link></li>
             </ul>
           </li>
         </ul>
