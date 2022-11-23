@@ -6,6 +6,7 @@ Vue.use(Vuex);
 import jwtDecode from "jwt-decode";
 
 import http from "@/common/axios.js";
+import kakaoapi from "@/common/axioskakao";
 import util from "@/common/util.js";
 
 import router from "@/routers/routers.js";
@@ -426,8 +427,77 @@ export default new Vuex.Store({
             return false;
         }
 
-      }
+      },
 
+      async saleInsert(context, payload){
+
+        let insertParams = payload.item
+        console.log(insertParams)
+        console.log(payload.files)
+
+        //let decodeToken = jwtDecode(this.getters.getAccessToken);
+        //insertParams.userEmail = t
+
+        try{
+          let {data} = await kakaoapi.get('/v2/local/search/address'+'?query='+payload.addr)
+          console.log(data)
+          console.log(data.documents[0])
+          
+          let result = data.documents[0]
+          let jibun = result.address.main_address_no + result.address.sub_address_no
+          let AptName = result.road_address.building_name;
+          
+          console.log(result.address.region_3depth_name)
+          console.log(jibun)
+          const searchParams = {
+            jibun : jibun,
+            dong : result.address.region_3depth_name
+          }
+          
+          let no = await this.dispatch("getHouseInfo", searchParams);
+
+          if(no == -1 ){
+            console.log(AptName)
+            if(AptName != ''){
+
+              const houseInsertParam = {
+                AptName: AptName,
+                dong: result.address.region_3depth_name,
+                code: (result.address.b_code).substr(0, 5),
+                jibun: jibun,
+                lat: result.address.y,
+                lng: result.address.x,
+              }
+              await this.dispatch("houseInsert", houseInsertParam);
+            }
+          }else{
+            insertParams.no = no;
+            console.log('집 잇음 ' + no)
+          }
+        }catch(error){
+          console.log(error)
+        }
+      },
+      async getHouseInfo(context, payload){
+        console.log('getHouseInfo')
+        let no = -1
+        try{
+          let {data} = await http.post('/house/search-address', JSON.stringify(payload))
+          console.log(data)
+          no = data
+        }catch(error){
+          console.log(error)
+        }
+        return no
+      }, 
+      async houseInsert(context, payload){
+        try{
+          console.log('houseInsert')
+          await http.post('/house', JSON.stringify(payload))
+        }catch(error){
+          console.log(error)
+        }
+      }
 
     },
     getters: {
