@@ -29,7 +29,7 @@ export default {
         async saleDetail() {
             try {
                 let { data } = await http.get('/sales/' + this.$route.params.id);
-                console.log(data);
+                console.log(data.dto);
 
                 if (data.result == "login") {
                     this.doLogout(); // this.$router.push("/login"); 에서 변경

@@ -115,6 +115,10 @@ import SaleImgSlide from "@/components/sale/SaleImgSlide.vue";
 import KakaoMapDetail from "@/components/map/KakaoMapDetail.vue";
 export default {
     components: { SaleImgSlide, KakaoMapDetail },
+    data() {
+        return {
+        }
+    },
     computed: {
         saleTypeStr() {
             let saleType = this.$store.state.sale.saleTypeCode;
@@ -134,6 +138,8 @@ export default {
             return address.sido + " " + address.sigungu + " " + address.dong
                 + " " + this.$store.state.sale.jibun + " " + this.$store.state.sale.AptName;
         }
+    },
+    created() {
     }
 }
 </script>
