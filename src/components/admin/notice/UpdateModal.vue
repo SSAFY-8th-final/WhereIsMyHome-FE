@@ -38,8 +38,6 @@ import http from "@/common/axios.js";
 
 export default {
    name: "UpdateModal",
-   // props: ["board"],
-   // data 는 CKEditor, attachFile, fileList UI 관련 3개만
    data() {
       return {
          CKEditor: "",
@@ -59,8 +57,7 @@ export default {
    methods: {
       // modal 초기화
       initUI() {
-         this.CKEditor.setData('');
-         this.CKEditor.setData(this.$store.state.event.content);
+         this.CKEditor.setData(this.$store.state.notice.content);
       },
       async noticeUpdate() {
 

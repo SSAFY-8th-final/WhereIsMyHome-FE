@@ -24,29 +24,24 @@
   
   <script>
   export default {
-    // props 사용 X
-    // props: ['listRowCount', 'pageLinkCount', 'currentPageIndex', 'totalListItemCount'],
     data(){
       return {
       }
     },
     computed: {
-      pageCount: function(){
-        return this.$store.getters.getPageCount;
-      },
       startPageIndex: function () {
-        console.log(this.$store.getters.getStartPageIndex)
+        console.log("start " + this.$store.getters.getStartPageIndex)
         return this.$store.getters.getStartPageIndex;
       },
       endPageIndex: function () {
-        console.log(this.$store.getters.getEndPageIndex)
-        return this.$store.getters.getEndPageIndex;
+        console.log("end " + this.$store.getters.getNoticeEndPageIndex)
+        return this.$store.getters.getNoticeEndPageIndex;
       },
       prev: function(){
         return this.$store.getters.getPrev;
       },
       next: function(){
-        return this.$store.getters.getNext;
+        return this.$store.getters.getNoticeNext;
       }
     },
     methods:{

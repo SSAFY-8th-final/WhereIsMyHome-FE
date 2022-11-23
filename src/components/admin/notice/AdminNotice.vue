@@ -54,7 +54,7 @@
 </template>
 
 <script>
-import PaginationUI from "@/components/PaginationUI.vue";
+import PaginationUI from "@/components/admin/notice/PaginationUI.vue";
 import InsertModal from "@/components/admin/notice/InsertModal.vue";
 import UpdateModal from "@/components/admin/notice/UpdateModal.vue";
 import DetailModal from "@/components/admin/notice/DetailModal.vue";
@@ -106,7 +106,12 @@ export default {
         // detail
         async noticeDetail(noticeId) {
             try {
-                let { data } = await http.get('/admins/notices/' + noticeId);
+                this.$store.dispatch('getUserInfo');
+                let params = {
+                    userEmail: this.$store.state.user.userInfo.userEmail,
+                }
+
+                let { data } = await http.get('/admins/notices/' + noticeId, {params});
                 console.log(data);
 
                 if (data.result == "login") {
