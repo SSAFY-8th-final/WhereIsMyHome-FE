@@ -2,14 +2,14 @@
     <div class="portfolio-info">
         <h3>Event Information</h3>
         <ul>
-        <li><strong>Category</strong> <span>{{ $store.state.event.category }}</span></li>
+        <li><strong>Category</strong> <span>{{ this.$store.state.event.category }}</span></li>
         <li><strong>장소</strong> <span>온라인</span></li>
         
-        <li><strong>신청 시작일</strong> <span>{{ $store.state.event.startDate }} {{ $store.state.event.startTime }}</span></li>
-        <li><strong>신청 마감일</strong> <span>{{ $store.state.event.endDate }} {{ $store.state.event.endTime }}</span></li>
-        <li><strong>현재 {{ $store.state.event.attendCount }}명이 신청했어요!</strong></li>
+        <li><strong>신청 시작일</strong> <span>{{ this.$store.state.event.startDateTime }}</span></li>
+        <li><strong>신청 마감일</strong> <span>{{ this.$store.state.event.endDateTime }}</span></li>
+        <li><strong>현재 {{ this.$store.state.event.attendCount }}명이 신청했어요!</strong></li>
         <li><a @click="toggleAttend" class="btn-visit align-self-start"
-            :class="{ attended : $store.state.event.isAttend }">
+            :class="{ attended : this.$store.state.event.isAttend }">
             {{ statusText }}</a></li> <!-- 진행 상태에 따라 버튼 색상, 텍스트 다르게 -->
         </ul>
     </div>
@@ -40,7 +40,7 @@ export default {
                 let params = {
                     userEmail: this.$store.state.user.userInfo.userEmail,
                 }
-                let { data } = await http.post('/events/' + this.$route.params.id, {params});
+                let { data } = await http.post('/events/' + this.$route.params.id, params);
                 console.log(data);
 
                 if (data.result == "login") {

@@ -40,6 +40,7 @@ export default {
             this.$store.dispatch('getUserInfo');
             let params = {
                 userSeq: this.$store.state.user.userInfo.userSeq,
+                userEmail: this.$store.state.user.userInfo.userEmail,
             }
             try {
                 let { data } = await http.get('/events/' + this.$route.params.id, {params});
