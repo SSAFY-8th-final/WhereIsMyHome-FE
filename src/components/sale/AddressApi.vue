@@ -8,18 +8,22 @@
                 <div class="col-md-10 themed-grid-col">
                   <div class="form-outline mb-3">
                     <label class="form-label" for="mainAddress">주소</label>
-                    <input v-model="addr" type="text" id="mainAddress" class="form-control" readonly/>
+                    <input v-model="addr" type="text" id="mainAddress" class="form-control form-control-sm" readonly/>
                   </div>
                 </div>
                 <div class="col-md-2 themed-grid-col">
                     <button @click="showApi" class="btn btn-primary btn-block btn-search ms-1"><i class="bi bi-search"></i></button>
                 </div>
               </div>
-                <label class="form-label" for="detailAddress">상세주소</label>
-                <input v-model="addrDetail" type="text" id="detailAddress" class="form-control me-5"/>
+              <div class="row">
+                <div class="col-11">
+                  <label class="form-label" for="detailAddress">상세주소</label>
+                  <input v-model="addrDetail" type="text" id="detailAddress" class="form-control form-control-sm"/>
+                </div>
+              </div>
             </div>
           <div class="col-md-5 themed-grid-col">
-            <div id="map-check-addr" class="ms-4"></div>
+            <div id="map-check-addr" class="mt-3"></div>
           </div>
         </div>
         <div class="row justify-content-center">
@@ -44,7 +48,7 @@
                 <div class="row" v-if="saleTypeCode == '002'">
                   <div class="col-md-4 themed-grid-col">
                     <div class="form-outline mb-3">
-                      <input type="text" id="amount" class="form-control mt-4" v-model="amount1" placeholder="보증금"/>
+                      <input type="text" id="amount" class="form-control form-control-sm mt-4" v-model="amount1" placeholder="보증금"/>
                     </div>
                   </div>
                   <div class="after-input-word price" style="width: 1em">
@@ -52,7 +56,7 @@
                   </div>
                   <div class="col-md-4 themed-grid-col">
                     <div class="form-outline mb-3">
-                      <input type="text" id="amount" class="form-control mt-4" v-model="amount2" placeholder="월세"/>
+                      <input type="text" id="amount" class="form-control form-control-sm mt-4" v-model="amount2" placeholder="월세"/>
                     </div>
                   </div>
                   <div class="col-md-1 after-input-word price">만원</div>
@@ -62,7 +66,7 @@
                 <div class="row" v-else-if="saleTypeCode == '001'">
                 <div class="col-md-4 themed-grid-col">
                   <div class="form-outline mb-3">
-                    <input type="text" id="amount" class="form-control mt-4" v-model="amount1" placeholder="전세"/>
+                    <input type="text" id="amount" class="form-control form-control-sm mt-4" v-model="amount1" placeholder="전세"/>
                   </div>
                 </div>
                 <div class="col-md-1 after-input-word price">만원</div>
@@ -72,7 +76,7 @@
                 <div class="row" v-else>
                 <div class="col-md-4 themed-grid-col">
                   <div class="form-outline mb-3">
-                    <input type="text" id="amount" class="form-control mt-4" v-model="amount1" placeholder="매매"/>
+                    <input type="text" id="amount" class="form-control form-control-sm mt-4" v-model="amount1" placeholder="매매"/>
                   </div>
                 </div>
                 <div class="col-md-1 after-input-word price">만원</div>
@@ -100,47 +104,53 @@
               <div class="row">
                 <div class="col-1"> 
                   <label class="form-label">관리비</label>
-                  <input type="text" v-model="utilityBill" class="form-control"/>
+                  <input type="text" v-model="utilityBill" class="form-control form-control-sm"/>
                 </div>
                 <div class="col-md-1 after-input-word me-5">만원</div>
                 <div class="col-md-2 pe-3">
                   <label class="form-label">방향</label>
-                  <input type="text" v-model="direction" class="form-control" placeholder="ex.남향"/>
+                  <input type="text" v-model="direction" class="form-control form-control-sm" placeholder="ex.남향"/>
                 </div>
                 <div class="col-md-1"></div>
                 <div class="col-1"> 
                   <label class="form-label">면적</label>
-                  <input type="text" v-model="area" class="form-control"/>
+                  <input type="text" v-model="area" class="form-control form-control-sm"/>
                 </div>
                 <div class="col-md-1 after-input-word  me-5">㎡</div>
                 <div class="col-1">
-                  <label class="form-label">층수</label>
-                  <input type="text" v-model="floorAll" id="detailAddress" class="form-control"/>
+                  <label class="form-label">전체 층수</label>
+                  <input type="text" v-model="floorAll" id="detailAddress" class="form-control form-control-sm"/>
                 </div>
                 <div class="after-input-word" style="width: 1em">
                   /
                 </div>
                 <div class="col-1">
                   <label class="form-label">해당 층수</label>
-                  <input type="text" v-model="floorItem" class="form-control"/> 
+                  <input type="text" v-model="floorItem" class="form-control form-control-sm"/> 
                 </div>
               </div>
               <div class="row mt-3">
                 <div class="col-1 me-5"> 
                   <label class="form-label">방</label>
-                  <input type="text" v-model="room" class="form-control"/>
+                  <input type="text" v-model="room" class="form-control form-control-sm"/>
                 </div>
                 
                 <div class="col-1 me-5"> 
                   <label class="form-label">욕실</label>
-                  <input type="text" v-model="bathroom" class="form-control"/>
+                  <input type="text" v-model="bathroom" class="form-control form-control-sm"/>
                 </div>
                 
                 <div class="col-1"> 
                   <label class="form-label" >주차</label>
-                  <input type="text" v-model="parking" class="form-control"/>
+                  <input type="text" v-model="parking" class="form-control form-control-sm"/>
                 </div>
                 <div class="col-md-1 after-input-word">대</div>
+                <div class="col-4 other-type-input">
+                  <div class="form-check form-check-inline">
+                    <input v-model="parkingFree" class="form-check-input" type="checkbox">
+                    <label class="form-check-label" for="inlineCheckbox1">무료주차</label>
+                  </div>
+                </div>
               </div>
 
 
@@ -152,8 +162,8 @@
             <div class="col-md-11 themed-grid-col">
               <h2 class="mb-2 mt-5">상세 정보</h2>
               <div class="row justify-content-center">
-                <textarea class="form-control my-3" id="exampleFormControlTextarea1" rows="5"></textarea>
-                <input type="file" @change="getFileData" accept="image/*" multiple="multiple" id="file" class="form-control" aria-label="Upload" >
+                <textarea class="form-control form-control-sm my-3" v-model="description" rows="5"></textarea>
+                <input type="file" @change="getFileData" accept="image/*" multiple="multiple" id="file" class="form-control form-control-sm" aria-label="Upload" >
                 
               </div>
             </div>
@@ -195,7 +205,9 @@ export default {
       room: '',
       bathroom: '',
       parking: '',
+      parkingFree: '',
 
+      description: '',
       files: []
 
     }
@@ -225,7 +237,7 @@ export default {
           console.log(address)
             // 정상적으로 검색이 완료됐으면 
             if (status === kakao.maps.services.Status.OK) {
-              console.log(status)
+                console.log(status)
                 var coords = new kakao.maps.LatLng(result[0].y, result[0].x);
                 console.log(coords)
                 // 지도의 중심을 결과값으로 받은 위치로 이동시킵니다
@@ -282,29 +294,61 @@ export default {
       this.files = e.target.files;
     },
     submitValidation(){
-      
+      if(this.moveInCode == '002'){
+        console.log('validation - 입주 날짜 선택')
+        if(this.moveInDate == null || this.moveInDate == ''){
+          alert('날짜를 선택해주세요')
+          return false
+        }
+
+      }
+      if(this.amount1 == null || this.amount1 == ''){
+        alert('금액을 입력해주세요')
+        return false
+      }
+      if(this.saleTypeCode == '001'){
+        if(this.amount2 == null || this.amount2 == ''){
+          alert('월세를 입력해주세요')
+          return false
+        }
+      }
+      return true
     },
     async submitSale(){
-      const item= {
-        addrDetail: this.addrDetail,
+      if(!this.submitValidation()){
+        return;
+      }
+
+      console.log('submit validation 통과')
+      const item = {
+        addressDetail: this.addrDetail,
 
         saleTypeCode: this.saleTypeCode,
         moveInCode: this.moveInCode,
 
         moveInDate: this.moveInDate,
-        amount1: this.amount1,
-        amount2: this.amount2,
+        saleAmount: this.amount1,
+
         area: this.area,
         utilityBill: this.utilityBill,
         direction: this.direction,
         floor: this.floorItem,
         room: this.room,
         bathroom: this.bathroom,
-        parking: this.parking,
 
-        description: ''
+        description: this.description
       }
-      // files, addr도 보내기
+      if(this.saleTypeCode == '002')
+        item.saleAmount = this.amount1 + '/' + this.amount2
+
+      let parking = ''
+      if(this.parkingFree) parking += '무료 '
+      else parking += '유료 '
+      parking += this.parking
+      
+      item.parking = parking
+
+      // files, addr,도 보내기
       await this.$store.dispatch('saleInsert',{item: item, addr: this.addrRoad, files: this.files});
     },
 
@@ -329,17 +373,22 @@ export default {
 <style scoped>
 
 div >>> #map-check-addr {
-  width: 250px;
+  width: 100%;
   height: 200px;
   display: block;
 }
 div >>> .btn-search{
-  margin-top: 33px;
+  margin-top: 29px;
+  
 }
  div >>> .after-input-word{
   margin-top: 37px;
   margin-left: 0.5em;
   width: 2em;
+  }
+ div >>> .other-type-input{
+  margin-top: 37px;
+  margin-left: 0.5em;
   }
  div >>> .price{
   margin-top: 30px;

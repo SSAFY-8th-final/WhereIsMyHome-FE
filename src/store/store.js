@@ -432,11 +432,13 @@ export default new Vuex.Store({
       async saleInsert(context, payload){
 
         let insertParams = payload.item
-        console.log(insertParams)
+        
         console.log(payload.files)
 
-        //let decodeToken = jwtDecode(this.getters.getAccessToken);
-        //insertParams.userEmail = t
+        // 추후 수정
+        // let decodeToken = jwtDecode(this.getters.getAccessToken);
+        // let decodeToken = jwtDecode(token);
+        // console.log("2. getUserInfo() decodeToken :: ", decodeToken.userEmail);
 
         try{
           let {data} = await kakaoapi.get('/v2/local/search/address'+'?query='+payload.addr)
@@ -454,12 +456,10 @@ export default new Vuex.Store({
             dong : result.address.region_3depth_name
           }
           
-          let no = await this.dispatch("getHouseInfo", searchParams);
+          let houseinfoNo = await this.dispatch("getHouseInfo", searchParams);
 
-          if(no == -1 ){
-            console.log(AptName)
+          if(houseinfoNo == -1 ){
             if(AptName != ''){
-
               const houseInsertParam = {
                 AptName: AptName,
                 dong: result.address.region_3depth_name,
@@ -468,11 +468,18 @@ export default new Vuex.Store({
                 lat: result.address.y,
                 lng: result.address.x,
               }
-              await this.dispatch("houseInsert", houseInsertParam);
+              houseinfoNo = await this.dispatch("houseInsert", houseInsertParam);
+              console.log('new House '+houseinfoNo)
+              insertParams.houseinfoNo = houseinfoNo
+              insertParams.dongCode = result.address.b_code,
+              await this.dispatch("saleInsertOne", insertParams)
             }
           }else{
-            insertParams.no = no;
-            console.log('집 잇음 ' + no)
+            insertParams.houseinfoNo = houseinfoNo;
+            insertParams.dongCode = result.address.b_code,
+            console.log('집 잇음 ' + houseinfoNo)
+            console.log(insertParams)
+            await this.dispatch("saleInsertOne", insertParams)
           }
         }catch(error){
           console.log(error)
@@ -491,9 +498,20 @@ export default new Vuex.Store({
         return no
       }, 
       async houseInsert(context, payload){
+        let no = -1
         try{
           console.log('houseInsert')
-          await http.post('/house', JSON.stringify(payload))
+          let {data} = await http.post('/house', JSON.stringify(payload))
+          no = data.no
+        }catch(error){
+          console.log(error)
+        }
+        return no
+      },
+      async saleInsertOne(context, payload){
+        try{
+          let {data} = await http.post('/sales/dealer', payload)
+          console.log(data)
         }catch(error){
           console.log(error)
         }
