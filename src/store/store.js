@@ -517,6 +517,94 @@ export default new Vuex.Store({
                 else alert("문제 발생");
             }
         },
+        async saleInsert(context, payload){
+
+        let insertParams = payload.item
+        
+        console.log(payload.files)
+
+        // 추후 수정
+        // let decodeToken = jwtDecode(this.getters.getAccessToken);
+        // let decodeToken = jwtDecode(token);
+        // console.log("2. getUserInfo() decodeToken :: ", decodeToken.userEmail);
+
+        try{
+          let {data} = await kakaoapi.get('/v2/local/search/address'+'?query='+payload.addr)
+          console.log(data)
+          console.log(data.documents[0])
+          
+          let result = data.documents[0]
+          let jibun = result.address.main_address_no + result.address.sub_address_no
+          let AptName = result.road_address.building_name;
+          
+          console.log(result.address.region_3depth_name)
+          console.log(jibun)
+          const searchParams = {
+            jibun : jibun,
+            dong : result.address.region_3depth_name
+          }
+          
+          let houseinfoNo = await this.dispatch("getHouseInfo", searchParams);
+
+          if(houseinfoNo == -1 ){
+            if(AptName != ''){
+              const houseInsertParam = {
+                AptName: AptName,
+                dong: result.address.region_3depth_name,
+                code: (result.address.b_code).substr(0, 5),
+                jibun: jibun,
+                lat: result.address.y,
+                lng: result.address.x,
+              }
+              houseinfoNo = await this.dispatch("houseInsert", houseInsertParam);
+              console.log('new House '+houseinfoNo)
+              insertParams.houseinfoNo = houseinfoNo
+              insertParams.dongCode = result.address.b_code,
+              await this.dispatch("saleInsertOne", insertParams)
+            }
+          }else{
+            insertParams.houseinfoNo = houseinfoNo;
+            insertParams.dongCode = result.address.b_code,
+            console.log('집 잇음 ' + houseinfoNo)
+            console.log(insertParams)
+            await this.dispatch("saleInsertOne", insertParams)
+          }
+        }catch(error){
+          console.log(error)
+        }
+      },
+      async getHouseInfo(context, payload){
+        console.log('getHouseInfo')
+        let no = -1
+        try{
+          let {data} = await http.post('/house/search-address', JSON.stringify(payload))
+          console.log(data)
+          no = data
+        }catch(error){
+          console.log(error)
+        }
+        return no
+      }, 
+      async houseInsert(context, payload){
+        let no = -1
+        try{
+          console.log('houseInsert')
+          let {data} = await http.post('/house', JSON.stringify(payload))
+          no = data.no
+        }catch(error){
+          console.log(error)
+        }
+        return no
+      },
+      async saleInsertOne(context, payload){
+        try{
+          let {data} = await http.post('/sales/dealer', payload)
+          console.log(data)
+        }catch(error){
+          console.log(error)
+        }
+      }
+
     },
     getters: {
         isLogin: function (state) {
