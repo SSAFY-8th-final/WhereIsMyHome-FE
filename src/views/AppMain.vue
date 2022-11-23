@@ -21,6 +21,7 @@
       </div>
     </main>
   </div>
+  
 </template>
 
 <script>

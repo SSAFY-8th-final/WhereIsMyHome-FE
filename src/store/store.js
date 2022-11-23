@@ -628,6 +628,15 @@ export default new Vuex.Store({
             } catch (error) {
                 console.log(error)
             }
+        },
+        async houseSearchByName(context, searchWord) {
+            try {
+                let { data } = await http.get("/maps/search/" +  searchWord ); // params: params shorthand property, let response 도 제거
+                console.log(data);
+                return data
+            } catch (error) {
+                console.error(error);
+            }
         }
 
     },
@@ -782,5 +791,26 @@ export default new Vuex.Store({
 
             return address;
         },
+        getDongNameBySearchWord: (state) => (searchWord) => {
+            let listDong = state.address.dongList.filter((item) => (item.name).includes(searchWord));
+            let listSigungu = state.address.sigunguList.filter((item) => (item.name).includes(searchWord));
+            
+            let listTrans = []
+            listSigungu.forEach(item => {
+                let tmpList = state.address.dongList.filter((d) => (d.code).substr(0,5) == item.code);
+                listTrans.push(...tmpList)
+            });
+            console.log('sigungu')
+            console.log(listTrans)
+            console.log('dong')
+            console.log(listDong)
+            listDong.push(...listTrans)
+            console.log(listDong)
+            // const arr = listDong.concat(listSigungu)
+            // list.array.forEach(element => {
+                
+            // });
+            return listDong
+        }
     },
 });
