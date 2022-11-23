@@ -41,7 +41,7 @@
                     <td>{{ event.name }}</td>
                     <td>{{ event.readCount }}</td>
                     <td>{{ event.registerId }}</td>
-                    <td>{{ event.registerDateTime.date | makeDateStr(".") }}</td>
+                    <td>{{ event.registerDateTime.date | makeDateStr("/") }}</td>
                   </tr>
                 </tbody>
               </table>
@@ -60,7 +60,7 @@
 </template>
 
 <script>
-import PaginationUI from "@/components/PaginationUI.vue";
+import PaginationUI from "@/components/admin/event/PaginationUI.vue";
 import InsertModal from "@/components/admin/event/InsertModal.vue";
 import UpdateModal from "@/components/admin/event/UpdateModal.vue";
 import DetailModal from "@/components/admin/event/DetailModal.vue";
@@ -87,7 +87,7 @@ export default {
       detailModal: null,
       updateModal: null,
 
-      selectStatus: ''
+      selectStatus: '',
     };
   },
   computed: {
@@ -115,21 +115,45 @@ export default {
     // detail
     async eventDetail(eventKey) {
       try {
-        let { data } = await http.get('/admins/events/' + eventKey);
+        this.$store.dispatch('getUserInfo');
+        let params = {
+          userEmail: this.$store.state.user.userInfo.userEmail,
+          eventKey
+        }
+
+        let { data } = await http.get('/admins/events/' + eventKey, {params});
         console.log(data);
 
         if (data.result == "login") {
             this.doLogout(); // this.$router.push("/login"); 에서 변경
         } else {
             let { dto } = data;
+            var startDate = new Date(dto.startDateTime);
+            var endDate = new Date(dto.endDateTime);
+            dto.formatedStart = this.dateFormat(startDate);
+            dto.formatedEnd = this.dateFormat(endDate);
             this.$store.commit("SET_EVENT_DETAIL", dto);
-
             this.detailModal.show();
         }
       } catch (error) {
           console.log("AdminEventVue: error : ");
           console.log(error);
       }
+    },
+    dateFormat(date) {
+      let month = date.getMonth() + 1;
+      let day = date.getDate();
+      let hour = date.getHours();
+      let minute = date.getMinutes();
+      let second = date.getSeconds();
+
+      month = month >= 10 ? month : '0' + month;
+      day = day >= 10 ? day : '0' + day;
+      hour = hour >= 10 ? hour : '0' + hour;
+      minute = minute >= 10 ? minute : '0' + minute;
+      second = second >= 10 ? second : '0' + second;
+
+      return date.getFullYear() + '/' + month + '/' + day + ' ' + hour + ':' + minute + ':' + second;
     },
     // insert
     showInsertModal() {

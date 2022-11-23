@@ -47,11 +47,13 @@ export default {
         this.title = '';
         this.CKEditor.setData('');
       },
-      // 굳이 actions 에 있을 필요 없다. backend async 작업이지만, 그 결과로 store 를 변경하는 내용이 없다.
       async noticeInsert(){
+        this.$store.dispatch('getUserInfo');
+
         let noticeObj = {
             title: this.title,
             content: this.CKEditor.getData(),
+            userEmail: this.$store.state.user.userInfo.userEmail
          };
         try{
           let {data} = await http.post('/admins/notices', noticeObj);

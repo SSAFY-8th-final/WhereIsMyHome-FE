@@ -211,9 +211,15 @@ div.form {
   margin-left: 50px;
 }
 
-input:focus {
+/* input {
+  margin: 4px 0;
+  width: 400px;
+  height: 50px;
+  padding-left: 10px;
+} */
+/* input:focus {
   background-color: #e8f0fe;
-}
+} */
 
 input[type="submit"].login_button {
   width: 400px;

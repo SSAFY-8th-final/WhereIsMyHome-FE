@@ -19,11 +19,11 @@
                </div>
                <div class="mb-3">
                   <label for="">시작일
-                     <input v-model="startDateTime" type="date" class="form-control">
+                     <input v-model="storeStartDateTime" type="datetime-local" class="form-control">
                   </label>
                   &nbsp;&nbsp;
                   <label for="">종료일
-                     <input v-model="endDateTime" type="date" class="form-control">
+                     <input v-model="storeStartDateTime" type="datetime-local" class="form-control" >
                   </label>
                </div>
                <div class="mb-3">
@@ -101,18 +101,28 @@ export default {
       },
       storeStartDateTime: {
          get() {
-            return this.$store.state.event.startDateTime;
+            let startDate = this.$store.state.event.startDateTime;
+            let format = startDate.split(' ');
+            return (format[0] + 'T' + format[1]).slice(0, 16);
          },
          set(startDateTime) {
-            this.$store.commit("SET_EVENT_STARTDATETIME", startDateTime);
+            let startDate = startDateTime.split('T');
+            let format = startDate[0] + ' ' + startDate[1];
+            this.$store.commit("SET_EVENT_STARTDATETIME", format);
+            this.$store.commit("SET_EVENT_FORMATEDSTART", format);
          },
       },
       storeEndDateTime: {
          get() {
-            return this.$store.state.event.endDateTime;
+            let endDate = this.$store.state.event.endDateTime;
+            let format = endDate.split(' ');
+            return (format[0] + 'T' + format[1]).slice(0, 16);
          },
          set(endDateTime) {
-            this.$store.commit("SET_EVENT_ENDDATETIME", endDateTime);
+            let endDate = endDateTime.split('T');
+            let format = endDate[0] + ' ' + endDate[1];
+            this.$store.commit("SET_EVENT_STARTDATETIME", format);
+            this.$store.commit("SET_EVENT_FORMATEDSTART", format);
          },
       },
    },
@@ -140,8 +150,8 @@ export default {
          formData.append("eventKey", this.$store.state.event.eventKey); // update 에 추가
          formData.append("name", this.$store.state.event.name);
          formData.append("category", this.$store.state.event.category);
-         formData.append("startDateTime", this.startDateTime);
-         formData.append("endDateTime", this.endDateTime);
+         formData.append("startDateTime", this.$store.state.event.startDateTime);
+         formData.append("endDateTime", this.$store.state.event.endDateTime);
          formData.append("content", this.CKEditor.getData()); // store X !!!!
 
          // file upload

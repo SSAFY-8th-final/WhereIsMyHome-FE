@@ -37,8 +37,12 @@ export default {
     },
     methods: {
         async eventDetail() {
+            this.$store.dispatch('getUserInfo');
+            let params = {
+                userSeq: this.$store.state.user.userInfo.userSeq,
+            }
             try {
-                let { data } = await http.get('/events/' + this.$route.params.id);
+                let { data } = await http.get('/events/' + this.$route.params.id, {params});
                 console.log(data);
 
                 if (data.result == "login") {

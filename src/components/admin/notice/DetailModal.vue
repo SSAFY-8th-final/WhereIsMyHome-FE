@@ -39,8 +39,8 @@
                </table>
             </div>
             <div class="modal-footer">
-               <button @click="changeToUpdate" class="btn btn-sm btn-primary btn-outline" data-dismiss="modal" type="button">글 수정하기</button>
-               <button @click="changeToDelete" class="btn btn-sm btn-warning btn-outline" data-dismiss="modal" type="button">글 삭제하기</button>
+               <button v-show="this.$store.state.notice.sameUser" @click="changeToUpdate" class="btn btn-sm btn-primary btn-outline" data-dismiss="modal" type="button">글 수정하기</button>
+               <button v-show="this.$store.state.notice.sameUser" @click="changeToDelete" class="btn btn-sm btn-warning btn-outline" data-dismiss="modal" type="button">글 삭제하기</button>
             </div>
          </div>
       </div>

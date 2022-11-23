@@ -15,11 +15,11 @@
         </div>
         <div class="mb-3">
           <label for="">시작일
-            <input v-model="startDateTime" type="date" class="form-control">
+            <input v-model="startDateTime" type="datetime-local" class="form-control">
           </label>
           &nbsp;&nbsp;
           <label for="">종료일
-            <input v-model="endDateTime" type="date" class="form-control">
+            <input v-model="endDateTime" type="datetime-local" class="form-control">
           </label>
         </div>
         <div class="mb-3">
@@ -89,16 +89,22 @@ export default {
             this.fileList.push(URL.createObjectURL(file)); // push : array 에 항목 추가
           });
       },
-      // 굳이 actions 에 있을 필요 없다. backend async 작업이지만, 그 결과로 store 를 변경하는 내용이 없다.
       async eventInsert(){
+        let startDateTimeArr = this.startDateTime.split('T');
+        let startDateTimeStr = startDateTimeArr[0] + " " + startDateTimeArr[1];
+        let endDateTimeArr = this.endDateTime.split('T');
+        let endDateTimeStr = endDateTimeArr[0] + " " + endDateTimeArr[1];
+
         let formData = new FormData();
-        formData.append("title", this.title);
+        formData.append("name", this.name);
         formData.append("content", this.CKEditor.getData());
         formData.append("category", this.category);
-        formData.append("startDateTime", this.startDateTime);
-        formData.append("endDateTime", this.endDateTime);
-
-        console.log( this.startDateTime);
+        formData.append("startDateTime", startDateTimeStr);
+        formData.append("endDateTime", endDateTimeStr);
+        
+        this.$store.dispatch('getUserInfo');
+        formData.append("userEmail", this.$store.state.user.userInfo.userEmail);
+        
         // file upload
         let attachFiles = document.querySelector("#inputFileUploadInsert").files;
 
@@ -106,6 +112,8 @@ export default {
           const fileArray = Array.from(attachFiles);
           fileArray.forEach( file => formData.append("file", file) )
         }
+
+        
 
         let options = { 
           headers: { 'Content-Type': 'multipart/form-data' }

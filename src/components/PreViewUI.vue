@@ -23,7 +23,7 @@
 
         <hr />
 
-        <a href="/detail" class="readmore stretched-link"
+        <a href="/detail" class="readmore"
           ><span>Read More</span><i class="bi bi-arrow-right"></i
         ></a>
       </div>

@@ -22,6 +22,14 @@
                         <td>{{ $store.state.event.category }}</td>
                      </tr>
                      <tr>
+                        <td>시작일</td>
+                        <td>{{ $store.state.event.formatedStart }}</td>
+                     </tr>
+                     <tr>
+                        <td>종료일</td>
+                        <td>{{ $store.state.event.formatedEnd }}</td>
+                     </tr>
+                     <tr>
                         <td>내용</td>
                         <td v-html="$store.state.event.content"></td>
                      </tr>
@@ -57,8 +65,8 @@
                </table>
             </div>
             <div class="modal-footer">
-               <button @click="changeToUpdate" class="btn btn-sm btn-primary btn-outline" data-dismiss="modal" type="button">글 수정하기</button>
-               <button @click="changeToDelete" class="btn btn-sm btn-warning btn-outline" data-dismiss="modal" type="button">글 삭제하기</button>
+               <button v-show="this.$store.state.event.sameUser" @click="changeToDelete" class="btn btn-sm btn-warning btn-outline" data-dismiss="modal" type="button">글 삭제하기</button>
+               <button v-show="this.$store.state.event.sameUser" @click="changeToUpdate" class="btn btn-sm btn-primary btn-outline" data-dismiss="modal" type="button">글 수정하기</button>
             </div>
          </div>
       </div>
