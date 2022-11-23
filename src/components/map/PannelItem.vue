@@ -9,7 +9,7 @@
                   style=" position: relative;background-image: url('https://picsum.photos/300/300/?image=193')"
                 >
 
-                  <toggle-fav style="position: absolute;right:0"></toggle-fav>
+                  <toggle-fav :no="house.no" style="position: absolute;right:0"></toggle-fav>
                   <!-- <svg id='heart' height="0" width="0" style="position: relative;right:0">
                       <defs>
                           <clipPath id="svgPath">
@@ -29,9 +29,9 @@
               </div>
               <div class="col-xl-7 d-flex align-items-center">
                 <div class="card-body">
-                  <h4 class="card-title">{{house.aptName}}</h4>
+                  <h4 class="card-title">{{house.AptName}}</h4>
                   <p>
-                    거래금액: {{ house.saleAmount }}<br>거래유형: {{ house.saleTypeCode }}<br>*층
+                    거래금액: {{ house.saleAmount }}<br>거래유형: {{ house.saleTypeCode }}<br>{{house.floor}}층
                   </p>
                 </div>
               </div>
@@ -51,7 +51,8 @@ export default {
       house: {
           type: Object,
           default: ()=> {
-              return{
+              return {
+                  no: '',
                   aptName: '',
                   dealAmount: '',
                   area: '',
