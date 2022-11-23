@@ -37,6 +37,8 @@ export default new Vuex.Store({
             },
         },
         sale: {
+            saleInfo: null,
+
             no: 0,
             dongCode: "",
             postDate: "",
@@ -88,7 +90,9 @@ export default new Vuex.Store({
             category: "",
             content: "",
             startDateTime: "",
+            formatedStart: "",
             endDateTime: "",
+            formatedEnd: "",
             url: "",
             statusCode: "",
             registerId: "",
@@ -162,38 +166,16 @@ export default new Vuex.Store({
             state.event.category = payload.category;
             state.event.content = payload.content;
             state.event.startDateTime = payload.startDateTime;
-            state.event.startDate = util.makeDateStr(
-                payload.startDateTime.date.year,
-                payload.startDateTime.date.month,
-                payload.startDateTime.date.day,
-                "."
-            );
-            state.event.startTime = util.makeDateStr(
-                payload.startDateTime.time.hour,
-                payload.startDateTime.time.minute,
-                payload.startDateTime.time.second,
-                ":"
-            );
+            state.event.formatedStart = payload.formatedStart;
+            state.event.formatedEnd = payload.formatedEnd;
             state.event.endDateTime = payload.endDateTime;
-            state.event.endDate = util.makeDateStr(
-                payload.endDateTime.date.year,
-                payload.endDateTime.date.month,
-                payload.endDateTime.date.day,
-                "."
-            );
-            state.event.endTime = util.makeDateStr(
-                payload.endDateTime.time.hour,
-                payload.endDateTime.time.minute,
-                payload.endDateTime.time.second,
-                ":"
-            );
             state.event.statusCode = payload.statusCode;
             state.event.registerId = payload.registerId;
             state.event.registerDate = util.makeDateStr(
                 payload.registerDateTime.date.year,
                 payload.registerDateTime.date.month,
                 payload.registerDateTime.date.day,
-                "."
+                "/"
             );
             state.event.registerTime = util.makeDateStr(
                 payload.registerDateTime.time.hour,
@@ -218,6 +200,18 @@ export default new Vuex.Store({
         },
         SET_EVENT_ATTENDCOUNT(state, count) {
             state.event.attendCount += count;
+        },
+        SET_EVENT_FORMATEDSTART(state, format) {
+            state.event.formatedStart = format;
+        },
+        SET_EVENT_STARTDATETIME(state, date) {
+            state.event.startDateTime = date;
+        },
+        SET_EVENT_FORMATEDEND(state, format) {
+            state.event.formatedEnd = format;
+        },
+        SET_EVENT_ENDDATETIME(state, format) {
+            state.event.endDateTime = format;
         },
         /* notice */
         SET_NOTICE_LIST(state, list) {
@@ -551,9 +545,6 @@ export default new Vuex.Store({
         },
 
         // pagination
-        getPageCount: function (state) {
-            return Math.ceil(state.pagination.totalListItemCount / state.pagination.listRowCount);
-        },
         getStartPageIndex: function (state) {
             if (state.pagination.currentPageIndex % state.pagination.pageLinkCount == 0) {
                 //10, 20...맨마지막
@@ -570,7 +561,18 @@ export default new Vuex.Store({
                 );
             }
         },
-        getEndPageIndex: function (state, getters) {
+        getPrev: function (state) {
+            if (state.pagination.currentPageIndex <= state.pagination.pageLinkCount) {
+                return false;
+            } else {
+                return true;
+            }
+        },
+        // eventPagination
+        getEventPageCount: function(state) {
+            return Math.ceil(state.event.totalListItemCount / state.pagination.listRowCount);
+        },
+        getEventEndPageIndex: function (state, getters){
             let ret = 0;
             if (state.pagination.currentPageIndex % state.pagination.pageLinkCount == 0) {
                 //10, 20...맨마지막
@@ -585,18 +587,43 @@ export default new Vuex.Store({
                     state.pagination.pageLinkCount;
             }
             // 위 오류나는 코드를 아래와 같이 비교해서 처리
-            return ret > getters.getPageCount ? getters.getPageCount : ret;
+            return ret > getters.getEventPageCount ? getters.getEventPageCount : ret;
         },
-        getPrev: function (state) {
-            if (state.pagination.currentPageIndex <= state.pagination.pageLinkCount) {
+        getEventNext: function (state, getters) {
+            if (
+                Math.floor(getters.getEventPageCount / state.pagination.pageLinkCount) *
+                    state.pagination.pageLinkCount <
+                state.pagination.currentPageIndex
+            ) {
                 return false;
             } else {
                 return true;
             }
         },
-        getNext: function (state, getters) {
+        // noticePagination
+        getNoticePageCount: function(state) {
+            return Math.ceil(state.notice.totalListItemCount / state.pagination.listRowCount);
+        },
+        getNoticeEndPageIndex: function (state, getters){
+            let ret = 0;
+            if (state.pagination.currentPageIndex % state.pagination.pageLinkCount == 0) {
+                //10, 20...맨마지막
+                ret =
+                    (state.pagination.currentPageIndex / state.pagination.pageLinkCount - 1) *
+                        state.pagination.pageLinkCount +
+                    state.pagination.pageLinkCount;
+            } else {
+                ret =
+                    Math.floor(state.pagination.currentPageIndex / state.pagination.pageLinkCount) *
+                        state.pagination.pageLinkCount +
+                    state.pagination.pageLinkCount;
+            }
+            // 위 오류나는 코드를 아래와 같이 비교해서 처리
+            return ret > getters.getNoticePageCount ? getters.getNoticePageCount : ret;
+        },
+        getNoticeNext: function (state, getters) {
             if (
-                Math.floor(getters.getPageCount / state.pagination.pageLinkCount) *
+                Math.floor(getters.getNoticePageCount / state.pagination.pageLinkCount) *
                     state.pagination.pageLinkCount <
                 state.pagination.currentPageIndex
             ) {

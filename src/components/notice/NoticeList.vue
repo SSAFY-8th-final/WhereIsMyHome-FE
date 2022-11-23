@@ -28,7 +28,7 @@
                                 </tr>
                                 </thead>
                                 <tbody>
-                                    <tr style="cursor: pointer" v-for="(notice, index) in listGetters" :key="index" @click="noticeDetail(notice.noticeId)">
+                                    <tr style="cursor: pointer" v-for="(notice, index) in listGetters" :key="index" @click="noticeDetail(notice.noticeId, index)">
                                         <th scope="row">{{notice.noticeId}}</th>
                                         <td>{{notice.title}}</td>
                                         <td>{{notice.readCount}}</td>
@@ -49,7 +49,7 @@
 </template>
 
 <script>
-import PaginationUI from "@/components/PaginationUI.vue";
+import PaginationUI from "@/components/notice/PaginationUI.vue";
 import DetailModal from "@/components/notice/DetailModal.vue";
 
 import { Modal } from "bootstrap";
@@ -93,17 +93,22 @@ export default {
         // util
         makeDateStr: util.makeDateStr,
         // detail
-        async noticeDetail(noticeId) {
+        async noticeDetail(noticeId, index) {
+            this.$store.dispatch('getUserInfo');
             try {
-                let { data } = await http.get('/notices/' + noticeId);
+                let params = {
+                    userSeq: this.$store.state.user.userInfo.userSeq,
+                }
+                let { data } = await http.get('/notices/' + noticeId, {params});
                 console.log(data);
 
                 if (data.result == "login") {
                     this.doLogout(); // this.$router.push("/login"); 에서 변경
                 } else {
                     let { dto } = data;
+                    this.$store.state.notice.list[index].readCount = dto.readCount;
                     this.$store.commit("SET_NOTICE_DETAIL", dto);
-
+                    this.noticeList();
                     this.detailModal.show();
                 }
             } catch (error) {

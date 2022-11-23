@@ -133,7 +133,6 @@ export default {
             dto.formatedStart = this.dateFormat(startDate);
             dto.formatedEnd = this.dateFormat(endDate);
             this.$store.commit("SET_EVENT_DETAIL", dto);
-
             this.detailModal.show();
         }
       } catch (error) {

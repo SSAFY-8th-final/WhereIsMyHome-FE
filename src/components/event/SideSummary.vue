@@ -36,7 +36,11 @@ export default {
         },
         async attendEvent() {
             try {
-                let { data } = await http.post('/events/' + this.$route.params.id);
+                this.$store.dispatch('getUserInfo');
+                let params = {
+                    userEmail: this.$store.state.user.userInfo.userEmail,
+                }
+                let { data } = await http.post('/events/' + this.$route.params.id, {params});
                 console.log(data);
 
                 if (data.result == "login") {
