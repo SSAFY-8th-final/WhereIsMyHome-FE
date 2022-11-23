@@ -45,6 +45,20 @@ export default {
     },
     created() {
         this.saleDetail();
+
+        let arr = localStorage.getItem('watched');
+        if (arr == null) { // 초기 입력
+            arr = [];
+        } else {
+            arr = JSON.parse(arr);
+        }
+
+        arr.unshift(this.$route.params.id);
+        arr = new Set(arr);
+        arr = [...arr];
+        console.log(arr);
+
+        localStorage.setItem('watched', JSON.stringify(arr));
     }
 }
 </script>

@@ -1,13 +1,13 @@
 <template>
     <div class="col-lg-4 col-md-6 portfolio-item" :class="event.filter">
-        <div class="portfolio-content h-100">
-            <img src="assets/img/blog/blog-6.jpg" class="img-fluid" alt="" />
+        <div class="portfolio-content h-90">
+            <img src="/assets/img/flower.jpg" class="img-fluid" alt="" />
             <div class="portfolio-info">
             <h4>{{ getStatus }}</h4>
             <p>{{ event.name }}</p>
             <a
-                href="assets/img/blog/blog-6.jpg"
-                title="Remodeling 1"
+                href="/assets/img/flower.jpg"
+                :title="event.name"
                 data-gallery="portfolio-gallery-remodeling"
                 class="glightbox preview-link"
                 ><i class="bi bi-zoom-in"></i

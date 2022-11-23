@@ -8,18 +8,56 @@
 </template>
 
 <script>
+import http from "@/common/axios.js";
 export default {
+    props: ['no'],
     data: function () {
         return {
-        liked: false
+          liked: false,
         }
     },
     methods: {
-    heartit: function (e) {
-      e.stopPropagation();
-      this.liked = !this.liked;
+      heartit: function (e) {
+        e.stopPropagation();
+        this.liked = !this.liked;
 
-    }
+        this.$store.dispatch('getUserInfo');
+
+        if (this.liked) {
+          this.insertFav();
+        } else {
+          this.removeFav();
+        }
+      },
+      async insertFav() {
+        try {
+          let params = {
+            no: this.no,
+            userSeq : this.$store.state.user.userInfo.userSeq,
+          }
+
+          let response = await http.post("/users/fav", params);
+          let statusCode = response.status;
+          console.log(statusCode);
+
+        } catch (error) {
+          console.log(error);
+        }
+      },
+      async removeFav() {
+        try {
+          let params = {
+            userSeq : this.$store.state.user.userInfo.userSeq,
+          }
+
+          let response = await http.delete("/users/fav/" + this.no, { params });
+          let statusCode = response.status;
+          console.log(statusCode);
+
+        } catch (error) {
+          console.log(error);
+        }
+      }
   },
  mounted(){
   document.body.addEventListener('mousedown', function() {

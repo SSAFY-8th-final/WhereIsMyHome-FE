@@ -89,7 +89,20 @@ export default {
             this.fileList.push(URL.createObjectURL(file)); // push : array 에 항목 추가
           });
       },
-      async eventInsert(){
+      async eventInsert() {
+        let start = new Date(this.startDateTime);
+        let end = new Date(this.endDateTime);
+        let now = new Date();
+        let statusCode = '';
+
+        if (now < start) {
+          statusCode = '002'
+        } else if (start <= now && now < end) {
+          statusCode = '001'
+        } else {
+          statusCode = '003'
+        }
+
         let startDateTimeArr = this.startDateTime.split('T');
         let startDateTimeStr = startDateTimeArr[0] + " " + startDateTimeArr[1];
         let endDateTimeArr = this.endDateTime.split('T');
@@ -101,6 +114,7 @@ export default {
         formData.append("category", this.category);
         formData.append("startDateTime", startDateTimeStr);
         formData.append("endDateTime", endDateTimeStr);
+        formData.append("statusCode", statusCode);
         
         this.$store.dispatch('getUserInfo');
         formData.append("userEmail", this.$store.state.user.userInfo.userEmail);
