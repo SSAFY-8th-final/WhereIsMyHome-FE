@@ -1,107 +1,75 @@
 <template>
   <!-- ======= Services Section ======= -->
   <section id="services" class="services section-bg">
-    <section-header id="serviceTitle" title="동네정보" description="hello"></section-header>
+    <section-header
+      id="serviceTitle"
+      title="관심동네정보"
+      description="편의시설"
+    ></section-header>
     <div class="container" data-aos="fade-up">
       <div class="row gy-4">
-        <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="100">
+        <div class="col-lg-2 col-md-6" data-aos="fade-up" data-aos-delay="100">
           <div class="service-item position-relative">
-            <div class="icon">
+            <div class="icon mb-4">
               <i class="fa-sharp fa-solid fa-store"></i>
             </div>
             <h3>편의점</h3>
-            <p>
-              Provident nihil minus qui consequatur non omnis maiores. Eos accusantium minus dolores
-              iure perferendis tempore et consequatur.
-            </p>
-            <a href="service-details.html" class="readmore stretched-link"
-              >Learn more <i class="bi bi-arrow-right"></i
-            ></a>
+            <div class="icon-content">{{ this.list[0] }}</div>
           </div>
         </div>
         <!-- End Service Item -->
 
-        <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="200">
+        <div class="col-lg-2 col-md-6" data-aos="fade-up" data-aos-delay="200">
           <div class="service-item position-relative">
-            <div class="icon">
+            <div class="icon mb-4">
               <i class="fa-solid fa-piggy-bank"></i>
             </div>
             <h3>은행</h3>
-            <p>
-              Ut autem aut autem non a. Sint sint sit facilis nam iusto sint. Libero corrupti neque
-              eum hic non ut nesciunt dolorem.
-            </p>
-            <a href="service-details.html" class="readmore stretched-link"
-              >Learn more <i class="bi bi-arrow-right"></i
-            ></a>
+            <div class="icon-content">{{ this.list[1] }}</div>
           </div>
         </div>
         <!-- End Service Item -->
 
-        <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="300">
+        <div class="col-lg-2 col-md-6" data-aos="fade-up" data-aos-delay="300">
           <div class="service-item position-relative">
-            <div class="icon">
+            <div class="icon mb-4">
               <i class="fa-sharp fa-solid fa-building-columns"></i>
             </div>
             <h3>관공서</h3>
-            <p>
-              Ut excepturi voluptatem nisi sed. Quidem fuga consequatur. Minus ea aut. Vel qui id
-              voluptas adipisci eos earum corrupti.
-            </p>
-            <a href="service-details.html" class="readmore stretched-link"
-              >Learn more <i class="bi bi-arrow-right"></i
-            ></a>
+            <div class="icon-content">{{ this.list[2] }}</div>
           </div>
         </div>
         <!-- End Service Item -->
 
-        <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="400">
+        <div class="col-lg-2 col-md-6" data-aos="fade-up" data-aos-delay="400">
           <div class="service-item position-relative">
-            <div class="icon">
+            <div class="icon mb-4">
               <i class="fa-solid fa-dumbbell"></i>
             </div>
-            <h3>체육시설</h3>
-            <p>
-              Non et temporibus minus omnis sed dolor esse consequatur. Cupiditate sed error ea fuga
-              sit provident adipisci neque.
-            </p>
-            <a href="service-details.html" class="readmore stretched-link"
-              >Learn more <i class="bi bi-arrow-right"></i
-            ></a>
+            <h3>마트</h3>
+            <div class="icon-content">{{ this.list[3] }}</div>
           </div>
         </div>
         <!-- End Service Item -->
 
-        <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="500">
+        <div class="col-lg-2 col-md-6" data-aos="fade-up" data-aos-delay="500">
           <div class="service-item position-relative">
-            <div class="icon">
+            <div class="icon mb-4">
               <i class="fa-solid fa-school"></i>
             </div>
             <h3>학교</h3>
-            <p>
-              Cumque et suscipit saepe. Est maiores autem enim facilis ut aut ipsam corporis aut.
-              Sed animi at autem alias eius labore.
-            </p>
-            <a href="service-details.html" class="readmore stretched-link"
-              >Learn more <i class="bi bi-arrow-right"></i
-            ></a>
+            <div class="icon-content">{{ this.list[4] }}</div>
           </div>
         </div>
         <!-- End Service Item -->
 
-        <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="600">
+        <div class="col-lg-2 col-md-6" data-aos="fade-up" data-aos-delay="600">
           <div class="service-item position-relative">
-            <div class="icon">
+            <div class="icon mb-4">
               <i class="fa-sharp fa-solid fa-square-parking"></i>
             </div>
             <h3>주차장</h3>
-            <p>
-              Hic molestias ea quibusdam eos. Fugiat enim doloremque aut neque non et debitis iure.
-              Corrupti recusandae ducimus enim.
-            </p>
-            <a href="service-details.html" class="readmore stretched-link"
-              >Learn more <i class="bi bi-arrow-right"></i
-            ></a>
+            <div class="icon-content">{{ this.list[5] }}</div>
           </div>
         </div>
         <!-- End Service Item -->
@@ -115,19 +83,37 @@
 import SectionHeader from "@/components/main/SectionHeader.vue";
 export default {
   components: {
-    SectionHeader
-  }
+    SectionHeader,
+  },
+  data: function () {
+    return {
+      list: ['-','-','-','-','-','-'],
+    };
+  },
+  computed: {
+    isLogin() {
+      return this.$store.getters.isLogin;
+    },
+  },
+  async created() {
+    if (this.isLogin) this.list = await this.$store.dispatch("dongInfo");
+  },
+
 };
 </script>
 
 <style scoped>
-  #services >>> #serviceTitle {
-    padding-top: 0px !important;
-    padding-bottom: 60px;
-  }
+#services >>> #serviceTitle {
+  padding-top: 0px !important;
+  padding-bottom: 60px;
+}
 
-  .row > * {
-    padding-right: calc(1.5rem * .5);
-    padding-left: calc(1.5rem * .5);
-  }
+.row > * {
+  padding-right: calc(1.5rem * 0.5);
+  padding-left: calc(1.5rem * 0.5);
+}
+.service-item >>> .icon-content {
+  font-size: 2.5em;
+  font-weight: 800;
+}
 </style>

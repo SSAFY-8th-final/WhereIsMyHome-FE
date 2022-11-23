@@ -520,60 +520,60 @@ export default new Vuex.Store({
         },
         async saleInsert(context, payload){
 
-        let insertParams = payload.item
-        
-        console.log(payload.files)
+            let insertParams = payload.item
+            
+            console.log(payload.files)
 
-        // 추후 수정
-        // let decodeToken = jwtDecode(this.getters.getAccessToken);
-        // let decodeToken = jwtDecode(token);
-        // console.log("2. getUserInfo() decodeToken :: ", decodeToken.userEmail);
+            // 추후 수정
+            // let decodeToken = jwtDecode(this.getters.getAccessToken);
+            // let decodeToken = jwtDecode(token);
+            // console.log("2. getUserInfo() decodeToken :: ", decodeToken.userEmail);
 
-        try{
-          let {data} = await kakaoapi.get('/v2/local/search/address'+'?query='+payload.addr)
-          console.log(data)
-          console.log(data.documents[0])
-          
-          let result = data.documents[0]
-          let jibun = result.address.main_address_no + result.address.sub_address_no
-          let AptName = result.road_address.building_name;
-          
-          console.log(result.address.region_3depth_name)
-          console.log(jibun)
-          const searchParams = {
-            jibun : jibun,
-            dong : result.address.region_3depth_name
-          }
-          
-          let houseinfoNo = await this.dispatch("getHouseInfo", searchParams);
+            try{
+                let {data} = await kakaoapi.get('/v2/local/search/address'+'?query='+payload.addr)
+                console.log(data)
+                console.log(data.documents[0])
+                
+                let result = data.documents[0]
+                let jibun = result.address.main_address_no + result.address.sub_address_no
+                let AptName = result.road_address.building_name;
+                
+                console.log(result.address.region_3depth_name)
+                console.log(jibun)
+                const searchParams = {
+                    jibun : jibun,
+                    dong : result.address.region_3depth_name
+                }
+                
+                let houseinfoNo = await this.dispatch("getHouseInfo", searchParams);
 
-          if(houseinfoNo == -1 ){
-            if(AptName != ''){
-              const houseInsertParam = {
-                AptName: AptName,
-                dong: result.address.region_3depth_name,
-                code: (result.address.b_code).substr(0, 5),
-                jibun: jibun,
-                lat: result.address.y,
-                lng: result.address.x,
-              }
-              houseinfoNo = await this.dispatch("houseInsert", houseInsertParam);
-              console.log('new House '+houseinfoNo)
-              insertParams.houseinfoNo = houseinfoNo
-              insertParams.dongCode = result.address.b_code,
-              await this.dispatch("saleInsertOne", insertParams)
+                if(houseinfoNo == -1 ){
+                    if(AptName != ''){
+                        const houseInsertParam = {
+                            AptName: AptName,
+                            dong: result.address.region_3depth_name,
+                            code: (result.address.b_code).substr(0, 5),
+                            jibun: jibun,
+                            lat: result.address.y,
+                            lng: result.address.x,
+                        }
+                        houseinfoNo = await this.dispatch("houseInsert", houseInsertParam);
+                        console.log('new House '+houseinfoNo)
+                        insertParams.houseinfoNo = houseinfoNo
+                        insertParams.dongCode = result.address.b_code,
+                        await this.dispatch("saleInsertOne", insertParams)
+                    }
+                }else{
+                    insertParams.houseinfoNo = houseinfoNo;
+                    insertParams.dongCode = result.address.b_code,
+                    console.log('집 잇음 ' + houseinfoNo)
+                    console.log(insertParams)
+                    await this.dispatch("saleInsertOne", insertParams)
+                }
+            }catch(error){
+                console.log(error)
             }
-          }else{
-            insertParams.houseinfoNo = houseinfoNo;
-            insertParams.dongCode = result.address.b_code,
-            console.log('집 잇음 ' + houseinfoNo)
-            console.log(insertParams)
-            await this.dispatch("saleInsertOne", insertParams)
-          }
-        }catch(error){
-          console.log(error)
-        }
-      },
+        },
       async getHouseInfo(context, payload){
         console.log('getHouseInfo')
         let no = -1
@@ -604,7 +604,31 @@ export default new Vuex.Store({
         }catch(error){
           console.log(error)
         }
-      }
+        },
+        async dongInfo() {
+            let dongCode = this.getters.checkUserInfo.interestCode
+            if (dongCode == null) {
+                // do somthing
+                console.log('dongCode none')
+            }
+            let addr = this.getters.getAddressByDongCode(dongCode)
+            let query = addr.sido + ' ' + addr.dong
+            let category = ['CS2', 'BK9', 'PO3', 'MT1', 'SC4', 'PK6']
+            console.log(query)
+
+            const resArray = [];
+            try {
+                for await (const param of category) {
+                    let searchParams = '?query='+query + '&category_group_code=' + param
+                    let {data} = await kakaoapi.get('/v2/local/search/keyword' + searchParams)
+                    resArray.push(data.meta.total_count)
+                }
+                console.log(resArray)
+                return resArray
+            } catch (error) {
+                console.log(error)
+            }
+        }
 
     },
     getters: {
