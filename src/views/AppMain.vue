@@ -4,8 +4,7 @@
       <hero-section2></hero-section2>
 
       <div data-aos="fade-up">
-        <section-header title="인기 매물" description="hello"></section-header>
-        <pre-view></pre-view>
+        <popular-pre-view></popular-pre-view>
       </div>
 
       <div data-aos="fade-up">
@@ -19,6 +18,8 @@
         ></section-header>
         <SlidePreVieww></SlidePreVieww>
       </div>
+
+      <photo-control></photo-control>
     </main>
   </div>
   
@@ -28,16 +29,18 @@
 import SectionHeader from "@/components/main/SectionHeader.vue";
 import HeroSection2 from "@/components/main/HeroSection2.vue";
 import RectGrid from "@/components/main/RectGrid.vue";
-import PreView from "@/components/PreView.vue";
+import PopularPreView from "@/components/main/PopularPreView.vue";
 import SlidePreVieww from "@/components/main/SlidePreVieww.vue";
+import PhotoControl from "@/components/main/PhotoControl.vue";
 
 export default {
   components: {
     SectionHeader,
     HeroSection2,
     RectGrid,
-    PreView,
+    PopularPreView,
     SlidePreVieww,
+    PhotoControl
   },
 };
 </script>

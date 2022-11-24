@@ -712,10 +712,8 @@ export default new Vuex.Store({
                 let params = {
                     limit: 4,
                 };
-                let { data } = await http.get("/notices", params);
-
-                console.log(data);
-                return data;
+                let { data } = await http.get("/notices", { params });
+                return data.list;
             } catch (error) {
                 console.error(error);
             }
