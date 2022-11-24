@@ -46,4 +46,7 @@ export default {
   padding-right: calc(1.5rem * .5);
   padding-left: calc(1.5rem * .5);
 }
+section {
+  height: 1000px;
+}
 </style>

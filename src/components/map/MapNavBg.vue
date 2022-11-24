@@ -1,7 +1,7 @@
 <template>
     <!-- ======= MapNavBg ======= -->
     <div>
-        <div class="breadcrumbs d-flex align-items-center" style="background-image: url('assets/img/breadcrumbs-bg.jpg');">
+        <div class="breadcrumbs d-flex align-items-center" style="background-image: url('assets/img/interior-2.jpg');">
         </div>
     </div>
 </template>
