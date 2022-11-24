@@ -1,5 +1,6 @@
 import Vue from "vue";
 import Vuex from "vuex";
+import createPersistedState from 'vuex-persistedstate';
 
 Vue.use(Vuex);
 
@@ -16,6 +17,9 @@ import AddrSigungu from "@/assets/json/sigungu.json";
 import AddrDong from "@/assets/json/dong.json";
 
 export default new Vuex.Store({
+    plugins: [createPersistedState({
+        paths: ["user"]
+    })],
     state: {
         pagination: {
             listRowCount: 10,
