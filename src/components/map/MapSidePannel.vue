@@ -31,7 +31,7 @@ export default {
   },
   methods: {
       saleList() {
-        this.$store.dispatch("saleList");
+        //this.$store.dispatch("saleList");
       },
       openNav() {
           document.getElementById("mySidepanel").style.transform = "translateX(0%)";
@@ -56,7 +56,7 @@ export default {
       }
   },
   created() {
-    this.saleList();
+    //this.saleList();
   }
 }
 </script>

@@ -42,6 +42,11 @@ export default new Vuex.Store({
         },
         sale: {
             saleInfo: null,
+            list: [],
+            limit: 10,
+            offset: 0,
+
+            totalListItemCount: 0,
 
             no: 0,
             dongCode: "",
@@ -251,6 +256,18 @@ export default new Vuex.Store({
             state.notice.readCount = payload.readCount;
             state.notice.sameUser = payload.sameUser;
         },
+        /* dealer sale */
+        SET_SALE_LIST(state, list) {
+            state.sale.list = list;
+        },
+        SET_SALE_TOTAL_LIST_ITEM_COUNT(state, count) {
+            state.sale.totalListItemCount = count;
+        },
+        SET_SALE_MOVE_PAGE(state, pageIndex) {
+            state.sale.offset = (pageIndex - 1) * state.pagination.listRowCount;
+            state.pagination.currentPageIndex = pageIndex;
+        },
+
         // for UpdateModal title v-modal
         SET_NOTICE_TITLE(state, title) {
             state.notice.title = title;
@@ -366,20 +383,44 @@ export default new Vuex.Store({
                 console.error(error);
             }
         },
-        async saleList(context) {
+        async saleList(context, payload) {
             let params = {
-                searchWord: this.state.notice.searchWord,
+                searchWord: '',
+                dongCode: '',
+                houseinfoNo: ''
             };
-
+            console.log('payload' + payload)
             try {
-                let { data } = await http.get("/sales", { params });
+              if(payload != null && payload != ''){
+                params.dongCode = payload.dongCode
+                params.houseinfoNo = payload.houseinfoNo
+              }
+              let { data } = await http.get("/maps/houses", { params });
                 console.log(data);
-                if (data.result == "login") {
-                    router.push("/login");
-                } else {
-                    context.commit("SET_MAP_LIST", data.list);
-                    context.commit("SET_MAP_TOTAL_LIST_ITEM_COUNT", data.count);
-                }
+                
+                context.commit("SET_MAP_LIST", data.list);
+                context.commit("SET_MAP_TOTAL_LIST_ITEM_COUNT", data.count);
+                
+            } catch (error) {
+                console.error(error);
+            }
+        },
+        async dealerSaleList(context) {
+            try {
+                let params = {
+                    limit: this.state.sale.limit,
+                    offset: this.state.sale.offset,
+                    userEmail: this.state.user.userInfo.userEmail
+                    //option: selectStatus,
+                };
+                console.log('dealerSaleList')
+                console.log(params)
+              let { data } = await http.get("/sales/dealer", {params});
+                console.log(data);
+                
+                context.commit("SET_SALE_LIST", data.list);
+                context.commit("SET_SALE_TOTAL_LIST_ITEM_COUNT", data.count);
+                
             } catch (error) {
                 console.error(error);
             }
@@ -546,7 +587,7 @@ export default new Vuex.Store({
                 console.log(data.documents[0]);
 
                 let result = data.documents[0];
-                let jibun = result.address.main_address_no + result.address.sub_address_no;
+                let jibun = result.address.main_address_no +'-'+ result.address.sub_address_no;
                 let AptName = result.road_address.building_name;
 
                 console.log(result.address.region_3depth_name);
@@ -620,7 +661,7 @@ export default new Vuex.Store({
             let dongCode = this.getters.checkUserInfo.interestCode;
             if (dongCode == null) {
                 // do somthing
-                console.log("dongCode none");
+                console.log("dongCode not exist");
             }
             let addr = this.getters.getAddressByDongCode(dongCode);
             let query = addr.sido + " " + addr.dong;
@@ -635,7 +676,7 @@ export default new Vuex.Store({
                     resArray.push(data.meta.total_count);
                 }
                 console.log(resArray);
-                return resArray;
+                return {list: resArray, dong: addr.dong};
             } catch (error) {
                 console.log(error);
             }
@@ -671,7 +712,7 @@ export default new Vuex.Store({
             return state.notice.list;
         },
         getSaleList: function (state) {
-            return state.map.list;
+            return state.sale.list;
         },
         getSaleInfo: function (state) {
             return state.sale.saleInfo;
@@ -765,6 +806,38 @@ export default new Vuex.Store({
                 return true;
             }
         },
+        // salePagination
+        getSalePageCount: function (state) {
+            return Math.ceil(state.sale.totalListItemCount / state.pagination.listRowCount);
+        },
+        getSaleEndPageIndex: function (state, getters) {
+            let ret = 0;
+            if (state.pagination.currentPageIndex % state.pagination.pageLinkCount == 0) {
+                //10, 20...맨마지막
+                ret =
+                    (state.pagination.currentPageIndex / state.pagination.pageLinkCount - 1) *
+                        state.pagination.pageLinkCount +
+                    state.pagination.pageLinkCount;
+            } else {
+                ret =
+                    Math.floor(state.pagination.currentPageIndex / state.pagination.pageLinkCount) *
+                        state.pagination.pageLinkCount +
+                    state.pagination.pageLinkCount;
+            }
+            // 위 오류나는 코드를 아래와 같이 비교해서 처리
+            return ret > getters.getSalePageCount ? getters.getSalePageCount : ret;
+        },
+        getSaleNext: function (state, getters) {
+            if (
+                Math.floor(getters.getSalePageCount / state.pagination.pageLinkCount) *
+                    state.pagination.pageLinkCount <
+                state.pagination.currentPageIndex
+            ) {
+                return false;
+            } else {
+                return true;
+            }
+        },
         //  getSidoList: function (state) {
         //     return state.address.sido;
         //    },
@@ -811,12 +884,7 @@ export default new Vuex.Store({
                 let tmpList = state.address.dongList.filter((d) => (d.code).substr(0,5) == item.code);
                 listTrans.push(...tmpList)
             });
-            console.log('sigungu')
-            console.log(listTrans)
-            console.log('dong')
-            console.log(listDong)
             listDong.push(...listTrans)
-            console.log(listDong)
             // const arr = listDong.concat(listSigungu)
             // list.array.forEach(element => {
                 

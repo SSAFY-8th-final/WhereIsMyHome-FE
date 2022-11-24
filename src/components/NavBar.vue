@@ -50,12 +50,12 @@
           </li>
           <li class="dropdown">
             <a href="#"
-              ><span>Test</span>
+              ><span>Sale</span>
               <i class="bi bi-chevron-down dropdown-indicator"></i
             ></a>
             <ul>
               <li><router-link to="/sale/insert">매물 등록</router-link></li>
-              <li><router-link to="/test">test</router-link></li>
+              <li><router-link to="/sale">등록한 매물 보기</router-link></li>
             </ul>
           </li>
         </ul>

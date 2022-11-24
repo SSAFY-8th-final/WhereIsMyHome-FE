@@ -23,8 +23,9 @@ import FooterPage from "@/components/FooterPage.vue";
 
 
 // test
-import AppTestSearch from "@/views/AppTestSearch.vue";
+
 import AppSaleInsert from "@/views/AppSaleInsert.vue";
+import AppSaleList from "@/views/AppSaleList.vue";
 
 import store from "@/store/store";
 
@@ -190,16 +191,17 @@ const  routes = [
                 default: AppSaleInsert,
                 FooterPage,
             }
-    },
+        },
         {
-            path: "/test",
+            path: "/sale",
             //beforeEnter: onlyAuthUser,
             components: {
                 NavBar,
-                default: AppTestSearch,
+                default: AppSaleList,
                 FooterPage,
             }
-    },
+        },
+
         
 
 ]
