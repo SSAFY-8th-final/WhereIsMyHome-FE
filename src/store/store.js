@@ -366,20 +366,24 @@ export default new Vuex.Store({
                 console.error(error);
             }
         },
-        async saleList(context) {
+        async saleList(context, payload) {
             let params = {
-                searchWord: this.state.notice.searchWord,
+                searchWord: '',
+                dongCode: '',
+                houseinfoNo: ''
             };
-
+            console.log('payload' + payload)
             try {
-                let { data } = await http.get("/sales", { params });
+              if(payload != null && payload != ''){
+                params.dongCode = payload.dongCode
+                params.houseinfoNo = payload.houseinfoNo
+              }
+              let { data } = await http.get("/maps/houses", { params });
                 console.log(data);
-                if (data.result == "login") {
-                    router.push("/login");
-                } else {
-                    context.commit("SET_MAP_LIST", data.list);
-                    context.commit("SET_MAP_TOTAL_LIST_ITEM_COUNT", data.count);
-                }
+                
+                context.commit("SET_MAP_LIST", data.list);
+                context.commit("SET_MAP_TOTAL_LIST_ITEM_COUNT", data.count);
+                
             } catch (error) {
                 console.error(error);
             }
@@ -546,7 +550,7 @@ export default new Vuex.Store({
                 console.log(data.documents[0]);
 
                 let result = data.documents[0];
-                let jibun = result.address.main_address_no + result.address.sub_address_no;
+                let jibun = result.address.main_address_no +'-'+ result.address.sub_address_no;
                 let AptName = result.road_address.building_name;
 
                 console.log(result.address.region_3depth_name);
@@ -620,7 +624,7 @@ export default new Vuex.Store({
             let dongCode = this.getters.checkUserInfo.interestCode;
             if (dongCode == null) {
                 // do somthing
-                console.log("dongCode none");
+                console.log("dongCode not exist");
             }
             let addr = this.getters.getAddressByDongCode(dongCode);
             let query = addr.sido + " " + addr.dong;
@@ -635,7 +639,7 @@ export default new Vuex.Store({
                     resArray.push(data.meta.total_count);
                 }
                 console.log(resArray);
-                return resArray;
+                return {list: resArray, dong: addr.dong};
             } catch (error) {
                 console.log(error);
             }
@@ -811,12 +815,7 @@ export default new Vuex.Store({
                 let tmpList = state.address.dongList.filter((d) => (d.code).substr(0,5) == item.code);
                 listTrans.push(...tmpList)
             });
-            console.log('sigungu')
-            console.log(listTrans)
-            console.log('dong')
-            console.log(listDong)
             listDong.push(...listTrans)
-            console.log(listDong)
             // const arr = listDong.concat(listSigungu)
             // list.array.forEach(element => {
                 

@@ -20,33 +20,39 @@
             placeholder="지역 또는 아파트명을 입력하세요."
             aria-label=".form-control-lg example"
             v-on:keyup="searchEvent"
+            v-on:focus="showAutoComplete"
+            v-on:blur="hideAutoComplete"
           />
         </label>
       </form>
-      <div style="background-color: white" class="container">
+      <div style="background-color: white" class="container" id="autocomplete" :class="{hide: this.isHide}">
         <div class="row">
           <div class="col-6">
 
-        <ul class="list-group" v-on:mouseover="removeValue" style="width: 100%">
+        <ul class="list-group"  style="width: 100%">
           <li
             class="list-group-item"
             tabindex="-1"
             v-for="(el, index) in searchResultHouse"
             v-bind:key="index"
+            :value="el.no"
+            @click="mapSearchHouse(el.no)"
           >
             {{ el.AptName }}
           </li>
         </ul>
           </div>
           <div class="col-6">
-        <ul class="list-group" v-on:mouseover="removeValue" style="width: 100%">
+        <ul class="list-group" style="width: 100%">
           <li
             class="list-group-item"
             tabindex="-1"
-            v-for="(el2, index) in searchResultDong"
+            v-for="(el, index) in searchResultDong"
             v-bind:key="index"
+            :value="el.code"
+            @click="mapSearchDong(el.code)"
           >
-            {{ el2.name }} {{el2.code}}
+            {{ el.name }}
           </li>
         </ul>
           </div>
@@ -60,7 +66,7 @@
 export default {
   data() {
     return {
-      isActive: true,
+      isHide: true,
       searchQuery: null,
       searchResultHouse: [],
       searchResultDong: [],
@@ -80,31 +86,32 @@ export default {
           searchWord
         );
         this.searchResultDong = this.$store.getters.getDongNameBySearchWord(searchWord);
-        console.log(this.searchResultDong)
       }
     },
-    removeValue() {},
     validation(searchWord) {
       const reg = /[^가-힣a-zA-Z0-9|\s]/.test(searchWord);
-      console.log(`typing value: ${searchWord}`);
       return !reg;
     },
-  },
-  computed: {
-    filterList() {
-      const str = this.searchQuery;
-      const reg = /[^가-힣ㄱ-ㅎㅏ-ㅣa-zA-Z0-9|\s]/.test(str);
-      console.log(`typing value: ${str}`);
-      console.log(reg);
-      if (reg === false && str !== "" && str !== " ") {
-        this.isActive = true;
-        return this.names.filter((el) => {
-          return el.name.match(str);
-        });
-      } else {
-        this.isActive = false;
+    mapSearchHouse(no){
+      let params={
+        houseinfoNo: no
       }
+      this.$store.dispatch("saleList", params);
+      this.$router.push({ path: 'map' })
     },
+    mapSearchDong(code){
+      let params={
+        dongCode: code
+      }
+      this.$store.dispatch("saleList", params);
+      this.$router.push({ path: 'map' })
+    },
+    showAutoComplete(){
+      this.isHide = false
+    },
+    hideAutoComplete(){
+      this.isHide = true
+    }
   },
 };
 </script>
@@ -134,5 +141,11 @@ export default {
 
 #searchBar input:focus {
   background-color: white;
+}
+#autocomplete{
+  height: 300px;
+}
+.hide{
+  display: none;
 }
 </style>

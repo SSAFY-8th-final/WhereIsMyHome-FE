@@ -3,7 +3,7 @@
   <section id="services" class="services section-bg">
     <section-header
       id="serviceTitle"
-      title="관심동네정보"
+      :title="title"
       description="편의시설"
     ></section-header>
     <div class="container" data-aos="fade-up">
@@ -88,6 +88,8 @@ export default {
   data: function () {
     return {
       list: ['-','-','-','-','-','-'],
+      title: ''
+
     };
   },
   computed: {
@@ -96,7 +98,11 @@ export default {
     },
   },
   async created() {
-    if (this.isLogin) this.list = await this.$store.dispatch("dongInfo");
+    if (this.isLogin) {
+      let data = await this.$store.dispatch("dongInfo");
+      this.list = data.list;
+      this.title = data.dong + '은 어떤 동네일까요?'
+    }
   },
 
 };

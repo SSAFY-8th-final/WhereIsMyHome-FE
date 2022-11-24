@@ -1,7 +1,7 @@
 <template>
   <div>
     <main id="main">
-      <hero-section></hero-section>
+      <hero-section2></hero-section2>
 
       <div data-aos="fade-up">
         <section-header title="인기 매물" description="hello"></section-header>
@@ -26,7 +26,7 @@
 
 <script>
 import SectionHeader from "@/components/main/SectionHeader.vue";
-import HeroSection from "@/components/main/HeroSection.vue";
+import HeroSection2 from "@/components/main/HeroSection2.vue";
 import RectGrid from "@/components/main/RectGrid.vue";
 import PreView from "@/components/PreView.vue";
 import SlidePreVieww from "@/components/main/SlidePreVieww.vue";
@@ -34,7 +34,7 @@ import SlidePreVieww from "@/components/main/SlidePreVieww.vue";
 export default {
   components: {
     SectionHeader,
-    HeroSection,
+    HeroSection2,
     RectGrid,
     PreView,
     SlidePreVieww,
