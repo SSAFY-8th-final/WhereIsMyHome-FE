@@ -29,7 +29,6 @@
               <li>
                 <router-link to="/admin/notice">공지사항 관리</router-link>
               </li>
-              <li><router-link to="/admin/user">사용자 관리</router-link></li>
             </ul>
           </li>
           <li><router-link to="/map">Map</router-link></li>

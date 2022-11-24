@@ -137,6 +137,7 @@ const  routes = [
         {
             path: "/user",
             name: "user",
+            beforeEnter: onlyAuthUser,
             components: {
                 NavBar,
                 default: AppMyPage,
@@ -160,6 +161,7 @@ const  routes = [
           },
         {
             path: "/admin/notice",
+            beforeEnter: onlyAuthUser,
             components: {
                 NavBar,
                 default: AppAdminNotice,
@@ -168,6 +170,7 @@ const  routes = [
         },
         {
             path: "/admin/event",
+            beforeEnter: onlyAuthUser,
             components: {
             NavBar,
             default: AppAdminEvent,
@@ -185,7 +188,7 @@ const  routes = [
         },
         {
             path: "/sale/insert",
-            //beforeEnter: onlyAuthUser,
+            beforeEnter: onlyAuthUser,
             components: {
                 NavBar,
                 default: AppSaleInsert,
@@ -194,7 +197,7 @@ const  routes = [
         },
         {
             path: "/sale",
-            //beforeEnter: onlyAuthUser,
+            beforeEnter: onlyAuthUser,
             components: {
                 NavBar,
                 default: AppSaleList,
