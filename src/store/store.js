@@ -896,11 +896,16 @@ export default new Vuex.Store({
                 listTrans.push(...tmpList);
             });
             listDong.push(...listTrans);
-            // const arr = listDong.concat(listSigungu)
-            // list.array.forEach(element => {
 
-            // });
-            return listDong;
+            let listFullAddr = []
+            for (let i = 0; i < listDong.length; i++){
+                console.log(listDong[i].code);
+                let sigungu = state.address.sigunguList.filter((d) => d.code == listDong[i].code.substr(0,5))
+                let sido = state.address.sidoList.filter((d) => d.code == listDong[i].code.substr(0, 2))
+                let fullAddr = sido[0].name + ' ' + sigungu[0].name + ' ' + listDong[i].name
+                listFullAddr.push({code: listDong[i], name: fullAddr})
+            }
+            return listFullAddr;
         },
     },
 });
