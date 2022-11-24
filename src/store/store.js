@@ -157,8 +157,10 @@ export default new Vuex.Store({
             state.user.isValidToken = isValidToken;
         },
         SET_USER_INFO: (state, userInfo) => {
-            state.user.isLogin = true;
             state.user.userInfo = userInfo;
+        },
+        REMOVE_USER_FAV(state){
+            state.user.favList = null;
         },
         SET_TOKEN(state, payload) {
             state.user.token = payload.accessToken;
@@ -488,8 +490,10 @@ export default new Vuex.Store({
 
             let statusCode = response.status;
             if (statusCode == 200) {
+                console.log('로그아웃 성공')
                 context.commit("SET_IS_LOGIN", false);
                 context.commit("SET_USER_INFO", null);
+                context.commit("REMOVE_USER_FAV")
                 context.commit("SET_IS_VALID_TOKEN", false);
                 context.commit("SET_TOKEN", { accessToken: null, refreshToken: null });
             } else {
