@@ -63,6 +63,7 @@ export default {
       let watched = localStorage.getItem('watched');
 
       this.recent = [];
+      this.$store.dispatch('saleList');
       let list = this.$store.state.map.list;
       console.log(list);
       for (let i = 0; i < watched.length; i++) {

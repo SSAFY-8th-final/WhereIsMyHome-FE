@@ -9,7 +9,7 @@
                   style=" position: relative;background-image: url('https://picsum.photos/300/300/?image=193')"
                 >
 
-                  <toggle-fav :no="house.no" style="position: absolute;right:0"></toggle-fav>
+                  <toggle-fav :no="house.no" :isFav="house.isFav" style="position: absolute;right:0"></toggle-fav>
                   <!-- <svg id='heart' height="0" width="0" style="position: relative;right:0">
                       <defs>
                           <clipPath id="svgPath">
