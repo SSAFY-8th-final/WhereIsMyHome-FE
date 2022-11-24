@@ -85,7 +85,7 @@ export default {
       this.displayMarkers();  // 매물 마커찍기
     },
     displayMarkers() {
-      let list = this.$store.getters.getSaleList;
+      let list = this.$store.getters.getMapList;
       
       // 1. 현재 표시되어 있는 마커가 있다면 제거
       if(this.markers.length > 0) {
@@ -95,15 +95,15 @@ export default {
       }
 
       // 2. 마커 이미지 커스터 마이징
-      var imageSize = new kakao.maps.Size(24, 35);
-      var imageSrc = "https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/markerStar.png";  
+      var imageSize = new kakao.maps.Size(45, 45);
+      var imageSrc = "assets/img/map/free-icon-appartments-742516.png";  
       var markerImage = new kakao.maps.MarkerImage(imageSrc, imageSize); 
 
       // 3. 마커 표시
       list.forEach((el) => {
         const infowindow = new kakao.maps.InfoWindow({
           removable: true,
-          content: `<div style="padding:5px;">${el.aptName}</div>`,
+          content: `<div id="infoWindow" style="padding:5px;">${el.AptName}</div>`,
         });
 
         const marker = new kakao.maps.Marker({
@@ -259,5 +259,7 @@ div >>> #map {
   width: 100%;
   height: calc(100vh - 80px);
 }
-
+#infoWindow {
+  border: 0px;
+}
 </style>

@@ -44,7 +44,7 @@
         <div class="col-lg-2 col-md-6" data-aos="fade-up" data-aos-delay="400">
           <div class="service-item position-relative">
             <div class="icon mb-4">
-              <i class="fa-solid fa-dumbbell"></i>
+              <i class="bi bi-cart-dash-fill"></i>
             </div>
             <h3>마트</h3>
             <div class="icon-content">{{ this.list[3] }}</div>
@@ -98,11 +98,9 @@ export default {
     },
   },
   async created() {
-    if (this.isLogin) {
-      let data = await this.$store.dispatch("dongInfo");
-      this.list = data.list;
-      this.title = data.dong + '은 어떤 동네일까요?'
-    }
+    let data = await this.$store.dispatch("dongInfo");
+    this.list = data.list;
+    this.title = data.dong + '은 어떤 동네일까요?'
   },
 
 };
@@ -112,8 +110,11 @@ export default {
 #services >>> #serviceTitle {
   padding-top: 0px !important;
   padding-bottom: 60px;
+  margin-top:60px;
 }
-
+.container .row {
+  margin-bottom: 60px;
+}
 .row > * {
   padding-right: calc(1.5rem * 0.5);
   padding-left: calc(1.5rem * 0.5);

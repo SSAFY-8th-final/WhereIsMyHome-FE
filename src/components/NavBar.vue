@@ -19,7 +19,7 @@
       <i class="mobile-nav-toggle mobile-nav-hide d-none bi bi-x"></i>
       <nav id="navbar" class="navbar">
         <ul>
-          <li class="dropdown">
+          <li class="dropdown" v-show="isAdmin">
             <a href="#"
               ><span>Admin</span>
               <i class="bi bi-chevron-down dropdown-indicator"></i
@@ -48,7 +48,7 @@
               <li v-show="!login"><router-link to="/register">Register</router-link></li>
             </ul>
           </li>
-          <li class="dropdown">
+          <li class="dropdown" v-show="isDealer"> 
             <a href="#"
               ><span>Sale</span>
               <i class="bi bi-chevron-down dropdown-indicator"></i
@@ -79,10 +79,20 @@ export default {
       this.$router.go();
     },
   },
-   computed : {
-        login(){
-          return this.$store.state.user.isLogin
-        }
+  computed: {
+    isAdmin() {
+      if (!this.login) return false;
+      else if (this.$store.state.user.userInfo.gradeCode == '000') return true;
+      return false;
+    },
+    isDealer() {
+      if (!this.login) return false;
+      else if (this.$store.state.user.userInfo.gradeCode == '001') return true;
+      return false;
+    },
+    login(){
+      return this.$store.state.user.isLogin
+    }
   },
 };
 </script>

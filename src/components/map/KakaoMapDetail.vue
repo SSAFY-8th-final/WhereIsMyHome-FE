@@ -40,11 +40,29 @@ export default {
         contentNode = document.createElement('div'); // 커스텀 오버레이의 컨텐츠 엘리먼트 입니다 
         const container = document.getElementById("map-detail");
         const options = {
-            center: new kakao.maps.LatLng(37.574516, 126.968867), // 지도의 중심좌표
+            center: new kakao.maps.LatLng(this.$store.state.sale.lat, this.$store.state.sale.lng), // 지도의 중심좌표
             level: 3 // 지도의 확대 레벨
 
         };
         map = new kakao.maps.Map(container, options);
+
+        // 마커 설정
+        var imageSize = new kakao.maps.Size(40, 40);
+        var imageSrc = "assets/img/map/free-icon-appartments-742516.png";  
+        var markerImage = new kakao.maps.MarkerImage(imageSrc, imageSize);
+
+        const infowindow = new kakao.maps.InfoWindow({
+          content: `<div style="padding:5px;">${this.$store.state.sale.AptName}</div>`,
+        });
+
+        const marker = new kakao.maps.Marker({
+          map,
+          position: new kakao.maps.LatLng(this.$store.state.sale.lat, this.$store.state.sale.lng),
+          title: this.$store.state.sale.AptName,
+          image: markerImage
+        });
+
+        infowindow.open(map, marker)
 
         ps = new kakao.maps.services.Places(map);
         kakao.maps.event.addListener(map, 'idle', this.searchPlaces);

@@ -40,7 +40,7 @@
                         </li>
                         <li>
                             <div id="key">전용 면적</div>
-                            <div id="value">면적 추가하기!</div>
+                            <div id="value">{{this.$store.state.sale.area}} (㎡)</div>
                         </li>
                         <li>
                             <div id="key">방수/욕실</div>

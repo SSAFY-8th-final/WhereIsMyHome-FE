@@ -1,6 +1,6 @@
 import Vue from "vue";
 import Vuex from "vuex";
-import createPersistedState from 'vuex-persistedstate';
+import createPersistedState from "vuex-persistedstate";
 
 Vue.use(Vuex);
 
@@ -17,9 +17,11 @@ import AddrSigungu from "@/assets/json/sigungu.json";
 import AddrDong from "@/assets/json/dong.json";
 
 export default new Vuex.Store({
-    plugins: [createPersistedState({
-        paths: ["user"]
-    })],
+    plugins: [
+        createPersistedState({
+            paths: ["user"],
+        }),
+    ],
     state: {
         pagination: {
             listRowCount: 10,
@@ -148,6 +150,9 @@ export default new Vuex.Store({
             sigunguList: AddrSigungu,
             dongList: AddrDong,
         },
+        main: {
+            popularSale: null,
+        },
     },
     mutations: {
         SET_IS_LOGIN: (state, isLogin) => {
@@ -159,7 +164,7 @@ export default new Vuex.Store({
         SET_USER_INFO: (state, userInfo) => {
             state.user.userInfo = userInfo;
         },
-        REMOVE_USER_FAV(state){
+        REMOVE_USER_FAV(state) {
             state.user.favList = null;
         },
         SET_TOKEN(state, payload) {
@@ -346,6 +351,10 @@ export default new Vuex.Store({
         SET_FAV_TOTAL_LIST_ITEM_COUNT(state, count) {
             state.user.totalListItemCount = count;
         },
+        /* main */
+        SET_POPULAR_SALE(state, payload) {
+            state.main.popularSale = payload;
+        },
     },
     actions: {
         async noticeList(context) {
@@ -490,10 +499,10 @@ export default new Vuex.Store({
 
             let statusCode = response.status;
             if (statusCode == 200) {
-                console.log('로그아웃 성공')
+                console.log("로그아웃 성공");
                 context.commit("SET_IS_LOGIN", false);
                 context.commit("SET_USER_INFO", null);
-                context.commit("REMOVE_USER_FAV")
+                context.commit("REMOVE_USER_FAV");
                 context.commit("SET_IS_VALID_TOKEN", false);
                 context.commit("SET_TOKEN", { accessToken: null, refreshToken: null });
             } else {
@@ -666,10 +675,10 @@ export default new Vuex.Store({
             }
         },
         async dongInfo() {
-            let dongCode = this.getters.checkUserInfo.interestCode;
-            if (dongCode == null) {
-                // do somthing
-                console.log("dongCode not exist");
+            let dongCode = "1165010700"; // 반포동
+
+            if (this.state.user.isLogin) {
+                dongCode = this.getters.checkUserInfo.interestCode;
             }
             let addr = this.getters.getAddressByDongCode(dongCode);
             let query = addr.sido + " " + addr.dong;
@@ -692,6 +701,19 @@ export default new Vuex.Store({
         async houseSearchByName(context, searchWord) {
             try {
                 let { data } = await http.get("/maps/search/" + searchWord); // params: params shorthand property, let response 도 제거
+                console.log(data);
+                return data;
+            } catch (error) {
+                console.error(error);
+            }
+        },
+        async getRecentNotice() {
+            try {
+                let params = {
+                    limit: 4,
+                };
+                let { data } = await http.get("/notices", params);
+
                 console.log(data);
                 return data;
             } catch (error) {
@@ -723,6 +745,12 @@ export default new Vuex.Store({
         },
         getSaleInfo: function (state) {
             return state.sale.saleInfo;
+        },
+        getPopularSale: function (state) {
+            return state.main.popularSale;
+        },
+        getMapList: function (state) {
+            return state.map.list;
         },
 
         // pagination
