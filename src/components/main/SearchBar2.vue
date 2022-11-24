@@ -19,9 +19,10 @@
             type="text"
             placeholder="지역 또는 아파트명을 입력하세요."
             aria-label=".form-control-lg example"
-            v-on:keyup="searchEvent"
+            v-model="searchQuery"
             v-on:focus="showAutoComplete"
             v-on:blur="hideAutoComplete"
+            v-on:keyup="searchEvent"
           />
         </label>
       </form>
@@ -29,28 +30,28 @@
         <div class="row">
           <div class="col-6">
 
-        <ul class="list-group"  style="width: 100%">
+        <ul class="list-group search-main-list"  style="width: 100%">
           <li
-            class="list-group-item"
+            class="list-group-item search-list-item"
             tabindex="-1"
             v-for="(el, index) in searchResultHouse"
             v-bind:key="index"
             :value="el.no"
-            @click="mapSearchHouse(el.no)"
+            @click="mapSearchHouse($event, el.no)"
           >
             {{ el.AptName }}
           </li>
         </ul>
           </div>
           <div class="col-6">
-        <ul class="list-group" style="width: 100%">
+        <ul class="list-group search-main-list" style="width: 100%">
           <li
-            class="list-group-item"
+            class="list-group-item search-list-item"
             tabindex="-1"
             v-for="(el, index) in searchResultDong"
             v-bind:key="index"
             :value="el.code"
-            @click="mapSearchDong(el.code)"
+            @click="mapSearchDong($event, el.code)"
           >
             {{ el.name }}
           </li>
@@ -92,24 +93,33 @@ export default {
       const reg = /[^가-힣a-zA-Z0-9|\s]/.test(searchWord);
       return !reg;
     },
-    mapSearchHouse(no){
+    mapSearchHouse(event, no){
+      event.stopPropagation()
       let params={
         houseinfoNo: no
       }
       this.$store.dispatch("saleList", params);
       this.$router.push({ path: 'map' })
     },
-    mapSearchDong(code){
+    mapSearchDong(event, code){
+      event.stopPropagation()
       let params={
         dongCode: code
       }
+      console.log(code)
       this.$store.dispatch("saleList", params);
       this.$router.push({ path: 'map' })
+    },
+    makeFullAddr(){
+      (this.searchResultDong).forEach(()=>{
+        
+      })
     },
     showAutoComplete(){
       this.isHide = false
     },
     hideAutoComplete(){
+      if(this.searchQuery != null && this.searchQuery != '') return;
       this.isHide = true
     }
   },
@@ -147,5 +157,31 @@ export default {
 }
 .hide{
   display: none;
+}
+
+.search-main-list  {
+    overflow: auto;
+    margin-top: 15px;
+    height: calc(300px - 20px);
+    overflow-x: hidden;
+}
+.search-main-list > .search-list-item{
+  background-color: rgba(255, 255, 255, 0.062);
+  border: none !important;
+}
+
+/* deal-list 스크롤바 관련 */
+.search-main-list::-webkit-scrollbar {
+  width: 10px;
+}
+.search-main-list::-webkit-scrollbar-thumb {
+  background-color: grey;
+  border-radius: 10px;
+  background-clip: padding-box;
+  border: 1px solid transparent;
+}
+.search-main-list::-webkit-scrollbar-track {
+  border-radius: 10px;
+  box-shadow: inset 0px 0px 5px white;
 }
 </style>

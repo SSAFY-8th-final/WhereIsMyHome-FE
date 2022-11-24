@@ -1,14 +1,83 @@
 <template>
     <div id="mySidepanel" class="sidepanel">
-      <search-bar-map></search-bar-map>
+      <div>
+        <form id="searchBarMap">
+      <div class="mb-3">
+      <label>
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="20"
+          height="20"
+          fill="currentColor"
+          class="bi bi-search"
+          viewBox="0 0 20 20"
+        >
+          <path
+            d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"
+          />
+        </svg>
+        <input
+          type="text"
+          placeholder="지역 또는 아파트명을 입력하세요."
+          aria-label=".form-control-lg example"
+            v-model="searchQuery"
+            v-on:focus="showAutoComplete"
+            v-on:blur="hideAutoComplete"
+            v-on:keyup="searchEvent"
+        />
+      </label>
+
+      </div>
+    </form>
+      </div>
+      <div class="autocomplete-wrapper" :class="{hide: this.isHide}">
+        <div class="row">
+          <div class="col-6">
+
+        <ul class="list-group search-list"  style="width: 100%">
+          <li
+            class="list-group-item search-list-item"
+            tabindex="-1"
+            v-for="(el, index) in searchResultHouse"
+            v-bind:key="index"
+            :value="el.no"
+            @click="mapSearchHouse(el.no)"
+          >
+            {{ el.AptName }}
+          </li>
+        </ul>
+          </div>
+          <div class="col-6">
+        <ul class="list-group search-list" style="width: 100%">
+          <li
+            class="list-group-item search-list-item"
+            tabindex="-1"
+            v-for="(el, index) in searchResultDong"
+            v-bind:key="index"
+            :value="el.code"
+            @click="mapSearchDong(el.code)"
+          >
+            {{this.$store.getters.getSidoNameByCode(el.code)}} {{this.$store.getters.getSigunguNameByCode(el.code)}} {{ el.name }}
+          </li>
+        </ul>
+          </div>
+        </div>
+<!-- <ul class="list-group search-list"  style="width: 100%">
+  <li class="list-group-item search-list-item">ddd</li>
+  <li class="list-group-item search-list-item">ddd</li>
+  <li class="list-group-item search-list-item">ddd</li>
+  <li class="list-group-item search-list-item">ddd</li>
+
+</ul> -->
+      </div>
       <div>
         <ul class="list-group deal-list">
-            <pannel-item class="list-group-item container" style="cursor:pointer;" v-bind:house="house" v-for="(house, index) in  $store.state.map.list" v-bind:key="index"></pannel-item>
+            <pannel-item class="list-group-item container" style="cursor:pointer;" v-bind:house="house" v-for="(house, index) in  this.$store.state.map.list" v-bind:key="index"></pannel-item>
         </ul>
       </div>
     <div @click="sidePannelControll">
-        <svg id="sidePannelChevronBtn" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chevron-compact-right closebtn" viewBox="0 0 16 16">
-        <path fill-rule="evenodd" d="M6.776 1.553a.5.5 0 0 1 .671.223l3 6a.5.5 0 0 1 0 .448l-3 6a.5.5 0 1 1-.894-.448L9.44 8 6.553 2.224a.5.5 0 0 1 .223-.671z"/>
+        <svg id="sidePannelChevronBtn" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chevron-compact-left closebtn" viewBox="0 0 16 16">
+        <path fill-rule="evenodd" d="M9.224 1.553a.5.5 0 0 1 .223.67L6.56 8l2.888 5.776a.5.5 0 1 1-.894.448l-3-6a.5.5 0 0 1 0-.448l3-6a.5.5 0 0 1 .67-.223z"/>
         </svg> 
     </div>
 </div>
@@ -16,16 +85,20 @@
 </template>
 
 <script>
-import SearchBarMap from "@/components/map/SearchBarMap.vue";
+
 import PannelItem from "@/components/map/PannelItem.vue";
 
 export default {
   components:{
-      PannelItem, SearchBarMap
+      PannelItem
   },
   data() {
       return {
           openCloseNum: 0,
+          isHide: true,
+          searchQuery: null,
+          searchResultHouse: [],
+          searchResultDong: [],
           
       }
   },
@@ -53,7 +126,53 @@ export default {
               this.openCloseNum = 0;
               this.closeNav();
           }
-      }
+      },
+      async searchEvent(e) {
+        let searchWord = e.target.value;
+        if (
+          searchWord != null &&
+          searchWord.length > 1 &&
+          this.validation(searchWord)
+        ) {
+          console.log("진짜 검색");
+          this.searchResultHouse = await this.$store.dispatch(
+            "houseSearchByName",
+            searchWord
+          );
+          this.searchResultDong = this.$store.getters.getDongNameBySearchWord(searchWord);
+
+        }
+      },
+      validation(searchWord) {
+        const reg = /[^가-힣a-zA-Z0-9|\s]/.test(searchWord);
+        return !reg;
+      },
+      mapSearchHouse(no){
+        let params={
+          houseinfoNo: no
+        }
+        this.isHide = true
+        this.$store.dispatch("saleList", params);
+      },
+      mapSearchDong(code){
+        let params={
+          dongCode: code
+        }
+        this.isHide = true
+        this.$store.dispatch("saleList", params);
+      },
+      showAutoComplete(){
+        this.isHide = false
+      },
+    hideAutoComplete(){
+      if(this.searchQuery != null && this.searchQuery != '') return;
+      this.isHide = true
+    },
+    forceHideAutoComplete(){
+      this.isHide = true
+    },
+
+  
   },
   created() {
     this.saleList();
@@ -61,7 +180,7 @@ export default {
 }
 </script>
 
-<style>
+<style >
 
 /*********** 거래정보 레이아웃 세부 ***********/
 .deal-list {
@@ -137,7 +256,7 @@ export default {
   background-color: #fff;
   transition: 0.5s;
   margin-top: var(--header-size);
-  transform: translateX(-100%);
+  transform: translateX(0%);
 }
 
 .sidepanel a {
@@ -159,8 +278,6 @@ export default {
   right: 25px;
   font-size: 36px;
 }
-
-
 
 #togglebtn{
 	position: absolute;
@@ -195,6 +312,77 @@ export default {
   background-color:#444;
 }
 
+/*searchBarMap*/
+#searchBarMap > div{
+  box-shadow: 0 2px 1px 0 rgb(0 0 0 / 15%);
+  
+}
 
+#searchBarMap label {
+  display: flex;
+  align-items: center;
+  width: 300px;
+  height: 50px;
+  margin: 0 25px;
+  padding: 0 0 0 10px;
+  border-radius: 3px;
+  background-color: white;
+}
+
+#searchBarMap input {
+  width: 100%;
+  height: 20px;
+  margin-left: 10px;
+  font-size: 15px;
+  border: none !important;
+  outline: none !important;
+  box-shadow: none !important;
+  appearance: none;
+}
+
+#searchBarMap input:focus {
+  background-color: white;
+}
+  
+  /* autocomplete */
+.hide{
+  display: none;
+}
+.autocomplete-wrapper{
+  z-index: 900;
+  min-width: 300px;
+  height: 100px;
+  position: fixed;
+  top: 50px;
+  left: 25px;
+  background-color: white;
+}
+.search-list  {
+    overflow: auto;
+    margin-top: 15px;
+    height: calc(100px - 20px);
+    overflow-x: hidden;
+    border-right: 1px solid rgb(231, 231, 231);
+}
+.search-list > .search-list-item{
+  background-color: rgba(255, 255, 255, 0.062);
+  border: none !important;
+}
+
+/* deal-list 스크롤바 관련 */
+.search-list::-webkit-scrollbar {
+  width: 10px;
+}
+.search-list::-webkit-scrollbar-thumb {
+  background-color: grey;
+  border-radius: 10px;
+  background-clip: padding-box;
+  border: 1px solid transparent;
+}
+.search-list::-webkit-scrollbar-track {
+  background-color: rgb(255, 255, 255);
+  border-radius: 10px;
+  box-shadow: inset 0px 0px 5px white;
+}
 
 </style>
