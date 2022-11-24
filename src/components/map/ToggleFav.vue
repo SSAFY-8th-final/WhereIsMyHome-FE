@@ -10,10 +10,10 @@
 <script>
 import http from "@/common/axios.js";
 export default {
-    props: ['no'],
+    props: ['no', 'isFav'],
     data: function () {
         return {
-          liked: false,
+          liked: this.isFav,
         }
     },
     methods: {

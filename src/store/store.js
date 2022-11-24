@@ -385,22 +385,23 @@ export default new Vuex.Store({
         },
         async saleList(context, payload) {
             let params = {
-                searchWord: '',
-                dongCode: '',
-                houseinfoNo: ''
+                searchWord: "",
+                dongCode: "",
+                houseinfoNo: "",
             };
-            console.log('payload' + payload)
+            if (this.state.user.isLogin) params.userSeq = this.state.user.userInfo.userSeq;
+
+            console.log("payload" + payload);
             try {
-              if(payload != null && payload != ''){
-                params.dongCode = payload.dongCode
-                params.houseinfoNo = payload.houseinfoNo
-              }
-              let { data } = await http.get("/maps/houses", { params });
+                if (payload != null && payload != "") {
+                    params.dongCode = payload.dongCode;
+                    params.houseinfoNo = payload.houseinfoNo;
+                }
+                let { data } = await http.get("/maps/houses", { params });
                 console.log(data);
-                
+
                 context.commit("SET_MAP_LIST", data.list);
                 context.commit("SET_MAP_TOTAL_LIST_ITEM_COUNT", data.count);
-                
             } catch (error) {
                 console.error(error);
             }
@@ -410,17 +411,16 @@ export default new Vuex.Store({
                 let params = {
                     limit: this.state.sale.limit,
                     offset: this.state.sale.offset,
-                    userEmail: this.state.user.userInfo.userEmail
+                    userEmail: this.state.user.userInfo.userEmail,
                     //option: selectStatus,
                 };
-                console.log('dealerSaleList')
-                console.log(params)
-              let { data } = await http.get("/sales/dealer", {params});
+                console.log("dealerSaleList");
+                console.log(params);
+                let { data } = await http.get("/sales/dealer", { params });
                 console.log(data);
-                
+
                 context.commit("SET_SALE_LIST", data.list);
                 context.commit("SET_SALE_TOTAL_LIST_ITEM_COUNT", data.count);
-                
             } catch (error) {
                 console.error(error);
             }
@@ -587,7 +587,7 @@ export default new Vuex.Store({
                 console.log(data.documents[0]);
 
                 let result = data.documents[0];
-                let jibun = result.address.main_address_no +'-'+ result.address.sub_address_no;
+                let jibun = result.address.main_address_no + "-" + result.address.sub_address_no;
                 let AptName = result.road_address.building_name;
 
                 console.log(result.address.region_3depth_name);
@@ -676,21 +676,20 @@ export default new Vuex.Store({
                     resArray.push(data.meta.total_count);
                 }
                 console.log(resArray);
-                return {list: resArray, dong: addr.dong};
+                return { list: resArray, dong: addr.dong };
             } catch (error) {
                 console.log(error);
             }
         },
         async houseSearchByName(context, searchWord) {
             try {
-                let { data } = await http.get("/maps/search/" +  searchWord ); // params: params shorthand property, let response 도 제거
+                let { data } = await http.get("/maps/search/" + searchWord); // params: params shorthand property, let response 도 제거
                 console.log(data);
-                return data
+                return data;
             } catch (error) {
                 console.error(error);
             }
-        }
-
+        },
     },
     getters: {
         isLogin: function (state) {
@@ -876,20 +875,24 @@ export default new Vuex.Store({
             return address;
         },
         getDongNameBySearchWord: (state) => (searchWord) => {
-            let listDong = state.address.dongList.filter((item) => (item.name).includes(searchWord));
-            let listSigungu = state.address.sigunguList.filter((item) => (item.name).includes(searchWord));
-            
-            let listTrans = []
-            listSigungu.forEach(item => {
-                let tmpList = state.address.dongList.filter((d) => (d.code).substr(0,5) == item.code);
-                listTrans.push(...tmpList)
+            let listDong = state.address.dongList.filter((item) => item.name.includes(searchWord));
+            let listSigungu = state.address.sigunguList.filter((item) =>
+                item.name.includes(searchWord)
+            );
+
+            let listTrans = [];
+            listSigungu.forEach((item) => {
+                let tmpList = state.address.dongList.filter(
+                    (d) => d.code.substr(0, 5) == item.code
+                );
+                listTrans.push(...tmpList);
             });
-            listDong.push(...listTrans)
+            listDong.push(...listTrans);
             // const arr = listDong.concat(listSigungu)
             // list.array.forEach(element => {
-                
+
             // });
-            return listDong
-        }
+            return listDong;
+        },
     },
 });
