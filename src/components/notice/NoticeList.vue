@@ -185,4 +185,7 @@ export default {
   background-color: white;
   padding-left: 5px;
 }
+section {
+  height: 1000px;
+}
 </style>

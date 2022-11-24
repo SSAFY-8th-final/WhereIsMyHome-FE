@@ -264,4 +264,7 @@ export default {
 #writeBtn {
   margin-top: 20px;
 }
+section {
+  height: 1000px;
+}
 </style>
