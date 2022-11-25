@@ -57,7 +57,7 @@
             :value="el.code"
             @click="mapSearchDong(el.code)"
           >
-            {{this.$store.getters.getSidoNameByCode(el.code)}} {{this.$store.getters.getSigunguNameByCode(el.code)}} {{ el.name }}
+            {{ el.name }}
           </li>
         </ul>
           </div>

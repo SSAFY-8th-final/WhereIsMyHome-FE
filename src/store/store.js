@@ -628,11 +628,13 @@ export default new Vuex.Store({
                         };
                         houseinfoNo = await this.dispatch("houseInsert", houseInsertParam);
                         console.log("new House " + houseinfoNo);
+                        insertParams.userEmail = this.state.user.userInfo.userEmail,
                         insertParams.houseinfoNo = houseinfoNo;
                         (insertParams.dongCode = result.address.b_code),
                             await this.dispatch("saleInsertOne", insertParams);
                     }
                 } else {
+                    insertParams.userEmail = this.state.user.userInfo.userEmail,
                     insertParams.houseinfoNo = houseinfoNo;
                     (insertParams.dongCode = result.address.b_code),
                         console.log("집 잇음 " + houseinfoNo);

@@ -327,6 +327,7 @@ export default {
 
       // files, addr,도 보내기
       await this.$store.dispatch('saleInsert',{item: item, addr: this.addrRoad, files: this.files});
+      alert('등록 성공')
     },
 
   },
